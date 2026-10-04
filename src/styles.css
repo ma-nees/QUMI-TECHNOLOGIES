@@ -57,9 +57,9 @@
   --radius: 0.375rem;
   /* Brand: Cream Linen #FAF3E7, White, Cobalt #0047AB, Navy #0B1F3A, Slate #667085, Warm Gray #E6E0D7, Tangerine #F28C28 */
   --background: oklch(0.968 0.016 80);
-  --surface: oklch(1 0 0 / 0.65);
+  --surface: oklch(1 0 0 / 0.9);
   --foreground: oklch(0.236 0.056 257);
-  --card: oklch(1 0 0 / 0.65);
+  --card: oklch(1 0 0 / 0.9);
   --card-foreground: oklch(0.236 0.056 257);
   --popover: oklch(1 0 0 / 0.85);
   --popover-foreground: oklch(0.236 0.056 257);
