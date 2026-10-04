@@ -121,10 +121,10 @@ export function TechnologySection() {
 
 export function IndustriesList({ full = false }: { full?: boolean }) {
   return (
-    <div className="border-t border-border">
+    <div className="flex flex-col gap-6">
       {industries.map((ind, i) => (
         <Reveal key={ind.name} delay={(i % 4) * 40}>
-          <div className="group grid gap-3 border-b border-border py-7 transition-colors md:grid-cols-12 md:gap-8">
+          <div className="group grid gap-4 border border-border bg-surface/80 backdrop-blur-md p-8 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md md:grid-cols-12 md:gap-8">
             <span className="font-mono text-xs text-muted-foreground md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
             <h3 className="text-xl font-bold transition-colors group-hover:text-primary md:col-span-3">{ind.name}</h3>
             <p className="text-sm leading-relaxed text-muted-foreground md:col-span-4">
