@@ -75,7 +75,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-slate-200 bg-[#f0f4f8] pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
+        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-slate-200 bg-[#F4F8FC] pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
           <nav aria-label="Mobile" className="container-site flex flex-col pt-2">
             {navItems.map((n, i) => (
               <Link
