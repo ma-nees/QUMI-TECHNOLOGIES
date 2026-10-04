@@ -1,0 +1,2 @@
+# 10 — Three.js Architecture
+Single hero scene: a slowly rotating network of nodes and connecting lines (systems architecture metaphor) in cobalt with a few tangerine nodes. Loaded via `React.lazy` after hydration; static SVG fallback during load, on SSR and for `prefers-reduced-motion`. Pointer moves add gentle parallax. Renderer paused when off-screen (IntersectionObserver), disposed on unmount, DPR capped at 2.
