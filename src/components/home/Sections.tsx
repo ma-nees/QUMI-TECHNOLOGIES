@@ -34,7 +34,7 @@ export function ServicesGrid({ limit }: { limit?: number }) {
 
 export function ServicesSection() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-12 md:py-16">
       <div className="container-site">
         <SectionHeader
           eyebrow="What we do"
@@ -91,7 +91,7 @@ export function AboutSection() {
 
 export function TechnologySection() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-12 md:py-16">
       <div className="container-site">
         <SectionHeader
           eyebrow="Technology"
