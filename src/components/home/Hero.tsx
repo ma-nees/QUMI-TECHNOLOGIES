@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden border-b border-border text-center">
+    <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden border-b border-border text-center">
       {/* Radial gradient behind text to ensure legibility while keeping the scene 100% visible at the edges */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--color-background)_0%,_transparent_65%)] opacity-90" aria-hidden="true" />
       
-      <div className="container-site relative z-10 flex max-w-5xl flex-col items-center py-20">
+      <div className="container-site relative z-10 flex max-w-5xl flex-col items-center py-12">
         <p className="eyebrow animate-rise">Nepal-based technology partner</p>
         <h1
           className="animate-rise mt-6 text-[3rem] font-extrabold leading-[1.05] md:text-[5rem]"
