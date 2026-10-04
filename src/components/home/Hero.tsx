@@ -51,7 +51,7 @@ function Typewriter() {
   }, [text, isDeleting, index, isPaused]);
 
   return (
-    <span className="inline-block min-h-[1.2em] font-mono tracking-tighter">
+    <span className="inline-block min-h-[1.2em] font-display font-bold tracking-tight">
       <span className="bg-gradient-to-r from-primary via-[#60a5fa] to-primary bg-[length:200%_auto] animate-[gradient_4s_ease_infinite] bg-clip-text text-transparent drop-shadow-sm">{text}</span>
       <span className="animate-pulse border-r-[0.1em] border-primary/70 ml-1 inline-block h-[0.8em] align-middle -mt-2" />
     </span>
