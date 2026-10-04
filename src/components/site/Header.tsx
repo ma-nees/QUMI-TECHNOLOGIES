@@ -33,14 +33,18 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b bg-surface transition-[box-shadow,border-color] duration-300",
-        scrolled ? "border-transparent shadow-header" : "border-border",
+        "sticky top-0 z-50 transition-[box-shadow,border-color,background-color] duration-300",
+        // Desktop retains the full-width solid bar
+        "lg:border-b lg:bg-surface",
+        scrolled ? "lg:border-transparent lg:shadow-header" : "lg:border-border",
+        // Mobile is completely transparent so the elements appear floating
+        "bg-transparent border-transparent"
       )}
     >
       <div
         className={cn(
-          "container-site flex items-center justify-between transition-[height] duration-300",
-          scrolled ? "h-16" : "h-20",
+          "container-site flex items-center justify-between transition-[height,padding] duration-300",
+          scrolled ? "h-16" : "h-20 pt-2",
         )}
       >
         <Link to="/" aria-label="QUME Technologies home" onClick={() => setOpen(false)}>
@@ -65,7 +69,7 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden transition-transform duration-200 active:scale-90"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface/95 shadow-md backdrop-blur-md lg:hidden transition-transform duration-200 active:scale-90"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
