@@ -65,7 +65,7 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden transition-transform duration-200 active:scale-90"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -75,7 +75,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-[inherit] z-40 border-t border-border bg-surface lg:hidden" style={{ top: scrolled ? 64 : 80 }}>
+        <div className="fixed inset-x-0 bottom-0 top-[inherit] z-40 border-t border-border bg-background lg:hidden animate-in fade-in duration-200" style={{ top: scrolled ? 64 : 80 }}>
           <nav aria-label="Mobile" className="container-site flex flex-col py-6">
             {navItems.map((n, i) => (
               <Link
