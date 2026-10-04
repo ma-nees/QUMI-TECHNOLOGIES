@@ -11,7 +11,8 @@ const phrases = [
   "create business impact.",
   "shape the future of business.",
   "help businesses evolve.",
-  "turn ideas into impact."
+  "turn ideas into impact.",
+  "drive what's next."
 ];
 
 function Typewriter() {
@@ -22,7 +23,7 @@ function Typewriter() {
 
   useEffect(() => {
     if (isPaused) return;
-    
+
     const current = phrases[index]!;
     let timeoutId: ReturnType<typeof setTimeout>;
 
@@ -51,8 +52,8 @@ function Typewriter() {
 
   return (
     <span className="inline-block min-h-[1.2em]">
-      <span className="text-primary">{text}</span>
-      <span className="animate-pulse border-r-4 border-primary ml-1 inline-block h-[0.8em] align-middle -mt-2" />
+      <span className="bg-gradient-to-r from-primary via-[#60a5fa] to-primary bg-[length:200%_auto] animate-[gradient_4s_ease_infinite] bg-clip-text text-transparent drop-shadow-sm">{text}</span>
+      <span className="animate-pulse border-r-4 border-primary/70 ml-1 inline-block h-[0.8em] align-middle -mt-2" />
     </span>
   );
 }
@@ -62,7 +63,7 @@ export function Hero() {
     <section className="relative flex min-h-[30vh] items-center justify-center overflow-hidden border-b border-border text-center">
       {/* Radial gradient behind text to ensure legibility while keeping the scene 100% visible at the edges */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--color-background)_0%,_transparent_65%)] opacity-90" aria-hidden="true" />
-      
+
       <div className="container-site relative z-10 flex max-w-5xl flex-col items-center py-6">
         <p className="eyebrow animate-rise">Nepal-based technology partner</p>
         <h1
