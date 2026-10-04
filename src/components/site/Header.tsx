@@ -65,17 +65,17 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden transition-all duration-300 ease-out active:scale-75"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X size={20} /> : <List size={20} />}
+          {open ? <X size={20} className="animate-in spin-in-90 duration-300" /> : <List size={20} className="animate-in spin-in-90 duration-300" />}
         </button>
       </div>
 
       {open && (
-        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-border bg-surface pb-8 shadow-2xl lg:hidden">
+        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-border bg-background pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-300 ease-out origin-top">
           <nav aria-label="Mobile" className="container-site flex flex-col pt-2">
             {navItems.map((n, i) => (
               <Link
