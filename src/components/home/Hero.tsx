@@ -51,9 +51,9 @@ function Typewriter() {
   }, [text, isDeleting, index, isPaused]);
 
   return (
-    <span className="inline-block min-h-[1.2em] font-display font-bold tracking-tight">
+    <span className="inline font-display font-bold tracking-tight">
       <span className="bg-gradient-to-r from-primary via-[#60a5fa] to-primary bg-[length:200%_auto] animate-[gradient_4s_ease_infinite] bg-clip-text text-transparent drop-shadow-sm">{text}</span>
-      <span className="animate-pulse border-r-[0.1em] border-primary/70 ml-1 inline-block h-[0.8em] align-middle -mt-2" />
+      <span className="animate-pulse border-r-[0.1em] border-primary/70 ml-1 inline h-[0.8em] align-middle" />
     </span>
   );
 }
@@ -67,7 +67,7 @@ export function Hero() {
       <div className="container-site relative z-10 flex max-w-5xl flex-col items-center py-6">
         <p className="eyebrow animate-rise">Nepal-based technology partner</p>
         <h1
-          className="animate-rise mt-3 text-[2.5rem] font-extrabold leading-[1.05] md:text-[3.5rem]"
+          className="animate-rise mt-3 text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl"
           style={{ animationDelay: "90ms" }}
         >
           Engineering digital products that <Typewriter />
