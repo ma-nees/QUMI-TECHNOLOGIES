@@ -24,42 +24,44 @@ function CareersPage() {
         title="Do the best work of your career, from Nepal."
         intro="We hire engineers, designers and analysts who care about craft and want to build software that lasts."
       />
-      <section className="container-site py-16 md:py-24">
-        <div className="flex items-end justify-between">
-          <h2 className="text-2xl font-bold">Open positions</h2>
-          <span className="font-mono text-xs text-muted-foreground">{jobs.length} open</span>
-        </div>
-        <div className="mt-8 border-t border-border">
-          {jobs.length === 0 && (
-            <div className="border-b border-border py-10">
-              <p className="font-semibold">No open positions right now.</p>
-              <p className="mt-2 text-muted-foreground">
-                We still welcome strong candidates.{" "}
-                <Link to="/careers/$id" params={{ id: "general" }} className="font-semibold text-primary hover:underline">
-                  Send a general application
+      <section className="container-site py-8 md:py-12">
+        <div className="border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
+          <div className="flex items-end justify-between">
+            <h2 className="text-2xl font-bold">Open positions</h2>
+            <span className="font-mono text-xs text-muted-foreground">{jobs.length} open</span>
+          </div>
+          <div className="mt-8 border-t border-border/50">
+            {jobs.length === 0 && (
+              <div className="border-b border-border/50 py-10">
+                <p className="font-semibold">No open positions right now.</p>
+                <p className="mt-2 text-muted-foreground">
+                  We still welcome strong candidates.{" "}
+                  <Link to="/careers/$id" params={{ id: "general" }} className="font-semibold text-primary hover:underline">
+                    Send a general application
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
+            {jobs.map((j) => (
+              <Reveal key={j.id}>
+                <Link to="/careers/$id" params={{ id: j.id }} className="group grid gap-2 border-b border-border/50 py-7 transition-colors hover:bg-background/60 md:grid-cols-12 md:items-center md:px-4 rounded-lg my-2">
+                  <h3 className="text-lg font-bold transition-colors group-hover:text-primary md:col-span-5">{j.title}</h3>
+                  <span className="text-sm text-muted-foreground md:col-span-2">{j.department}</span>
+                  <span className="text-sm text-muted-foreground md:col-span-2">{j.location}</span>
+                  <span className="text-sm text-muted-foreground md:col-span-2">{j.employment_type}</span>
+                  <ArrowRight className="arrow-nudge hidden text-primary md:col-span-1 md:block md:justify-self-end" />
                 </Link>
-                .
-              </p>
-            </div>
+              </Reveal>
+            ))}
+          </div>
+          {jobs.length > 0 && (
+            <p className="mt-6 text-sm text-muted-foreground">
+              Don't see a fit?{" "}
+              <Link to="/careers/$id" params={{ id: "general" }} className="font-semibold text-primary hover:underline">Send a general application</Link>.
+            </p>
           )}
-          {jobs.map((j) => (
-            <Reveal key={j.id}>
-              <Link to="/careers/$id" params={{ id: j.id }} className="group grid gap-2 border-b border-border py-7 transition-colors hover:bg-surface md:grid-cols-12 md:items-center md:px-4">
-                <h3 className="text-lg font-bold transition-colors group-hover:text-primary md:col-span-5">{j.title}</h3>
-                <span className="text-sm text-muted-foreground md:col-span-2">{j.department}</span>
-                <span className="text-sm text-muted-foreground md:col-span-2">{j.location}</span>
-                <span className="text-sm text-muted-foreground md:col-span-2">{j.employment_type}</span>
-                <ArrowRight className="arrow-nudge hidden text-primary md:col-span-1 md:block md:justify-self-end" />
-              </Link>
-            </Reveal>
-          ))}
         </div>
-        {jobs.length > 0 && (
-          <p className="mt-6 text-sm text-muted-foreground">
-            Don't see a fit?{" "}
-            <Link to="/careers/$id" params={{ id: "general" }} className="font-semibold text-primary hover:underline">Send a general application</Link>.
-          </p>
-        )}
       </section>
       <section className="border-t border-border bg-surface py-16 md:py-24">
         <div className="container-site">

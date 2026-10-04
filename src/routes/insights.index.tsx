@@ -22,29 +22,31 @@ function InsightsPage() {
   return (
     <>
       <PageHero eyebrow="Insights" title="Notes on engineering and technology." intro="Practical writing from our team on building, running and improving software systems." />
-      <section className="container-site py-16 md:py-24">
-        {posts.length === 0 ? (
-          <div className="rounded-md border border-border bg-surface p-10">
-            <p className="font-semibold">Our first articles are on the way.</p>
-            <p className="mt-2 text-muted-foreground">Check back soon.</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-3">
-            {posts.map((p, i) => (
-              <Reveal key={p.id} delay={(i % 3) * 60}>
-                <Link to="/insights/$slug" params={{ slug: p.slug }} className="group card-interactive flex h-full flex-col rounded-md p-7">
-                  <div className="flex justify-between font-mono text-[0.68rem] uppercase tracking-wider text-muted-foreground">
-                    <span className="text-primary">{p.category}</span>
-                    <span>{fmtDate(p.published_at)}</span>
-                  </div>
-                  <h2 className="mt-6 text-xl font-bold leading-snug transition-colors group-hover:text-primary">{p.title}</h2>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{p.excerpt}</p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">Read article <ArrowRight className="arrow-nudge" /></span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        )}
+      <section className="container-site py-8 md:py-12">
+        <div className="border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
+          {posts.length === 0 ? (
+            <div className="rounded-xl border border-border/60 bg-background/60 p-10">
+              <p className="font-semibold">Our first articles are on the way.</p>
+              <p className="mt-2 text-muted-foreground">Check back soon.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-3">
+              {posts.map((p, i) => (
+                <Reveal key={p.id} delay={(i % 3) * 60}>
+                  <Link to="/insights/$slug" params={{ slug: p.slug }} className="group flex h-full flex-col rounded-xl border border-border/60 bg-background/60 p-7 transition-colors hover:bg-background">
+                    <div className="flex justify-between font-mono text-[0.68rem] uppercase tracking-wider text-muted-foreground">
+                      <span className="text-primary">{p.category}</span>
+                      <span>{fmtDate(p.published_at)}</span>
+                    </div>
+                    <h2 className="mt-6 text-xl font-bold leading-snug transition-colors group-hover:text-primary">{p.title}</h2>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{p.excerpt}</p>
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">Read article <ArrowRight className="arrow-nudge" /></span>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </>
   );
