@@ -27,7 +27,7 @@ const gridFrag = /* glsl */ `
 
   void main() {
     vec2 uv = vWorld.xz;
-    uv.y += uTime * 0.8;                           // grid flows toward the viewer
+    uv.y += uTime * 1.6;                           // grid flows toward the viewer
 
     float minor = gridLine(uv, 2.0);
     float major = gridLine(uv, 10.0);
@@ -161,7 +161,7 @@ export default function Global3DBackground() {
     const packets = Array.from({ length: packetCount }, () => ({
       edge: Math.floor(Math.random() * Math.max(edges.length, 1)),
       t: Math.random(),
-      speed: 0.15 + Math.random() * 0.35,
+      speed: 0.35 + Math.random() * 0.65,
       rev: Math.random() > 0.5,
     }));
     const packetGeo = new THREE.BufferGeometry();
@@ -236,8 +236,8 @@ export default function Global3DBackground() {
       if (document.hidden) return;
       if (!reduce) time += dt;
 
-      scrollSmooth += (scrollTarget - scrollSmooth) * 0.07;
-      mouseGrid.lerp(mouseGridTarget, 0.1);
+      scrollSmooth += (scrollTarget - scrollSmooth) * 0.15;
+      mouseGrid.lerp(mouseGridTarget, 0.15);
       gridMat.uniforms.uTime!.value = time;
 
       // packets glide along their links
@@ -271,9 +271,9 @@ export default function Global3DBackground() {
       // scrolling flies the camera forward through the network
       const travel = Math.min(scrollSmooth * 0.006, 14);
       const zTarget = 20 - travel;
-      camera.position.z += (zTarget - camera.position.z) * 0.08;
-      camera.position.x += (camTarget.x * 2.2 - camera.position.x) * 0.04;
-      camera.position.y += (1 - camTarget.y * 1.2 - camera.position.y) * 0.04;
+      camera.position.z += (zTarget - camera.position.z) * 0.15;
+      camera.position.x += (camTarget.x * 2.2 - camera.position.x) * 0.08;
+      camera.position.y += (1 - camTarget.y * 1.2 - camera.position.y) * 0.08;
       camera.lookAt(camTarget.x * 0.6, 1.5, camera.position.z - 20);
 
       renderer.render(scene, camera);
