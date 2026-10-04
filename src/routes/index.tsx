@@ -30,14 +30,7 @@ function Index() {
   return (
     <>
       <Hero />
-      <AboutSection />
       <ServicesSection />
-      <TechnologySection />
-      <IndustriesSection />
-      <CaseStudiesSection />
-      <PrinciplesSection />
-      <ProcessSection />
-      <EngagementSection />
       <CtaSection />
     </>
   );
