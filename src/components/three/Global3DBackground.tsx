@@ -210,13 +210,13 @@ export default function Global3DBackground() {
     }
     dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
-      size: 0.3,
-      color: blueGlow,
+      size: 1.2,
+      color: primary,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.6,
       map: glowTex,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: THREE.NormalBlending,
     });
     const dustParticles = new THREE.Points(dustGeo, dustMat);
     scene.add(dustParticles);
