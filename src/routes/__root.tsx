@@ -112,17 +112,21 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Global3DBackground />
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-      >
-        Skip to content
-      </a>
-      {!bare && <Header />}
-      <main id="main">
-        <Outlet />
-      </main>
-      {!bare && <Footer />}
+      <div className="relative z-10 flex min-h-screen flex-col bg-transparent pointer-events-none">
+        <div className="pointer-events-auto flex-1 flex flex-col">
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+          >
+            Skip to content
+          </a>
+          {!bare && <Header />}
+          <main id="main" className="flex-1">
+            <Outlet />
+          </main>
+          {!bare && <Footer />}
+        </div>
+      </div>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
