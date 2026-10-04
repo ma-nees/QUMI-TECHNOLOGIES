@@ -22,7 +22,6 @@ import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-condi
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
 import { Route as CareersIdRouteImport } from './routes/careers.$id'
-import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -88,11 +87,6 @@ const CareersIdRoute = CareersIdRouteImport.update({
   path: '/careers/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InsightsSlugRoute = InsightsSlugRouteImport.update({
-  id: '/insights/$slug',
-  path: '/insights/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,7 +100,6 @@ export interface FileRoutesByFullPath {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/careers/$id': typeof CareersIdRoute
-  '/insights/$slug': typeof InsightsSlugRoute
   '/careers/': typeof CareersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -121,7 +114,6 @@ export interface FileRoutesByTo {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/careers/$id': typeof CareersIdRoute
-  '/insights/$slug': typeof InsightsSlugRoute
   '/careers': typeof CareersIndexRoute
 }
 export interface FileRoutesById {
@@ -138,7 +130,6 @@ export interface FileRoutesById {
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/careers/$id': typeof CareersIdRoute
-  '/insights/$slug': typeof InsightsSlugRoute
   '/careers/': typeof CareersIndexRoute
 }
 export interface FileRouteTypes {
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/admin'
     | '/careers/$id'
-    | '/insights/$slug'
     | '/careers/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,7 +160,6 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/admin'
     | '/careers/$id'
-    | '/insights/$slug'
     | '/careers'
   id:
     | '__root__'
@@ -186,7 +175,6 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/_authenticated/admin'
     | '/careers/$id'
-    | '/insights/$slug'
     | '/careers/'
   fileRoutesById: FileRoutesById
 }
@@ -202,7 +190,6 @@ export interface RootRouteChildren {
   SolutionsRoute: typeof SolutionsRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   CareersIdRoute: typeof CareersIdRoute
-  InsightsSlugRoute: typeof InsightsSlugRoute
   CareersIndexRoute: typeof CareersIndexRoute
 }
 
@@ -299,13 +286,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareersIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/insights/$slug': {
-      id: '/insights/$slug'
-      path: '/insights/$slug'
-      fullPath: '/insights/$slug'
-      preLoaderRoute: typeof InsightsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -332,7 +312,6 @@ const rootRouteChildren: RootRouteChildren = {
   SolutionsRoute: SolutionsRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   CareersIdRoute: CareersIdRoute,
-  InsightsSlugRoute: InsightsSlugRoute,
   CareersIndexRoute: CareersIndexRoute,
 }
 export const routeTree = rootRouteImport
