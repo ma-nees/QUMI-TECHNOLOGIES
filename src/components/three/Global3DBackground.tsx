@@ -70,8 +70,8 @@ export default function Global3DBackground() {
     const isMobile = window.innerWidth < 768;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-    // Use higher pixel ratio for crisp rendering, capped at 2 for performance
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Use native pixel ratio for absolute crispness on high-density displays (like iPhones)
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     el.appendChild(renderer.domElement);
 
