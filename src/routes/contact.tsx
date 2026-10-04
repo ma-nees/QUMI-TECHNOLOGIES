@@ -50,9 +50,8 @@ function ContactPage() {
         title="Tell us what you're building."
         intro="Share a few details about your project or question. A member of our team will reply by email."
       />
-      <section className="container-site py-8 md:py-12">
-        <div className="border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm grid gap-14 md:grid-cols-12">
-          <div className="md:col-span-7">
+      <section className="container-site grid gap-8 py-8 md:gap-14 md:grid-cols-12 md:py-12">
+        <div className="md:col-span-7 border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
           {status === "sent" ? (
             <div className="animate-rise rounded-xl border border-border/60 bg-background/60 p-10">
               <CheckCircle size={36} weight="light" className="text-primary" />
@@ -85,7 +84,8 @@ function ContactPage() {
             </form>
           )}
         </div>
-        <aside className="md:col-span-4 md:col-start-9">
+        
+        <aside className="md:col-span-5 h-fit border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
           <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">Direct contact</h2>
           <ul className="mt-6 divide-y divide-border/50 border-y border-border/50">
             <li className="flex items-center gap-4 py-5"><EnvelopeSimple size={22} weight="light" className="text-primary" /><a href={`mailto:${company.email}`} className="font-semibold hover:text-primary">{company.email}</a></li>
@@ -94,7 +94,6 @@ function ContactPage() {
           </ul>
           <p className="mt-6 text-sm leading-relaxed text-muted-foreground">Office hours: Sunday to Friday, Nepal Time (UTC+5:45).</p>
         </aside>
-        </div>
       </section>
     </>
   );
