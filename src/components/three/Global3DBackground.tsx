@@ -213,7 +213,7 @@ export default function Global3DBackground() {
       size: 1.2,
       color: primary,
       transparent: true,
-      opacity: 0.6,
+      opacity: 1.0,
       map: glowTex,
       depthWrite: false,
       blending: THREE.NormalBlending,
