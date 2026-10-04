@@ -100,13 +100,13 @@ export function TechnologySection() {
           title="A focused, proven stack."
           intro="We choose mature tools with strong ecosystems, and we choose them per project — not by habit."
         />
-        <div className="mt-14 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
           {technologies.map((g, i) => (
-            <Reveal key={g.group} delay={i * 60} className="bg-surface p-7">
+            <Reveal key={g.group} delay={i * 60} className="border border-border bg-surface/80 backdrop-blur-md p-6 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md">
               <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{g.group}</h3>
               <ul className="mt-5 space-y-3">
                 {g.items.map((t) => (
-                  <li key={t} className="flex items-center justify-between border-b border-border pb-3 text-[0.95rem] font-semibold last:border-0">
+                  <li key={t} className="flex items-center justify-between border-b border-border/50 pb-3 text-[0.95rem] font-semibold last:border-0">
                     {t}
                   </li>
                 ))}
@@ -287,14 +287,14 @@ export function ProcessSection() {
 
 export function PrinciplesSection() {
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="container-site">
         <SectionHeader eyebrow="Why QUME" title="The principles we work by." />
-        <div className="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-2">
+        <div className="mt-14 grid gap-6 md:grid-cols-2">
           {principles.map((p, i) => (
-            <Reveal key={p.title} delay={i * 60} className="border-t-2 border-foreground pt-6">
+            <Reveal key={p.title} delay={i * 60} className="border border-border bg-surface/80 backdrop-blur-md p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md">
               <h3 className="text-xl font-bold">{p.title}</h3>
-              <p className="mt-3 max-w-md leading-relaxed text-muted-foreground">{p.text}</p>
+              <p className="mt-3 leading-relaxed text-muted-foreground">{p.text}</p>
             </Reveal>
           ))}
         </div>
