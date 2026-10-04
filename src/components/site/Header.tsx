@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 
 export const navItems = [
+  { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/solutions", label: "Solutions" },
   { to: "/industries", label: "Industries" },
