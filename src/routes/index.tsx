@@ -30,30 +30,7 @@ export const Route = createFileRoute("/")({
 
 
 
-function StatsSection() {
-  return (
-    <section className="border-y border-border/50 bg-background/40 py-12 backdrop-blur-sm">
-      <div className="container-site grid gap-8 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border/50 text-center">
-        <Reveal delay={0} className="p-4">
-          <p className="text-4xl font-extrabold text-primary">50+</p>
-          <p className="mt-2 text-sm font-medium text-muted-foreground uppercase tracking-widest">Enterprise Projects</p>
-        </Reveal>
-        <Reveal delay={100} className="p-4">
-          <p className="text-4xl font-extrabold text-primary">12</p>
-          <p className="mt-2 text-sm font-medium text-muted-foreground uppercase tracking-widest">Countries Served</p>
-        </Reveal>
-        <Reveal delay={200} className="p-4">
-          <p className="text-4xl font-extrabold text-primary">24/7</p>
-          <p className="mt-2 text-sm font-medium text-muted-foreground uppercase tracking-widest">Support & Ops</p>
-        </Reveal>
-        <Reveal delay={300} className="p-4">
-          <p className="text-4xl font-extrabold text-primary">40+</p>
-          <p className="mt-2 text-sm font-medium text-muted-foreground uppercase tracking-widest">Senior Engineers</p>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
+
 
 function ValuePropositionSection() {
   return (
@@ -99,7 +76,6 @@ function Index() {
   return (
     <>
       <Hero />
-      <StatsSection />
       <ValuePropositionSection />
       <ServicesSection />
       <CtaSection />
