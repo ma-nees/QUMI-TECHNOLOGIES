@@ -184,7 +184,7 @@ export default function Global3DBackground() {
     for (let i = 0; i < cubeCount; i++) {
       const warm = i % 4 === 0;
       const mat = new THREE.MeshStandardMaterial({
-        color: warm ? accent : "#cfe0ff",
+        color: warm ? primary : "#cfe0ff",
         metalness: warm ? 0.35 : 0.1,
         roughness: 0.12,
         transparent: true,
