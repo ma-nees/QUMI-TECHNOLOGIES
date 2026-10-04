@@ -43,7 +43,7 @@ export function Header() {
           scrolled ? "h-16" : "h-20",
         )}
       >
-        <Link to="/" aria-label="QUME Technologies home" onClick={() => setOpen(false)}>
+        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)}>
           <Logo />
         </Link>
 

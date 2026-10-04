@@ -9,7 +9,7 @@ import { pageMeta } from "@/lib/seo";
 const jobsQuery = queryOptions({ queryKey: ["jobs"], queryFn: () => listJobs() });
 
 export const Route = createFileRoute("/careers/")({
-  head: () => pageMeta("Careers", "Join QUME Technologies in Kathmandu. Open roles in engineering, design and data."),
+  head: () => pageMeta("Careers", "Join QUMI Technologies in Kathmandu. Open roles in engineering, design and data."),
   loader: ({ context }) => context.queryClient.ensureQueryData(jobsQuery),
   component: CareersPage,
   errorComponent: () => <p className="container-site py-24">Couldn't load open roles. Please refresh.</p>,
@@ -65,7 +65,7 @@ function CareersPage() {
       </section>
       <section className="border-t border-border bg-surface py-16 md:py-24">
         <div className="container-site">
-          <p className="eyebrow">Working at QUME</p>
+          <p className="eyebrow">Working at QUMI</p>
           <div className="mt-10 grid gap-10 md:grid-cols-4">
             {principles.map((p) => (
               <div key={p.title} className="border-t-2 border-foreground pt-5">

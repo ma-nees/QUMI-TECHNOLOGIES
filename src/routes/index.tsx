@@ -17,9 +17,9 @@ import { Reveal, SectionHeader } from "@/components/site/primitives";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QUME Technologies — Software, Cloud & Data Engineering from Nepal" },
+      { title: "QUMI Technologies — Software, Cloud & Data Engineering from Nepal" },
       { name: "description", content: "Nepal-based technology partner engineering custom software, web and mobile apps, cloud, data and AI solutions." },
-      { property: "og:title", content: "QUME Technologies — Engineering digital products" },
+      { property: "og:title", content: "QUMI Technologies — Engineering digital products" },
       { property: "og:description", content: "Custom software, cloud, data and AI engineering from Kathmandu, Nepal." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -37,7 +37,7 @@ function ValuePropositionSection() {
     <section className="py-12 md:py-20">
       <div className="container-site">
         <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-sm">
-          <SectionHeader eyebrow="Why Qume" title="Built for modern digital demands." intro="We combine silicon-valley engineering standards with the incredible technical talent pool in Kathmandu." />
+          <SectionHeader eyebrow="Why Qumi" title="Built for modern digital demands." intro="We combine silicon-valley engineering standards with the incredible technical talent pool in Kathmandu." />
           
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {[

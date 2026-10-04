@@ -13,7 +13,7 @@ const solutions = [
 ];
 
 export const Route = createFileRoute("/solutions")({
-  head: () => pageMeta("Solutions", "How QUME Technologies solves business problems: modernisation, digital channels, operations platforms, data, AI and cloud."),
+  head: () => pageMeta("Solutions", "How QUMI Technologies solves business problems: modernisation, digital channels, operations platforms, data, AI and cloud."),
   component: SolutionsPage,
 });
 

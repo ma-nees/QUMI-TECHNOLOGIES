@@ -76,7 +76,7 @@ export function Hero() {
           className="animate-rise mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground"
           style={{ animationDelay: "180ms" }}
         >
-          QUME Technologies designs and builds custom software, modernises operations on the cloud,
+          QUMI Technologies designs and builds custom software, modernises operations on the cloud,
           and puts data and AI to practical use — for enterprises, startups and public institutions.
         </p>
         <div className="animate-rise mt-6 flex flex-wrap justify-center gap-3" style={{ animationDelay: "270ms" }}>

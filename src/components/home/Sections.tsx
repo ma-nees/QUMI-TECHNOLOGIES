@@ -67,7 +67,7 @@ export function AboutSection() {
         <Reveal delay={120} className="md:col-span-5 md:col-start-8">
           <div className="space-y-5 text-base leading-relaxed text-muted-foreground">
             <p>
-              QUME Technologies is a Nepal-based IT company. We work with organisations that need software
+              QUMI Technologies is a Nepal-based IT company. We work with organisations that need software
               they can depend on: systems that scale, stay secure and remain maintainable long after launch.
             </p>
             <p>
@@ -84,7 +84,7 @@ export function AboutSection() {
           </ul>
           <Button asChild variant="link" className="mt-8">
             <Link to="/about">
-              More about QUME <ArrowRight className="arrow-nudge" />
+              More about QUMI <ArrowRight className="arrow-nudge" />
             </Link>
           </Button>
         </Reveal>
@@ -291,7 +291,7 @@ export function PrinciplesSection() {
   return (
     <section className="py-8 md:py-12">
       <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
-        <SectionHeader eyebrow="Why QUME" title="The principles we work by." />
+        <SectionHeader eyebrow="Why QUMI" title="The principles we work by." />
         <div className="mt-14 grid gap-6 md:grid-cols-2">
           {principles.map((p, i) => (
             <Reveal key={p.title} delay={i * 60} className="border border-border/60 bg-background/60 p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-background">

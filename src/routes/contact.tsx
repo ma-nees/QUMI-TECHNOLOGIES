@@ -11,7 +11,7 @@ import { company } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
-  head: () => pageMeta("Contact", "Start a project or ask a question. Talk to the QUME Technologies team in Kathmandu, Nepal."),
+  head: () => pageMeta("Contact", "Start a project or ask a question. Talk to the QUMI Technologies team in Kathmandu, Nepal."),
   component: ContactPage,
 });
 

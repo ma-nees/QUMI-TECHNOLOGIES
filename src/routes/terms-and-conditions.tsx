@@ -4,7 +4,7 @@ import { company } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms-and-conditions")({
-  head: () => pageMeta("Terms & Conditions", "Terms governing the use of the QUME Technologies website."),
+  head: () => pageMeta("Terms & Conditions", "Terms governing the use of the QUMI Technologies website."),
   component: () => (
     <>
       <PageHero eyebrow="Legal" title="Terms & Conditions" intro="This template must be reviewed by legal counsel before publication." />

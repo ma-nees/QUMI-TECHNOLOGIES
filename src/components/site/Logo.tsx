@@ -7,7 +7,7 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
         <path d="M18.5 18.5 L24 24" strokeWidth="3" strokeLinecap="square" className="stroke-highlight" />
       </svg>
       <span className={inverse ? "text-ink-foreground" : "text-foreground"}>
-        <span className="text-[1.05rem] font-extrabold tracking-tight">QUME</span>
+        <span className="text-[1.05rem] font-extrabold tracking-tight">QUMI</span>
         <span className="ml-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] opacity-70">
           Technologies
         </span>

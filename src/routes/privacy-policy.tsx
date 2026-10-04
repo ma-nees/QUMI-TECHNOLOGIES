@@ -4,7 +4,7 @@ import { company } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy-policy")({
-  head: () => pageMeta("Privacy Policy", "How QUME Technologies collects, uses and protects personal information."),
+  head: () => pageMeta("Privacy Policy", "How QUMI Technologies collects, uses and protects personal information."),
   component: () => (
     <>
       <PageHero eyebrow="Legal" title="Privacy Policy" intro="This template must be reviewed by legal counsel before publication." />

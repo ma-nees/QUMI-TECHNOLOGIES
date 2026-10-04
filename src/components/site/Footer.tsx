@@ -40,7 +40,7 @@ export function Footer() {
             ].map(({ Icon, label }) => (
               <a
                 key={label}
-                href={label === "LinkedIn" ? "https://linkedin.com/company/qume" : label === "GitHub" ? "https://github.com/qume" : "https://x.com/qume"}
+                href={label === "LinkedIn" ? "https://linkedin.com/company/qumi" : label === "GitHub" ? "https://github.com/qumi" : "https://x.com/qumi"}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}

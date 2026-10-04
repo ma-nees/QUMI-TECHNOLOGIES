@@ -11,10 +11,10 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 export const company = {
-  name: "QUME Technologies",
-  short: "QUME",
+  name: "QUMI Technologies",
+  short: "QUMI",
   // Placeholder contact details — replace with real ones.
-  email: "hello@qume.tech",
+  email: "hello@qumi.tech",
   phone: "+977 1-0000000",
   address: "Kathmandu, Nepal",
 };
@@ -116,7 +116,7 @@ export const principles = [
 ];
 
 export const engagementModels = [
-  { title: "Project delivery", text: "A defined scope delivered end-to-end by a dedicated QUME team." },
+  { title: "Project delivery", text: "A defined scope delivered end-to-end by a dedicated QUMI team." },
   { title: "Dedicated team", text: "Engineers and designers who work as an extension of your team." },
   { title: "Advisory", text: "Architecture reviews, audits and technical due diligence." },
 ];

@@ -4,7 +4,7 @@ import { CtaSection, PrinciplesSection, ProcessSection, TechnologySection } from
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  head: () => pageMeta("About", "QUME Technologies is a Nepal-based IT company focused on engineering-driven software, cloud and data work."),
+  head: () => pageMeta("About", "QUMI Technologies is a Nepal-based IT company focused on engineering-driven software, cloud and data work."),
   component: AboutPage,
 });
 
@@ -12,7 +12,7 @@ function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About QUME"
+        eyebrow="About QUMI"
         title="A technology company from Nepal, built for the long term."
         intro="We exist to show that dependable, well-engineered software can be designed and built in Nepal — for clients here and around the world."
       />

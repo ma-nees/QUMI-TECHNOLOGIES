@@ -8,10 +8,10 @@ import { Logo } from "@/components/site/Logo";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Staff sign in — QUME Technologies" },
-      { name: "description", content: "Sign in to the QUME Technologies admin area." },
-      { property: "og:title", content: "Staff sign in — QUME Technologies" },
-      { property: "og:description", content: "Admin access for QUME Technologies staff." },
+      { title: "Staff sign in — QUMI Technologies" },
+      { name: "description", content: "Sign in to the QUMI Technologies admin area." },
+      { property: "og:title", content: "Staff sign in — QUMI Technologies" },
+      { property: "og:description", content: "Admin access for QUMI Technologies staff." },
       { name: "robots", content: "noindex" },
     ],
   }),

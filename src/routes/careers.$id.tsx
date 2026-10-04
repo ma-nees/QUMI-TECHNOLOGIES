@@ -25,8 +25,8 @@ export const Route = createFileRoute("/careers/$id")({
     return { title: job?.title ?? "General application", summary: job?.summary ?? "" };
   },
   head: ({ loaderData }) => {
-    const t = `${loaderData?.title ?? "Careers"} — Careers at QUME Technologies`;
-    const d = loaderData?.summary || "Apply to join QUME Technologies in Kathmandu, Nepal.";
+    const t = `${loaderData?.title ?? "Careers"} — Careers at QUMI Technologies`;
+    const d = loaderData?.summary || "Apply to join QUMI Technologies in Kathmandu, Nepal.";
     return {
       meta: [
         { title: t },

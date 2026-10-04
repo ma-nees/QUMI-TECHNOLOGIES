@@ -16,7 +16,7 @@ type Post = Database["public"]["Tables"]["posts"]["Row"];
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Admin — QUME Technologies" },
+      { title: "Admin — QUMI Technologies" },
       { name: "description", content: "Manage enquiries, jobs, applications and insights." },
       { name: "robots", content: "noindex" },
     ],
