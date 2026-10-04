@@ -38,7 +38,7 @@ export const listPosts = createServerFn({ method: "GET" }).handler(async (): Pro
 });
 
 export const getPost = createServerFn({ method: "GET" })
-  .inputValidator((d: { slug: string }) => z.object({ slug: z.string().max(200) }).parse(d))
+  .validator((d: { slug: string }) => z.object({ slug: z.string().max(200) }).parse(d))
   .handler(async ({ data }): Promise<Post | null> => {
     const { data: row, error } = await publicClient()
       .from("posts")
@@ -64,7 +64,7 @@ export const listJobs = createServerFn({ method: "GET" }).handler(async (): Prom
 });
 
 export const getJob = createServerFn({ method: "GET" })
-  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data }): Promise<Job | null> => {
     const { data: row, error } = await publicClient()
       .from("jobs")
@@ -77,7 +77,7 @@ export const getJob = createServerFn({ method: "GET" })
   });
 
 export const submitContact = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => contactSchema.parse(d))
+  .validator((d: unknown) => contactSchema.parse(d))
   .handler(async ({ data }) => {
     if (data.website) return { ok: true };
     const { error } = await publicClient().from("contact_submissions").insert({
@@ -95,7 +95,7 @@ export const submitContact = createServerFn({ method: "POST" })
   });
 
 export const submitApplication = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => applicationSchema.parse(d))
+  .validator((d: unknown) => applicationSchema.parse(d))
   .handler(async ({ data }) => {
     if (data.website) return { ok: true };
     const { error } = await publicClient().from("job_applications").insert({
