@@ -1,6 +1,61 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+
+const phrases = [
+  "drive business growth.",
+  "accelerate business growth.",
+  "transform businesses.",
+  "power business growth.",
+  "create business impact.",
+  "shape the future of business.",
+  "help businesses evolve.",
+  "turn ideas into impact."
+];
+
+function Typewriter() {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    
+    const current = phrases[index]!;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    if (isDeleting) {
+      timeoutId = setTimeout(() => {
+        setText(current.substring(0, text.length - 1));
+        if (text.length <= 1) {
+          setIsDeleting(false);
+          setIndex((i) => (i + 1) % phrases.length);
+        }
+      }, 40);
+    } else {
+      timeoutId = setTimeout(() => {
+        setText(current.substring(0, text.length + 1));
+        if (text.length === current.length) {
+          setIsPaused(true);
+          setTimeout(() => {
+            setIsPaused(false);
+            setIsDeleting(true);
+          }, 2500);
+        }
+      }, 60);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [text, isDeleting, index, isPaused]);
+
+  return (
+    <span className="inline-block min-h-[1.2em]">
+      <span className="text-primary">{text}</span>
+      <span className="animate-pulse border-r-4 border-primary ml-1 inline-block h-[0.8em] align-middle -mt-2" />
+    </span>
+  );
+}
 
 export function Hero() {
   return (
@@ -14,7 +69,7 @@ export function Hero() {
           className="animate-rise mt-3 text-[2.5rem] font-extrabold leading-[1.05] md:text-[3.5rem]"
           style={{ animationDelay: "90ms" }}
         >
-          Engineering digital products that move businesses forward.
+          Engineering digital products that <Typewriter />
         </h1>
         <p
           className="animate-rise mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground"
