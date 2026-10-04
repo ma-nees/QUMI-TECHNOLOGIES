@@ -33,25 +33,17 @@ export function Header() {
   return (
     <header
       className={cn(
-        "z-50 transition-[box-shadow,border-color,background-color] duration-300",
-        // Desktop: sticky, full width, border bottom
-        "lg:sticky lg:top-0 lg:border-b lg:bg-surface",
-        scrolled ? "lg:border-transparent lg:shadow-header" : "lg:border-border",
-        // Mobile: fixed, top floating, transparent container (click-through)
-        "fixed top-4 left-0 right-0 flex justify-center pointer-events-none lg:pointer-events-auto lg:block lg:top-0 lg:left-auto lg:right-auto"
+        "sticky top-0 z-50 border-b bg-surface transition-[box-shadow,border-color] duration-300",
+        scrolled ? "border-transparent shadow-header" : "border-border",
       )}
     >
       <div
         className={cn(
-          "pointer-events-auto flex items-center transition-all duration-300",
-          // Desktop inner container
-          "lg:container-site lg:justify-between lg:w-full lg:max-w-[1240px] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-8 lg:shadow-none",
-          scrolled ? "lg:h-16" : "lg:h-20",
-          // Mobile inner floating pill
-          "h-14 gap-8 rounded-full border border-border bg-surface/90 px-6 shadow-lg backdrop-blur-md justify-between"
+          "container-site flex items-center justify-between transition-[height] duration-300",
+          scrolled ? "h-16" : "h-20",
         )}
       >
-        <Link to="/" aria-label="QUME Technologies home" onClick={() => setOpen(false)} className="shrink-0">
+        <Link to="/" aria-label="QUME Technologies home" onClick={() => setOpen(false)}>
           <Logo />
         </Link>
 
@@ -83,8 +75,8 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-40 bg-background lg:hidden animate-in fade-in duration-200 pt-24 pb-8 overflow-y-auto">
-          <nav aria-label="Mobile" className="container-site flex flex-col">
+        <div className="fixed inset-x-0 bottom-0 top-[inherit] z-40 border-t border-border bg-background lg:hidden animate-in fade-in duration-200" style={{ top: scrolled ? 64 : 80 }}>
+          <nav aria-label="Mobile" className="container-site flex flex-col py-6">
             {navItems.map((n, i) => (
               <Link
                 key={n.to}
