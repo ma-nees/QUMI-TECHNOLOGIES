@@ -11,7 +11,6 @@ export const navItems = [
   { to: "/solutions", label: "Solutions" },
   { to: "/industries", label: "Industries" },
   { to: "/about", label: "About" },
-  { to: "/insights", label: "Insights" },
   { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
 ] as const;
