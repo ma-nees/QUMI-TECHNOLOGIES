@@ -45,7 +45,7 @@ export function ServicesSection() {
             intro="From the first architecture decision to production operations, our teams cover the full lifecycle of a digital product."
           />
         </div>
-        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-sm">
+        <div className="pt-2">
           <ServicesGrid />
         </div>
       </div>
