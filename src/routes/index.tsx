@@ -31,13 +31,6 @@ function Index() {
     <>
       <Hero />
       <ServicesSection />
-      <AboutSection />
-      <TechnologySection />
-      <IndustriesSection />
-      <CaseStudiesSection />
-      <ProcessSection />
-      <PrinciplesSection />
-      <EngagementSection />
       <CtaSection />
     </>
   );
