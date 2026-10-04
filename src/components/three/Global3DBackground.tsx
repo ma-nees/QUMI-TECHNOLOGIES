@@ -69,9 +69,9 @@ export default function Global3DBackground() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.innerWidth < 768;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true, powerPreference: "high-performance" });
-    // Cap pixel ratio to 1.5 to save fill rate on large displays
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    // Keep pixel ratio at native, but cap at 2 for performance on mobile while keeping anti-aliasing
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     el.appendChild(renderer.domElement);
 
@@ -110,7 +110,7 @@ export default function Global3DBackground() {
     scene.add(grid);
 
     /* 2. Data network */
-    const nodeCount = isMobile ? 32 : 70;
+    const nodeCount = isMobile ? 22 : 70;
     const nodes: THREE.Vector3[] = [];
     for (let i = 0; i < nodeCount; i++) {
       nodes.push(
@@ -156,7 +156,7 @@ export default function Global3DBackground() {
     );
 
     // packets travelling along random links
-    const packetCount = isMobile ? 14 : 34;
+    const packetCount = isMobile ? 8 : 34;
     const packetPos = new Float32Array(packetCount * 3);
     const packets = Array.from({ length: packetCount }, () => ({
       edge: Math.floor(Math.random() * Math.max(edges.length, 1)),
@@ -177,7 +177,7 @@ export default function Global3DBackground() {
     scene.add(network);
 
     /* 3. Floating glass cubes (parallax layer) */
-    const cubeCount = isMobile ? 6 : 12;
+    const cubeCount = isMobile ? 3 : 12;
     const cubeGeo = new RoundedBoxGeometry(1, 1, 1, 4, 0.18);
     const cubeEdges = new THREE.EdgesGeometry(cubeGeo, 20);
     const cubes: { g: THREE.Group; base: THREE.Vector3; depth: number; spin: number }[] = [];
