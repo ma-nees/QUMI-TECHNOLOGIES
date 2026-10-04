@@ -12,7 +12,7 @@ export const Route = createFileRoute("/industries")({
         title="Sector knowledge built into the software."
         intro="Each industry brings different rules, users and risks. We design with those constraints from the start."
       />
-      <section className="container-site py-16 md:py-24">
+      <section className="container-site py-8 md:py-12">
         <IndustriesList full />
       </section>
       <CtaSection />

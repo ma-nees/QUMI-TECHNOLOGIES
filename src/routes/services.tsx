@@ -18,11 +18,11 @@ function ServicesPage() {
         title="End-to-end engineering for digital products."
         intro="Eight disciplines, one accountable team. Engage us for a single capability or the full product lifecycle."
       />
-      <section className="container-site py-16 md:py-24">
-        <div className="flex flex-col gap-6">
+      <section className="container-site py-8 md:py-12">
+        <div className="flex flex-col gap-4">
           {services.map((s, i) => (
             <Reveal key={s.slug}>
-              <div id={s.slug} className="grid scroll-mt-28 gap-6 border border-border bg-surface/80 backdrop-blur-md p-8 rounded-xl shadow-sm md:grid-cols-12 transition-all hover:bg-surface hover:shadow-md">
+              <div id={s.slug} className="grid scroll-mt-28 gap-4 border border-border bg-surface/80 backdrop-blur-md p-5 md:p-6 rounded-lg shadow-sm md:grid-cols-12 md:gap-6 transition-all hover:bg-surface hover:shadow-md">
                 <div className="flex items-start gap-5 md:col-span-5">
                   <span className="font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
                   <div className="flex items-center gap-4 md:block">
