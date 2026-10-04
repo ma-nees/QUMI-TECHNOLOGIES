@@ -75,8 +75,8 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-[inherit] z-40 border-t border-border bg-surface lg:hidden" style={{ top: scrolled ? 64 : 80 }}>
-          <nav aria-label="Mobile" className="container-site flex flex-col py-6">
+        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-border bg-surface pb-8 shadow-2xl lg:hidden">
+          <nav aria-label="Mobile" className="container-site flex flex-col pt-2">
             {navItems.map((n, i) => (
               <Link
                 key={n.to}
