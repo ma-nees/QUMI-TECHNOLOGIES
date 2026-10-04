@@ -53,7 +53,7 @@ function ContactPage() {
       <section className="container-site grid gap-8 py-8 md:gap-14 md:grid-cols-12 md:py-12">
         <div className="md:col-span-7 border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
           {status === "sent" ? (
-            <div className="animate-rise rounded-xl border border-border/60 bg-background/60 p-10">
+            <div className="animate-rise">
               <CheckCircle size={36} weight="light" className="text-primary" />
               <h2 className="mt-5 text-2xl font-bold">Thank you — your message has been received.</h2>
               <p className="mt-3 text-muted-foreground">We'll get back to you at the email address you provided.</p>
@@ -62,7 +62,7 @@ function ContactPage() {
               </Button>
             </div>
           ) : (
-            <form onSubmit={onSubmit} noValidate className="grid gap-5 rounded-xl border border-border/60 bg-background/60 p-6 md:grid-cols-2 md:p-10">
+            <form onSubmit={onSubmit} noValidate className="grid gap-5 md:grid-cols-2">
               <Honeypot />
               <Field label="Full name" name="name" autoComplete="name" error={errors["name"]} />
               <Field label="Work email" name="email" type="email" autoComplete="email" error={errors["email"]} />
