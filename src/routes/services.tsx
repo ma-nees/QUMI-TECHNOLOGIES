@@ -25,9 +25,9 @@ function ServicesPage() {
               <div id={s.slug} className="grid scroll-mt-28 gap-6 border border-border bg-surface/80 backdrop-blur-md p-8 rounded-xl shadow-sm md:grid-cols-12 transition-all hover:bg-surface hover:shadow-md">
                 <div className="flex items-start gap-5 md:col-span-5">
                   <span className="font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <s.icon size={28} weight="light" className="text-primary" />
-                    <h2 className="mt-4 text-2xl font-bold">{s.title}</h2>
+                  <div className="flex items-center gap-4 md:block">
+                    <s.icon size={28} weight="light" className="text-primary shrink-0" />
+                    <h2 className="text-xl font-bold md:mt-4 md:text-2xl">{s.title}</h2>
                   </div>
                 </div>
                 <p className="leading-relaxed text-muted-foreground md:col-span-4">{s.summary}</p>

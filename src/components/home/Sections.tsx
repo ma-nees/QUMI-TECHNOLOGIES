@@ -19,8 +19,10 @@ export function ServicesGrid({ limit }: { limit?: number }) {
             hash={s.slug}
             className="group card-interactive flex h-full flex-col border-0 p-7 hover:z-10"
           >
-            <s.icon size={28} weight="light" className="icon-nudge text-primary" />
-            <h3 className="mt-8 text-lg font-bold leading-snug">{s.title}</h3>
+            <div className="flex items-center gap-3 md:block">
+              <s.icon size={28} weight="light" className="icon-nudge text-primary shrink-0" />
+              <h3 className="text-lg font-bold leading-snug md:mt-8">{s.title}</h3>
+            </div>
             <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{s.summary}</p>
             <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
               Learn more <ArrowRight className="arrow-nudge" />
