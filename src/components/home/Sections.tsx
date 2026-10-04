@@ -37,16 +37,16 @@ export function ServicesGrid({ limit }: { limit?: number }) {
 export function ServicesSection() {
   return (
     <section className="py-8 md:py-12">
-      <div className="container-site">
+      <div className="container-site flex flex-col gap-6">
         <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-sm">
           <SectionHeader
             eyebrow="What we do"
             title="Services built around real delivery, not buzzwords."
             intro="From the first architecture decision to production operations, our teams cover the full lifecycle of a digital product."
           />
-          <div className="mt-14">
-            <ServicesGrid />
-          </div>
+        </div>
+        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-sm">
+          <ServicesGrid />
         </div>
       </div>
     </section>
