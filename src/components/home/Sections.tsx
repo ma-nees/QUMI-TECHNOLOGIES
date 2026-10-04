@@ -11,9 +11,9 @@ import caseHealth from "@/assets/case-health.jpg";
 export function ServicesGrid({ limit }: { limit?: number }) {
   const list = limit ? services.slice(0, limit) : services;
   return (
-    <div className="grid border-l border-t border-border sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid border-l border-t border-border/50 sm:grid-cols-2 lg:grid-cols-4">
       {list.map((s, i) => (
-        <Reveal key={s.slug} delay={(i % 4) * 60} className="border-b border-r border-border">
+        <Reveal key={s.slug} delay={(i % 4) * 60} className="border-b border-r border-border/50">
           <Link
             to="/services"
             hash={s.slug}
@@ -38,13 +38,15 @@ export function ServicesSection() {
   return (
     <section className="py-8 md:py-12">
       <div className="container-site">
-        <SectionHeader
-          eyebrow="What we do"
-          title="Services built around real delivery, not buzzwords."
-          intro="From the first architecture decision to production operations, our teams cover the full lifecycle of a digital product."
-        />
-        <div className="mt-14">
-          <ServicesGrid />
+        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-sm">
+          <SectionHeader
+            eyebrow="What we do"
+            title="Services built around real delivery, not buzzwords."
+            intro="From the first architecture decision to production operations, our teams cover the full lifecycle of a digital product."
+          />
+          <div className="mt-14">
+            <ServicesGrid />
+          </div>
         </div>
       </div>
     </section>
