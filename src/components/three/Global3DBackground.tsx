@@ -201,6 +201,26 @@ export default function Global3DBackground() {
       cubes.push({ g, base, depth: 0.3 + Math.random() * 0.9, spin: (Math.random() - 0.5) * 0.5 });
     }
 
+    /* 4. Deep space ambient dust/particles */
+    const dustCount = isMobile ? 150 : 400;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount * 3; i++) {
+      dustPos[i] = (Math.random() - 0.5) * 100;
+    }
+    dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({
+      size: 0.3,
+      color: blueGlow,
+      transparent: true,
+      opacity: 0.4,
+      map: glowTex,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const dustParticles = new THREE.Points(dustGeo, dustMat);
+    scene.add(dustParticles);
+
     /* ---------- Input ---------- */
     const camTarget = { x: 0, y: 0 };
     let scrollTarget = 0;
@@ -260,6 +280,11 @@ export default function Global3DBackground() {
       }
 
       network.rotation.y = Math.sin(time * 0.12) * 0.12;
+
+      // dust slowly drifts and spins
+      dustParticles.rotation.y = time * 0.05;
+      dustParticles.rotation.x = time * 0.02;
+      dustParticles.position.y = Math.sin(time * 0.2) * 2;
 
       // cubes tumble and drift at different depths
       cubes.forEach((c, i) => {
