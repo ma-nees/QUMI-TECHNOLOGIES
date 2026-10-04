@@ -177,9 +177,9 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
   transition:
-    transform 280ms var(--ease-out),
-    border-color 280ms var(--ease-out),
-    box-shadow 280ms var(--ease-out);
+    transform 120ms var(--ease-out),
+    border-color 120ms var(--ease-out),
+    box-shadow 120ms var(--ease-out);
   &:hover {
     transform: translateY(-2px);
     border-color: var(--color-border-strong);
@@ -188,14 +188,14 @@
 }
 
 @utility arrow-nudge {
-  transition: transform 260ms var(--ease-out);
+  transition: transform 120ms var(--ease-out);
   .group:hover & {
     transform: translateX(4px);
   }
 }
 
 @utility icon-nudge {
-  transition: transform 260ms var(--ease-out);
+  transition: transform 120ms var(--ease-out);
   .group:hover & {
     transform: translateY(-3px);
   }
