@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
   return (
-    <div className="container-site flex min-h-[60vh] flex-col items-start justify-center py-24">
+    <div className="container-site flex min-h-[60vh] flex-col items-start justify-center py-10">
       <p className="eyebrow">Error 404</p>
       <h1 className="mt-4 text-4xl font-bold">This page doesn't exist.</h1>
       <p className="mt-3 text-muted-foreground">It may have been moved, or the link may be incorrect.</p>
@@ -40,7 +40,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   }, [error]);
 
   return (
-    <div className="container-site flex min-h-[60vh] flex-col items-start justify-center py-24">
+    <div className="container-site flex min-h-[60vh] flex-col items-start justify-center py-10">
       <h1 className="text-2xl font-bold">This page didn't load</h1>
       <p className="mt-2 text-muted-foreground">Something went wrong on our end. Please try again.</p>
       <div className="mt-6 flex gap-3">

@@ -25,7 +25,7 @@ const cols = [
 export function Footer() {
   return (
     <footer className="bg-ink text-ink-foreground">
-      <div className="container-site grid gap-12 py-16 md:grid-cols-12">
+      <div className="container-site grid gap-12 py-8 md:py-12 md:grid-cols-12">
         <div className="md:col-span-5">
           <Logo inverse />
           <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-70">

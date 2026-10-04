@@ -25,7 +25,7 @@ function SolutionsPage() {
         title="Technology applied to concrete business problems."
         intro="We start from the outcome you need, then choose the architecture and tools that get you there."
       />
-      <section className="container-site py-16 md:py-24">
+      <section className="container-site py-8 md:py-12">
         <SectionHeader eyebrow="Common engagements" title="Where we help most." />
         <div className="mt-12 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-3">
           {solutions.map((s, i) => (

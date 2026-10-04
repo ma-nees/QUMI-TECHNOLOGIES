@@ -246,7 +246,7 @@ export function ProcessSection() {
   }, []);
 
   return (
-    <section className="bg-ink py-12 text-ink-foreground md:py-16">
+    <section className="bg-ink py-8 text-ink-foreground md:py-12">
       <div className="container-site grid gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-4">
           <p className="eyebrow">How we deliver</p>
@@ -305,7 +305,7 @@ export function PrinciplesSection() {
 
 export function EngagementSection() {
   return (
-    <section className="border-t border-border bg-surface py-12 md:py-16">
+    <section className="border-t border-border bg-surface py-8 md:py-12">
       <div className="container-site">
         <SectionHeader
           eyebrow="How we work with teams"
@@ -328,7 +328,7 @@ export function EngagementSection() {
 
 export function CtaSection() {
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="container-site">
         <Reveal className="relative overflow-hidden rounded-md bg-primary px-8 py-14 text-primary-foreground md:px-16 md:py-20">
           <div className="grid-lines absolute inset-0 opacity-[0.07]" aria-hidden="true" />

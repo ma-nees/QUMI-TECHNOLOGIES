@@ -40,12 +40,12 @@ export const Route = createFileRoute("/careers/$id")({
   },
   component: JobPage,
   notFoundComponent: () => (
-    <div className="container-site py-24">
+    <div className="container-site py-12">
       <h1 className="text-2xl font-bold">This role is no longer open.</h1>
       <Link to="/careers" className="mt-4 inline-block font-semibold text-primary">View open roles</Link>
     </div>
   ),
-  errorComponent: () => <p className="container-site py-24">Couldn't load this role. Please refresh.</p>,
+  errorComponent: () => <p className="container-site py-12">Couldn't load this role. Please refresh.</p>,
 });
 
 const ALLOWED = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
@@ -95,7 +95,7 @@ function JobPage() {
   }
 
   return (
-    <section className="container-site grid gap-14 py-14 md:grid-cols-12 md:py-20">
+    <section className="container-site grid gap-14 py-8 md:grid-cols-12 md:py-12">
       <div className="md:col-span-5">
         <Link to="/careers" className="group inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-primary">
           <ArrowLeft className="transition-transform group-hover:-translate-x-1" /> All roles

@@ -60,7 +60,7 @@ export function SectionHeader({
 export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: ReactNode; intro?: ReactNode }) {
   return (
     <section className="border-b border-border">
-      <div className="container-site py-16 md:py-24">
+      <div className="container-site py-8 md:py-12">
         <p className="eyebrow animate-rise">{eyebrow}</p>
         <h1
           className="animate-rise mt-5 max-w-3xl text-4xl font-bold leading-[1.08] md:text-[3.25rem]"
