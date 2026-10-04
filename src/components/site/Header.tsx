@@ -81,7 +81,7 @@ export function Header() {
           
           {/* Floating Menu Card */}
           <div 
-            className="fixed left-4 right-4 z-50 rounded-2xl border border-border bg-surface p-6 shadow-2xl lg:hidden animate-in zoom-in-95 fade-in duration-200" 
+            className="fixed left-4 right-4 z-50 rounded-[1.25rem] border border-border bg-card p-5 shadow-2xl lg:hidden animate-in zoom-in-95 fade-in duration-200" 
             style={{ top: scrolled ? 72 : 92 }}
           >
             <nav aria-label="Mobile" className="flex flex-col">
@@ -90,18 +90,23 @@ export function Header() {
                   key={n.to}
                   to={n.to}
                   onClick={() => setOpen(false)}
-                  className="animate-rise flex items-center justify-between border-b border-border/50 py-3.5 text-lg font-semibold data-[status=active]:text-primary"
-                  style={{ animationDelay: `${i * 30}ms` }}
+                  className="flex items-center justify-between border-b border-border/60 py-4 text-[0.95rem] font-medium text-foreground hover:text-primary data-[status=active]:text-primary"
                 >
                   {n.label}
-                  <ArrowRight size={18} className="text-muted-foreground" />
                 </Link>
               ))}
-              <Button asChild size="lg" className="mt-8 rounded-xl shadow-lg shadow-primary/20">
-                <Link to="/contact" onClick={() => setOpen(false)}>
-                  Start a Project
-                </Link>
-              </Button>
+              <div className="mt-6 flex flex-col gap-3">
+                <Button asChild size="lg" className="w-full rounded-xl bg-primary hover:bg-primary-hover shadow-none">
+                  <Link to="/contact" onClick={() => setOpen(false)}>
+                    Start a Project
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="w-full rounded-xl border-border bg-transparent shadow-none hover:bg-surface">
+                  <Link to="/services" onClick={() => setOpen(false)}>
+                    Explore Services
+                  </Link>
+                </Button>
+              </div>
             </nav>
           </div>
         </>
