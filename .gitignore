@@ -34,7 +34,3 @@ dist-ssr
 # User-requested ignores
 .venv/
 docs/
-public/
-bun.lock
-vite.config.ts
-vitest.config.ts
