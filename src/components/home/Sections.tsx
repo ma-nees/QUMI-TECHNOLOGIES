@@ -94,7 +94,7 @@ export function AboutSection() {
 export function TechnologySection() {
   return (
     <section className="py-8 md:py-12">
-      <div className="container-site">
+      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
         <SectionHeader
           eyebrow="Technology"
           title="A focused, proven stack."
@@ -102,7 +102,7 @@ export function TechnologySection() {
         />
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
           {technologies.map((g, i) => (
-            <Reveal key={g.group} delay={i * 60} className="border border-border bg-surface/80 backdrop-blur-md p-6 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md">
+            <Reveal key={g.group} delay={i * 60} className="border border-border/60 bg-background/60 p-6 rounded-xl shadow-sm transition-all hover:bg-background">
               <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{g.group}</h3>
               <ul className="mt-5 space-y-3">
                 {g.items.map((t) => (
@@ -288,11 +288,11 @@ export function ProcessSection() {
 export function PrinciplesSection() {
   return (
     <section className="py-8 md:py-12">
-      <div className="container-site">
+      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
         <SectionHeader eyebrow="Why QUME" title="The principles we work by." />
         <div className="mt-14 grid gap-6 md:grid-cols-2">
           {principles.map((p, i) => (
-            <Reveal key={p.title} delay={i * 60} className="border border-border bg-surface/80 backdrop-blur-md p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md">
+            <Reveal key={p.title} delay={i * 60} className="border border-border/60 bg-background/60 p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-background">
               <h3 className="text-xl font-bold">{p.title}</h3>
               <p className="mt-3 leading-relaxed text-muted-foreground">{p.text}</p>
             </Reveal>
