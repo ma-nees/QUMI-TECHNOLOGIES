@@ -75,27 +75,36 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-[inherit] z-40 border-t border-border bg-background lg:hidden animate-in fade-in duration-200" style={{ top: scrolled ? 64 : 80 }}>
-          <nav aria-label="Mobile" className="container-site flex flex-col py-6">
-            {navItems.map((n, i) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setOpen(false)}
-                className="animate-rise flex items-center justify-between border-b border-border py-4 text-lg font-semibold data-[status=active]:text-primary"
-                style={{ animationDelay: `${i * 30}ms` }}
-              >
-                {n.label}
-                <ArrowRight className="text-muted-foreground" />
-              </Link>
-            ))}
-            <Button asChild size="lg" className="mt-8">
-              <Link to="/contact" onClick={() => setOpen(false)}>
-                Start a Project
-              </Link>
-            </Button>
-          </nav>
-        </div>
+        <>
+          {/* Backdrop */}
+          <div className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm lg:hidden animate-in fade-in" onClick={() => setOpen(false)} />
+          
+          {/* Floating Menu Card */}
+          <div 
+            className="fixed left-4 right-4 z-50 rounded-2xl border border-border bg-surface p-6 shadow-2xl lg:hidden animate-in zoom-in-95 fade-in duration-200" 
+            style={{ top: scrolled ? 72 : 92 }}
+          >
+            <nav aria-label="Mobile" className="flex flex-col">
+              {navItems.map((n, i) => (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className="animate-rise flex items-center justify-between border-b border-border/50 py-3.5 text-lg font-semibold data-[status=active]:text-primary"
+                  style={{ animationDelay: `${i * 30}ms` }}
+                >
+                  {n.label}
+                  <ArrowRight size={18} className="text-muted-foreground" />
+                </Link>
+              ))}
+              <Button asChild size="lg" className="mt-8 rounded-xl shadow-lg shadow-primary/20">
+                <Link to="/contact" onClick={() => setOpen(false)}>
+                  Start a Project
+                </Link>
+              </Button>
+            </nav>
+          </div>
+        </>
       )}
     </header>
   );
