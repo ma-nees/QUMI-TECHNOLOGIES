@@ -98,25 +98,31 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-slate-200 bg-[#F4F8FC] pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
+        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-border bg-background pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
           <nav aria-label="Mobile" className="container-site flex flex-col pt-2">
             {navItems.map((n, i) => (
               <Link
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="animate-rise flex items-center justify-between border-b border-slate-200/60 py-4 text-lg font-semibold text-slate-800 data-[status=active]:text-primary"
+                className="animate-rise flex items-center justify-between border-b border-border py-4 text-lg font-semibold text-foreground hover:text-primary data-[status=active]:text-primary"
                 style={{ animationDelay: `${i * 30}ms` }}
               >
                 {n.label}
-                <ArrowRight className="text-slate-400" />
+                <ArrowRight className="opacity-50" />
               </Link>
             ))}
-            <Button asChild size="lg" className="mt-8">
+            <div className="mt-8 flex flex-col gap-4">
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-medium opacity-70">Theme</span>
+                <ThemeToggle />
+              </div>
+              <Button asChild size="lg">
               <Link to="/contact" onClick={() => setOpen(false)}>
                 Start a Project
               </Link>
-            </Button>
+              </Button>
+            </div>
           </nav>
         </div>
       )}
