@@ -86,15 +86,18 @@ export function Header() {
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border lg:hidden transition-all duration-150 ease-out active:scale-75"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={20} className="animate-in spin-in-90 duration-150" /> : <List size={20} className="animate-in spin-in-90 duration-150" />}
-        </button>
+        <div className="flex items-center gap-3 lg:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border transition-all duration-150 ease-out active:scale-75"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={20} className="animate-in spin-in-90 duration-150" /> : <List size={20} className="animate-in spin-in-90 duration-150" />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -113,10 +116,6 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-8 flex flex-col gap-4">
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-medium opacity-70">Theme</span>
-                <ThemeToggle />
-              </div>
               <Button asChild size="lg">
               <Link to="/contact" onClick={() => setOpen(false)}>
                 Start a Project
