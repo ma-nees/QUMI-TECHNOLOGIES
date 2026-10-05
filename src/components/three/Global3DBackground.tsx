@@ -55,6 +55,8 @@ function makeGlowTexture() {
   return new THREE.CanvasTexture(c);
 }
 
+import { useTheme } from "next-themes";
+
 /**
  * Site-wide background: a perspective grid floor, a floating data network with packets
  * flowing along its links, and drifting glass cubes. Scrolling flies the camera forward
@@ -62,6 +64,7 @@ function makeGlowTexture() {
  */
 export default function Global3DBackground() {
   const mount = useRef<HTMLDivElement>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const el = mount.current;
@@ -83,10 +86,17 @@ export default function Global3DBackground() {
     key.position.set(6, 10, 8);
     scene.add(key);
 
-    const primary = new THREE.Color("#0047AB");
-    const accent = new THREE.Color("#F28C28");
+    const isDark = resolvedTheme === "dark";
+    const primary = new THREE.Color(isDark ? "#6EACDA" : "#0047AB");
+    const accent = new THREE.Color(isDark ? "#E2E2B6" : "#F28C28");
     const blueGlow = primary.clone().lerp(new THREE.Color("#ffffff"), 0.2);
     const glowTex = makeGlowTexture();
+    
+    // Adjust opacities based on theme
+    const lineOpacity = isDark ? 0.35 : 0.22;
+    const cubeOpacityBase = isDark ? 0.6 : 0.4;
+    const cubeWarmOpacity = isDark ? 0.8 : 0.9;
+    const dustOpacity = isDark ? 0.7 : 1.0;
 
     /* 1. Perspective grid floor */
     const mouseGrid = new THREE.Vector2(999, 999);
@@ -152,7 +162,7 @@ export default function Global3DBackground() {
     lineGeo.setAttribute("position", new THREE.Float32BufferAttribute(linePos, 3));
     const lines = new THREE.LineSegments(
       lineGeo,
-      new THREE.LineBasicMaterial({ color: primary, transparent: true, opacity: 0.22 }),
+      new THREE.LineBasicMaterial({ color: primary, transparent: true, opacity: lineOpacity }),
     );
 
     // packets travelling along random links
@@ -184,15 +194,15 @@ export default function Global3DBackground() {
     for (let i = 0; i < cubeCount; i++) {
       const warm = i % 4 === 0;
       const mat = new THREE.MeshStandardMaterial({
-        color: warm ? primary : "#cfe0ff",
+        color: warm ? primary : (isDark ? "#03346E" : "#cfe0ff"),
         metalness: warm ? 0.35 : 0.1,
         roughness: 0.12,
         transparent: true,
-        opacity: warm ? 0.9 : 0.4,
+        opacity: warm ? cubeWarmOpacity : cubeOpacityBase,
       });
       const g = new THREE.Group();
       g.add(new THREE.Mesh(cubeGeo, mat));
-      g.add(new THREE.LineSegments(cubeEdges, new THREE.LineBasicMaterial({ color: primary, transparent: true, opacity: 0.45 })));
+      g.add(new THREE.LineSegments(cubeEdges, new THREE.LineBasicMaterial({ color: primary, transparent: true, opacity: lineOpacity + 0.1 })));
       const s = 0.8 + Math.random() * 1.8;
       g.scale.setScalar(s);
       const base = new THREE.Vector3((Math.random() - 0.5) * 40, -3 + Math.random() * 11, -22 + Math.random() * 28);
@@ -213,10 +223,10 @@ export default function Global3DBackground() {
       size: 1.2,
       color: primary,
       transparent: true,
-      opacity: 1.0,
+      opacity: dustOpacity,
       map: glowTex,
       depthWrite: false,
-      blending: THREE.NormalBlending,
+      blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
     });
     const dustParticles = new THREE.Points(dustGeo, dustMat);
     scene.add(dustParticles);
