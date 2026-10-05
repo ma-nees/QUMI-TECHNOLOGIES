@@ -140,12 +140,14 @@ export default function Global3DBackground() {
     const nodePoints = new THREE.Points(
       nodeGeo,
       new THREE.PointsMaterial({
-        size: 1.1,
+        size: isDark ? 2.5 : 1.1,
         map: glowTex,
         vertexColors: true,
         transparent: true,
         depthWrite: false,
         sizeAttenuation: true,
+        blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
+        opacity: isDark ? 1.0 : 0.8,
       }),
     );
 
@@ -178,7 +180,15 @@ export default function Global3DBackground() {
     packetGeo.setAttribute("position", new THREE.BufferAttribute(packetPos, 3));
     const packetPoints = new THREE.Points(
       packetGeo,
-      new THREE.PointsMaterial({ size: 0.9, map: glowTex, color: accent, transparent: true, depthWrite: false }),
+      new THREE.PointsMaterial({ 
+        size: isDark ? 2.2 : 0.9, 
+        map: glowTex, 
+        color: accent, 
+        transparent: true, 
+        depthWrite: false,
+        blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
+        opacity: isDark ? 1.0 : 0.8
+      }),
     );
     packetPoints.frustumCulled = false;
 
@@ -220,10 +230,10 @@ export default function Global3DBackground() {
     }
     dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
-      size: 1.2,
+      size: isDark ? 2.5 : 1.2,
       color: primary,
       transparent: true,
-      opacity: dustOpacity,
+      opacity: isDark ? 1.0 : dustOpacity,
       map: glowTex,
       depthWrite: false,
       blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
