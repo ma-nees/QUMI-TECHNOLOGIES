@@ -17,9 +17,20 @@ const phrases = [
 
 function Typewriter() {
   const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [text, setText] = useState(phrases[0]!);
+  const [isDeleting, setIsDeleting] = useState(true);
+  const [isPaused, setIsPaused] = useState(true);
+
+  // Initial pause on mount
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (isPaused && text === phrases[0] && index === 0) {
+        timeoutId = setTimeout(() => {
+            setIsPaused(false);
+        }, 2000);
+        return () => clearTimeout(timeoutId);
+    }
+  }, []);
 
   useEffect(() => {
     if (isPaused) return;
