@@ -78,9 +78,9 @@ export default function Global3DBackground() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.innerWidth < 768;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" });
-    // Cap pixel ratio at 1.25 for performance while keeping acceptable quality
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.25));
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    // Keep pixel ratio at native, but cap at 2 for performance on mobile while keeping anti-aliasing
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     el.appendChild(renderer.domElement);
 
@@ -126,7 +126,7 @@ export default function Global3DBackground() {
     scene.add(grid);
 
     /* 2. Data network */
-    const nodeCount = isMobile ? 12 : 45;
+    const nodeCount = isMobile ? 22 : 70;
     const nodes: THREE.Vector3[] = [];
     for (let i = 0; i < nodeCount; i++) {
       nodes.push(
@@ -225,7 +225,7 @@ export default function Global3DBackground() {
     }
 
     /* 4. Deep space ambient dust/particles */
-    const dustCount = isMobile ? 80 : 200;
+    const dustCount = isMobile ? 150 : 400;
     const dustGeo = new THREE.BufferGeometry();
     const dustPos = new Float32Array(dustCount * 3);
     for (let i = 0; i < dustCount * 3; i++) {
@@ -256,9 +256,9 @@ export default function Global3DBackground() {
       blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
     });
     const sun = new THREE.Sprite(sunMat);
-    sun.scale.set(45, 45, 1);
+    sun.scale.set(80, 80, 1);
     sun.position.set(0, FLOOR_Y + 8, -120);
-    if (!isMobile) scene.add(sun);
+    scene.add(sun);
 
     /* 6. Wireframe core: icosahedron + torus knot + orbit rings */
     const core = new THREE.Group();
@@ -357,7 +357,7 @@ export default function Global3DBackground() {
     meteors.forEach((m) => (m.delay = rand(0, 5)));
 
     /* 9. Pulse ripples expanding across the floor */
-    const rippleCount = isMobile ? 0 : 2;
+    const rippleCount = isMobile ? 2 : 4;
     const ripples = Array.from({ length: rippleCount }, (_, i) => {
       const mat = new THREE.MeshBasicMaterial({
         color: i % 2 ? accent : primary,
@@ -439,7 +439,7 @@ export default function Global3DBackground() {
     scene.add(helix);
 
     /* 12. Rising embers drifting up from the floor */
-    const emberN = isMobile ? 20 : 75;
+    const emberN = isMobile ? 40 : 130;
     const emberArr = new Float32Array(emberN * 3);
     const emberBaseX = new Float32Array(emberN);
     const emberSpeed = new Float32Array(emberN);
@@ -490,7 +490,7 @@ export default function Global3DBackground() {
     });
 
     /* 14. Wireframe mountain range on the horizon */
-    const mtnGeo = new THREE.PlaneGeometry(240, 60, isMobile ? 20 : 40, isMobile ? 6 : 10);
+    const mtnGeo = new THREE.PlaneGeometry(240, 60, isMobile ? 30 : 60, isMobile ? 8 : 14);
     {
       const p = mtnGeo.attributes.position!;
       for (let i = 0; i < p.count; i++) {
