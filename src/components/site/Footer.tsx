@@ -24,7 +24,7 @@ const cols = [
 
 export function Footer() {
   return (
-    <footer className="bg-ink text-ink-foreground">
+    <footer className="bg-ink text-ink-foreground dark:bg-[#010d17] dark:text-foreground dark:border-t dark:border-border">
       <div className="container-site grid gap-12 py-8 md:py-12 md:grid-cols-12">
         <div className="md:col-span-5">
           <Logo inverse />
@@ -44,7 +44,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-foreground/20 transition-colors hover:border-highlight hover:text-highlight"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-foreground/20 dark:border-border dark:hover:border-highlight transition-colors hover:border-highlight hover:text-highlight"
               >
                 <Icon size={18} />
               </a>
@@ -85,7 +85,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-ink-foreground/10">
+      <div className="border-t border-ink-foreground/10 dark:border-border">
         <div className="container-site flex flex-col gap-3 py-6 text-xs opacity-70 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} {company.name}. All rights reserved.</p>
           <div className="flex gap-6">
