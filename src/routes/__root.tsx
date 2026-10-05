@@ -112,12 +112,34 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const bare = pathname.startsWith("/admin") || pathname.startsWith("/auth");
+  const [shouldLoad3D, setShouldLoad3D] = React.useState(false);
+
+  useEffect(() => {
+    const handleInteraction = () => setShouldLoad3D(true);
+    
+    // Load on first interaction
+    window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
+    window.addEventListener('mousemove', handleInteraction, { once: true, passive: true });
+    window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
+    
+    // Fallback: load after 3.5 seconds regardless
+    const timer = setTimeout(() => setShouldLoad3D(true), 3500);
+
+    return () => {
+      window.removeEventListener('scroll', handleInteraction);
+      window.removeEventListener('mousemove', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={null}>
-        <Global3DBackground />
-      </Suspense>
+      {shouldLoad3D && (
+        <Suspense fallback={null}>
+          <Global3DBackground />
+        </Suspense>
+      )}
       <div className="relative z-10 flex min-h-screen flex-col bg-transparent pointer-events-none">
         <div className="pointer-events-auto flex-1 flex flex-col">
           <a
