@@ -25,10 +25,10 @@ function Typewriter() {
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
     if (isPaused && text === phrases[0] && index === 0) {
-        timeoutId = setTimeout(() => {
-            setIsPaused(false);
-        }, 2000);
-        return () => clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsPaused(false);
+      }, 2000);
+      return () => clearTimeout(timeoutId);
     }
   }, []);
 
@@ -80,7 +80,7 @@ export function Hero() {
         <h1
           className="mt-3 text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl min-h-[140px] sm:min-h-[120px] md:min-h-0 flex flex-col md:block items-center"
         >
-          <span>Engineering digital products that</span>
+          <span>Engineering digital products that </span>
           <Typewriter />
         </h1>
         <p
