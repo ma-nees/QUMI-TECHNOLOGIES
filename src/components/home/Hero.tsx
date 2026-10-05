@@ -78,10 +78,11 @@ export function Hero() {
       <div className="container-site relative z-10 flex max-w-5xl flex-col items-center py-6">
         <p className="eyebrow animate-rise">Nepal-based technology partner</p>
         <h1
-          className="animate-rise mt-3 text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl"
+          className="animate-rise mt-3 text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl min-h-[140px] sm:min-h-[120px] md:min-h-0 flex flex-col md:block items-center"
           style={{ animationDelay: "90ms" }}
         >
-          Engineering digital products that <Typewriter />
+          <span>Engineering digital products that</span>
+          <Typewriter />
         </h1>
         <p
           className="animate-rise mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground"

@@ -112,20 +112,12 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const bare = pathname.startsWith("/admin") || pathname.startsWith("/auth");
-  const [isIdle, setIsIdle] = React.useState(false);
-
-  useEffect(() => {
-    const defer = window.requestIdleCallback || ((cb) => setTimeout(cb, 100));
-    defer(() => setIsIdle(true));
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isIdle && (
-        <Suspense fallback={null}>
-          <Global3DBackground />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <Global3DBackground />
+      </Suspense>
       <div className="relative z-10 flex min-h-screen flex-col bg-transparent pointer-events-none">
         <div className="pointer-events-auto flex-1 flex flex-col">
           <a
