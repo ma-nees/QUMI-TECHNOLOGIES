@@ -88,6 +88,37 @@
   --shadow-header: 0 1px 0 var(--border), 0 6px 20px -14px oklch(0.236 0.056 257 / 20%);
 }
 
+.dark {
+  --background: oklch(0.15 0.02 260); /* Deep Navy */
+  --surface: oklch(0.2 0.02 260 / 0.9);
+  --foreground: oklch(0.95 0.01 260); /* Off-white */
+  --card: oklch(0.2 0.02 260 / 0.9);
+  --card-foreground: oklch(0.95 0.01 260);
+  --popover: oklch(0.2 0.02 260 / 0.85);
+  --popover-foreground: oklch(0.95 0.01 260);
+  --primary: oklch(0.6 0.2 260); /* Brighter Cobalt for dark mode */
+  --primary-hover: oklch(0.65 0.2 260);
+  --primary-soft: oklch(0.3 0.1 260);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.25 0.02 260);
+  --secondary-foreground: oklch(0.95 0.01 260);
+  --muted: oklch(0.25 0.02 260);
+  --muted-foreground: oklch(0.7 0.03 260);
+  --accent: oklch(0.3 0.1 260);
+  --accent-foreground: oklch(0.6 0.2 260);
+  --highlight: oklch(0.72 0.17 58); /* Tangerine */
+  --ink: oklch(0.95 0.01 260);
+  --ink-foreground: oklch(0.15 0.02 260);
+  --destructive: oklch(0.56 0.2 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.28 0.02 260);
+  --border-strong: oklch(0.35 0.02 260);
+  --input: oklch(0.28 0.02 260);
+  --ring: oklch(0.6 0.2 260);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 20%), 0 8px 24px -12px oklch(0 0 0 / 40%);
+  --shadow-header: 0 1px 0 var(--border), 0 6px 20px -14px oklch(0 0 0 / 40%);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

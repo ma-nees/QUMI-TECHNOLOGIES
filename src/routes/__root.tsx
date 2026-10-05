@@ -103,6 +103,8 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { ThemeProvider } from "next-themes";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -129,7 +131,8 @@ function RootComponent() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
       {shouldLoad3D && (
         <Suspense fallback={null}>
           <Global3DBackground />
@@ -152,5 +155,6 @@ function RootComponent() {
       </div>
       <Toaster position="bottom-right" />
     </QueryClientProvider>
+    </ThemeProvider>
   );
 }
