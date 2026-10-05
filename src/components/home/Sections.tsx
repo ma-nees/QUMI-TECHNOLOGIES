@@ -333,7 +333,7 @@ export function CtaSection() {
     <section className="py-8 md:py-12">
       <div className="container-site">
         <Reveal className="relative overflow-hidden rounded-md bg-primary px-8 py-14 text-primary-foreground md:px-16 md:py-20">
-          <div className="grid-lines absolute inset-0 opacity-[0.07]" aria-hidden="true" />
+          <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "linear-gradient(var(--color-primary-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary-foreground) 1px, transparent 1px)", backgroundSize: "56px 56px" }} aria-hidden="true" />
           <div className="relative grid items-end gap-8 md:grid-cols-12">
             <div className="md:col-span-8">
               <p className="font-mono text-xs uppercase tracking-[0.14em] opacity-75">Have a product or technology challenge?</p>

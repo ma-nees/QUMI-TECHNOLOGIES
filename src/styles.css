@@ -144,10 +144,6 @@
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
-  ::selection {
-    background: var(--primary-soft);
-    color: var(--primary);
-  }
 }
 
 @utility container-site {
