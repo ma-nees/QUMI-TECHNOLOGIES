@@ -11,12 +11,21 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/manrope/400.css";
+import "@fontsource/manrope/500.css";
+import "@fontsource/manrope/600.css";
+import "@fontsource/manrope/700.css";
+import "@fontsource/manrope/800.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/700.css";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
-import Global3DBackground from "@/components/three/Global3DBackground";
+import React, { Suspense, lazy } from "react";
+const Global3DBackground = lazy(() => import("@/components/three/Global3DBackground"));
 import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
@@ -74,14 +83,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "preload", as: "style", href: appCss },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap",
-      },
     ],
   }),
   shellComponent: RootShell,
@@ -111,7 +115,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Global3DBackground />
+      <Suspense fallback={null}>
+        <Global3DBackground />
+      </Suspense>
       <div className="relative z-10 flex min-h-screen flex-col bg-transparent pointer-events-none">
         <div className="pointer-events-auto flex-1 flex flex-col">
           <a
