@@ -131,7 +131,7 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
       {shouldLoad3D && (
         <Suspense fallback={null}>
