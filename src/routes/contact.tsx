@@ -6,11 +6,15 @@ import { PageHero } from "@/components/site/primitives";
 import { Field, Honeypot, TextArea, fieldClass } from "@/components/site/Field";
 import { Button } from "@/components/ui/button";
 import { contactSchema } from "@/lib/schemas";
-import { submitContact } from "@/lib/public.functions";
+import { submitContact, fetchCompanySettings } from "@/lib/public.functions";
 import { company } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
+  loader: async () => {
+    const settings = await fetchCompanySettings();
+    return { settings };
+  },
   head: () => pageMeta("Contact", "Start a project or ask a question. Talk to the QUMI Technologies team in Kathmandu, Nepal."),
   component: ContactPage,
 });
@@ -18,6 +22,7 @@ export const Route = createFileRoute("/contact")({
 const topics = ["New project", "Existing system", "Consulting", "Partnership", "Other"];
 
 function ContactPage() {
+  const { settings } = Route.useLoaderData();
   const send = useServerFn(submitContact);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -42,6 +47,10 @@ function ContactPage() {
       setStatus("error");
     }
   }
+
+  const email = settings?.email || company.email;
+  const phone = settings?.mobile_number || company.phone;
+  const address = settings?.location || company.address;
 
   return (
     <>
@@ -88,9 +97,9 @@ function ContactPage() {
         <aside className="md:col-span-5 h-fit border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
           <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">Direct contact</h2>
           <ul className="mt-6 divide-y divide-border/50 border-y border-border/50">
-            <li className="flex items-center gap-4 py-5"><EnvelopeSimple size={22} weight="light" className="text-primary" /><a href={`mailto:${company.email}`} className="font-semibold hover:text-primary">{company.email}</a></li>
-            <li className="flex items-center gap-4 py-5"><Phone size={22} weight="light" className="text-primary" /><span className="font-semibold">{company.phone}</span></li>
-            <li className="flex items-center gap-4 py-5"><MapPin size={22} weight="light" className="text-primary" /><span className="font-semibold">{company.address}</span></li>
+            <li className="flex items-center gap-4 py-5"><EnvelopeSimple size={22} weight="light" className="text-primary" /><a href={`mailto:${email}`} className="font-semibold hover:text-primary">{email}</a></li>
+            <li className="flex items-center gap-4 py-5"><Phone size={22} weight="light" className="text-primary" /><a href={`tel:${phone.replace(/\s/g, "")}`} className="font-semibold hover:text-primary">{phone}</a></li>
+            <li className="flex items-center gap-4 py-5"><MapPin size={22} weight="light" className="text-primary" /><span className="font-semibold">{address}</span></li>
           </ul>
           <p className="mt-6 text-sm leading-relaxed text-muted-foreground">Office hours: Sunday to Friday, Nepal Time (UTC+5:45).</p>
         </aside>

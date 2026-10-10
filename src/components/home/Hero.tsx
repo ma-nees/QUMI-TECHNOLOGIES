@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
 const phrases = [
@@ -91,14 +92,12 @@ export function Hero() {
           and puts data and AI to practical use — for enterprises, startups and public institutions.
         </p>
         <div className="animate-rise mt-6 flex flex-wrap justify-center gap-3" style={{ animationDelay: "270ms" }}>
-          <Button asChild size="lg" className="h-12 px-6 shadow-lg shadow-primary/25">
-            <Link to="/contact">
-              Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="h-12 px-6 bg-surface/50 backdrop-blur-md">
-            <Link to="/services">Explore Services</Link>
-          </Button>
+          <Link to="/contact" className={cn(buttonVariants({ size: "lg" }), "h-12 px-6 shadow-lg shadow-primary/25")}>
+            Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
+          </Link>
+          <Link to="/services" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "h-12 px-6 bg-surface/50 backdrop-blur-md")}>
+            Explore Services
+          </Link>
         </div>
         <dl
           className="animate-rise mt-8 grid w-full max-w-3xl grid-cols-1 gap-6 border-t border-border pt-6 text-sm md:grid-cols-3"

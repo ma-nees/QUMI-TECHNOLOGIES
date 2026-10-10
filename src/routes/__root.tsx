@@ -91,11 +91,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
@@ -105,18 +105,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 import { ThemeProvider } from "next-themes";
 import { useState } from "react";
+import { IntroVideo } from "@/components/site/IntroVideo";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const bare = pathname.startsWith("/admin") || pathname.startsWith("/auth");
   const [shouldLoad3D, setShouldLoad3D] = React.useState(false);
-  const [showIntro, setShowIntro] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !sessionStorage.getItem("hasSeenIntro");
-    }
-    return true;
-  });
+  const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
     const handleInteraction = () => setShouldLoad3D(true);
@@ -137,64 +132,37 @@ function RootComponent() {
     };
   }, []);
 
-  useEffect(() => {
-    if (showIntro) {
-      const timer = setTimeout(() => {
-        handleIntroComplete();
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showIntro]);
-
-  const handleIntroComplete = () => {
-    setShowIntro(false);
-    sessionStorage.setItem("hasSeenIntro", "true");
-  };
-
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
-      <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-1000 ${showIntro ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-        <video 
-          src="/video.mp4" 
-          autoPlay 
-          loop
-          muted 
-          playsInline 
-          className="w-full h-full object-contain"
-        />
-        <button 
-          onClick={handleIntroComplete} 
-          className="absolute top-6 right-6 z-10 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
-        >
-          Skip
-        </button>
-      </div>
-
-      <div className={`relative transition-opacity duration-1000 ${showIntro ? "opacity-0 pointer-events-none h-screen overflow-hidden" : "opacity-100"}`}>
-        {shouldLoad3D && (
-          <Suspense fallback={null}>
-            <Global3DBackground />
-          </Suspense>
-        )}
-        <div className="relative z-10 flex min-h-screen flex-col bg-transparent pointer-events-none">
-          <div className="pointer-events-auto flex-1 flex flex-col">
-            <a
-              href="#main"
-              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-            >
-              Skip to content
-            </a>
-            {!bare && <Header />}
-            <main id="main" className="flex-1">
-              <Outlet />
-            </main>
-            {!bare && <Footer />}
+        {showIntro ? (
+          <IntroVideo onComplete={() => setShowIntro(false)} />
+        ) : (
+          <div className="relative">
+            {shouldLoad3D && (
+              <Suspense fallback={null}>
+                <Global3DBackground />
+              </Suspense>
+            )}
+            <div className="relative z-10 flex min-h-screen flex-col bg-transparent">
+              <div className="flex-1 flex flex-col">
+                <a
+                  href="#main"
+                  className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+                >
+                  Skip to content
+                </a>
+                <Header />
+                <main id="main" className="flex-1">
+                  <Outlet />
+                </main>
+                <Footer />
+              </div>
+            </div>
+            <Toaster position="bottom-right" />
           </div>
-        </div>
-      </div>
-      <Toaster position="bottom-right" />
-    </QueryClientProvider>
+        )}
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

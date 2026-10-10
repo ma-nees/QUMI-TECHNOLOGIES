@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getJob, submitApplication } from "@/lib/public.functions";
 import { applicationSchema } from "@/lib/schemas";
 import { supabase } from "@/integrations/supabase/client";
+import ReactMarkdown from "react-markdown";
 
 const jobQuery = (id: string) =>
   queryOptions({
@@ -87,10 +88,14 @@ function JobPage() {
     const path = `applications/${crypto.randomUUID()}/${safe}`;
     const up = await supabase.storage.from("resumes").upload(path, file!, { contentType: file!.type });
     if (up.error) {
+      console.error("Upload error:", up.error);
       setStatus("error");
       return;
     }
-    const res = await send({ data: { ...raw, resume_path: path } }).catch(() => ({ ok: false }));
+    const res = await send({ data: { ...raw, resume_path: path } }).catch((err) => {
+      console.error("Submit error:", err);
+      return { ok: false };
+    });
     setStatus(res.ok ? "sent" : "error");
   }
 
@@ -108,10 +113,10 @@ function JobPage() {
             <div><dt className="text-muted-foreground">Type</dt><dd className="font-semibold">{job.employment_type}</dd></div>
           </dl>
         )}
-        <div className="mt-8 space-y-4 leading-relaxed text-muted-foreground">
-          {(job?.description || job?.summary || "Tell us about yourself and the kind of work you want to do. We review every application.")
-            .split(/\n{2,}/)
-            .map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
+        <div className="mt-8 leading-relaxed text-muted-foreground [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-inside [&_ul]:list-disc [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:mt-6 [&_strong]:font-semibold [&_strong]:text-foreground">
+          <ReactMarkdown>
+            {job?.description || job?.summary || "Tell us about yourself and the kind of work you want to do. We review every application."}
+          </ReactMarkdown>
         </div>
       </div>
       <div className="md:col-span-6 md:col-start-7">

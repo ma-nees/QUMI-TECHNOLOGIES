@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { List, X, ArrowRight } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { useTheme } from "next-themes";
@@ -79,11 +79,9 @@ export function Header() {
 
         <div className="hidden lg:flex items-center gap-4">
           <ThemeToggle />
-          <Button asChild>
-            <Link to="/contact">
-              Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
-            </Link>
-          </Button>
+          <Link to="/contact" className={buttonVariants()}>
+            Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
+          </Link>
         </div>
 
         <div className="flex items-center gap-3 lg:hidden">
@@ -116,11 +114,9 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-8 flex flex-col gap-4">
-              <Button asChild size="lg">
-              <Link to="/contact" onClick={() => setOpen(false)}>
+              <Link to="/contact" onClick={() => setOpen(false)} className={buttonVariants({ size: "lg" })}>
                 Start a Project
               </Link>
-              </Button>
             </div>
           </nav>
         </div>

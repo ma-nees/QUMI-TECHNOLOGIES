@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { EnvelopeSimple, Phone, MapPin, LinkedinLogo, GithubLogo, XLogo } from "@phosphor-icons/react";
+import { EnvelopeSimple, Phone, MapPin, LinkedinLogo, GithubLogo, XLogo, InstagramLogo, RedditLogo, FacebookLogo, LinkSimple } from "@phosphor-icons/react";
 import { company } from "@/lib/content";
 import { Logo } from "./Logo";
+import { useEffect, useState } from "react";
+import { fetchCompanySettings } from "@/lib/public.functions";
 
 const cols = [
   {
@@ -23,6 +25,26 @@ const cols = [
 ] as const;
 
 export function Footer() {
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetchCompanySettings().then(setSettings);
+  }, []);
+
+  // Determine active socials based on settings
+  const socials = [];
+  if (settings?.linkedin_url) socials.push({ Icon: LinkedinLogo, label: "LinkedIn", url: settings.linkedin_url });
+  if (settings?.twitter_url) socials.push({ Icon: XLogo, label: "X", url: settings.twitter_url });
+  if (settings?.facebook_url) socials.push({ Icon: FacebookLogo, label: "Facebook", url: settings.facebook_url });
+  if (settings?.instagram_url) socials.push({ Icon: InstagramLogo, label: "Instagram", url: settings.instagram_url });
+  if (settings?.reddit_url) socials.push({ Icon: RedditLogo, label: "Reddit", url: settings.reddit_url });
+  if (settings?.threads_url) socials.push({ Icon: LinkSimple, label: "Threads", url: settings.threads_url });
+
+  // Add github as fallback if no settings yet just to not look empty during setup
+  if (socials.length === 0) {
+    socials.push({ Icon: GithubLogo, label: "GitHub", url: "https://github.com/qumi" });
+  }
+
   return (
     <footer className="bg-ink text-ink-foreground dark:bg-[#010d17] dark:text-foreground dark:border-t dark:border-border">
       <div className="container-site grid gap-12 py-8 md:py-12 md:grid-cols-12">
@@ -33,14 +55,10 @@ export function Footer() {
             in Nepal and abroad.
           </p>
           <div className="mt-6 flex gap-3">
-            {[
-              { Icon: LinkedinLogo, label: "LinkedIn" },
-              { Icon: GithubLogo, label: "GitHub" },
-              { Icon: XLogo, label: "X" },
-            ].map(({ Icon, label }) => (
+            {socials.map(({ Icon, label, url }) => (
               <a
                 key={label}
-                href={label === "LinkedIn" ? "https://linkedin.com/company/qumi" : label === "GitHub" ? "https://github.com/qumi" : "https://x.com/qumi"}
+                href={url}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
@@ -72,15 +90,15 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm">
             <li className="flex items-center gap-2.5">
               <EnvelopeSimple size={16} className="opacity-60" />
-              <a href={`mailto:${company.email}`} className="hover:text-highlight">{company.email}</a>
+              <a href={`mailto:${settings?.email || company.email}`} className="hover:text-highlight">{settings?.email || company.email}</a>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone size={16} className="opacity-60" />
-              <a href={`tel:${company.phone.replace(/\s/g, "")}`} className="hover:text-highlight">{company.phone}</a>
+              <a href={`tel:${(settings?.mobile_number || company.phone).replace(/\s/g, "")}`} className="hover:text-highlight">{settings?.mobile_number || company.phone}</a>
             </li>
             <li className="flex items-center gap-2.5">
               <MapPin size={16} className="opacity-60" />
-              {company.address}
+              {settings?.location || company.address}
             </li>
           </ul>
         </div>
