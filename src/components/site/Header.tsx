@@ -62,7 +62,7 @@ export function Header() {
       <div
         className={cn(
           "container-site flex items-center justify-between transition-[height] duration-300",
-          scrolled ? "h-14" : "h-16",
+          scrolled ? "h-16" : "h-20",
         )}
       >
         <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)}>
