@@ -81,6 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preload", as: "style", href: appCss },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "manifest", href: "/manifest.json" },
     ],
   }),
   shellComponent: RootShell,
@@ -130,6 +131,16 @@ function RootComponent() {
       window.removeEventListener('touchstart', handleInteraction);
       clearTimeout(timer);
     };
+  }, []);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+          console.error('Service Worker registration failed:', err);
+        });
+      });
+    }
   }, []);
 
   return (
