@@ -78,9 +78,9 @@ export default function Global3DBackground() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.innerWidth < 768;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-    // Keep pixel ratio at native, but cap at 2 for performance on mobile while keeping anti-aliasing
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, alpha: true, powerPreference: "high-performance" });
+    // Capping at 1.5 on desktop and 1.25 on mobile saves ~44% fill-rate while looking sharp on retina screens
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
     el.appendChild(renderer.domElement);
 
@@ -581,9 +581,6 @@ export default function Global3DBackground() {
     let scrollTarget = 0;
     let scrollSmooth = 0;
 
-    const onMove = (e: PointerEvent) => {
-      // Disabled mouse tracking per user request
-    };
     const onScroll = () => {
       scrollTarget = window.scrollY;
     };
@@ -592,7 +589,6 @@ export default function Global3DBackground() {
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
-    window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
 
@@ -605,10 +601,13 @@ export default function Global3DBackground() {
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      const now = performance.now();
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
       if (document.hidden) return;
+      const now = performance.now();
+      const elapsed = now - last;
+      // Frame rate limiter: avoid over-rendering above 60fps on 120Hz/144Hz monitors
+      if (elapsed < 16) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      last = now;
       if (!reduce) time += dt;
       const mdt = reduce ? 0 : dt; // motion delta (0 when reduced motion)
 
@@ -820,7 +819,6 @@ export default function Global3DBackground() {
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       scene.traverse((o) => {

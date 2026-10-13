@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/home/Hero";
+import { ScrollBasedVelocity } from "@/components/ui/scroll-based-velocity";
 import {
   AboutSection,
   CaseStudiesSection,
@@ -75,6 +76,14 @@ function ValuePropositionSection() {
 function Index() {
   return (
     <>
+      <div className="border-b border-border/80 bg-surface/85 backdrop-blur-md py-1.5 overflow-hidden shadow-xs">
+        <ScrollBasedVelocity
+          text="QUMI TECHNOLOGIES"
+          default_velocity={3}
+          numRows={1}
+          className="font-display text-xs sm:text-sm font-medium uppercase tracking-[0.28em] text-foreground"
+        />
+      </div>
       <Hero />
       <ValuePropositionSection />
       <ServicesSection />
