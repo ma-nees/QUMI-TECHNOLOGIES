@@ -105,14 +105,11 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 import { ThemeProvider } from "next-themes";
-import { useState } from "react";
-import { IntroVideo } from "@/components/site/IntroVideo";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [shouldLoad3D, setShouldLoad3D] = React.useState(false);
-  const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
     const handleInteraction = () => setShouldLoad3D(true);
@@ -146,33 +143,29 @@ function RootComponent() {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
-        {showIntro ? (
-          <IntroVideo onComplete={() => setShowIntro(false)} />
-        ) : (
-          <div className="relative">
-            {shouldLoad3D && (
-              <Suspense fallback={null}>
-                <Global3DBackground />
-              </Suspense>
-            )}
-            <div className="relative z-10 flex min-h-screen flex-col bg-transparent">
-              <div className="flex-1 flex flex-col">
-                <a
-                  href="#main"
-                  className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-                >
-                  Skip to content
-                </a>
-                <Header />
-                <main id="main" className="flex-1">
-                  <Outlet />
-                </main>
-                <Footer />
-              </div>
+        <div className="relative">
+          {shouldLoad3D && (
+            <Suspense fallback={null}>
+              <Global3DBackground />
+            </Suspense>
+          )}
+          <div className="relative z-10 flex min-h-screen flex-col bg-transparent">
+            <div className="flex-1 flex flex-col">
+              <a
+                href="#main"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+              >
+                Skip to content
+              </a>
+              <Header />
+              <main id="main" className="flex-1">
+                <Outlet />
+              </main>
+              <Footer />
             </div>
-            <Toaster position="bottom-right" />
           </div>
-        )}
+          <Toaster position="bottom-right" />
+        </div>
       </QueryClientProvider>
     </ThemeProvider>
   );
