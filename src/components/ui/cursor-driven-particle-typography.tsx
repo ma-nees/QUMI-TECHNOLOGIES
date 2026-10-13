@@ -233,10 +233,12 @@ export function CursorDrivenParticleTypography({
       const textColor = color || defaultFg;
 
       // Determine responsive font size
-      const maxWidth = Math.max(260, containerWidth - 24);
+      const maxWidth = Math.max(240, containerWidth - 20);
       let calculatedFontSize = fontSize;
 
-      if (containerWidth < 480) {
+      if (containerWidth < 380) {
+        calculatedFontSize = Math.min(fontSize, 30);
+      } else if (containerWidth < 480) {
         calculatedFontSize = Math.min(fontSize, 34);
       } else if (containerWidth < 768) {
         calculatedFontSize = Math.min(fontSize, 46);
@@ -260,7 +262,7 @@ export function CursorDrivenParticleTypography({
       }
 
       const activeLines = layoutLines(initialLines, ctx, maxWidth);
-      const lineHeight = calculatedFontSize * 1.16;
+      const lineHeight = calculatedFontSize * (containerWidth < 480 ? 1.25 : 1.16);
       const totalTextHeight = (activeLines.length - 1) * lineHeight;
       const startY = (containerHeight - totalTextHeight) / 2;
 

@@ -46,7 +46,7 @@ export function Hero() {
                 { text: "Engineering digital products" },
                 { text: "built to last.", isAccent: true },
               ]}
-              className="h-[145px] sm:h-[165px] md:h-[195px] lg:h-[220px]"
+              className="h-[155px] sm:h-[165px] md:h-[195px] lg:h-[220px]"
               fontSize={66}
               particleDensity={4}
               particleSize={1.7}
@@ -65,14 +65,14 @@ export function Hero() {
 
           {/* Clear Call to Action Hierarchy */}
           <div
-            className="animate-rise mt-9 flex flex-wrap items-center justify-center gap-4"
+            className="animate-rise mt-8 sm:mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0"
             style={{ animationDelay: "240ms" }}
           >
             <Link
               to="/contact"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "h-12 px-8 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all"
+                "h-12 w-full sm:w-auto px-8 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all text-center justify-center"
               )}
             >
               Initiate an Engagement <ArrowRight weight="bold" className="ml-2 arrow-nudge" />
@@ -81,7 +81,7 @@ export function Hero() {
               to="/services"
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
-                "h-12 px-7 border-border/80 bg-surface/60 backdrop-blur-md hover:bg-surface hover:-translate-y-0.5 transition-all"
+                "h-12 w-full sm:w-auto px-7 border-border/80 bg-surface/60 backdrop-blur-md hover:bg-surface hover:-translate-y-0.5 transition-all text-center justify-center"
               )}
             >
               Explore Capabilities
@@ -90,7 +90,7 @@ export function Hero() {
 
           {/* Engineering Credibility Strip */}
           <div
-            className="animate-rise mt-12 grid w-full max-w-2xl grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 border-t border-border/70 pt-8"
+            className="animate-rise mt-10 sm:mt-12 grid w-full max-w-2xl grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 border-t border-border/70 pt-6 sm:pt-8"
             style={{ animationDelay: "320ms" }}
           >
             <div className="flex flex-col items-center">
