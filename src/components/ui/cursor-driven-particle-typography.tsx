@@ -300,31 +300,41 @@ export function CursorDrivenParticleTypography({
         ctx.fillText(line.text, containerWidth / 2, lineY);
       });
 
+      // Adaptive particle density: smaller fonts need tighter step (2-3px) so thin letter stems don't get skipped
+      const effectiveDensity = Math.max(
+        2,
+        Math.min(particleDensity, Math.floor(calculatedFontSize / 16))
+      );
+      const effectiveParticleSize = Math.max(
+        1.2,
+        Math.min(particleSize, calculatedFontSize * 0.038)
+      );
+
       // Sample pixel data from drawn typography
       const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
       ctx.clearRect(0, 0, containerWidth, containerHeight);
 
       particles = [];
-      const step = Math.max(1, Math.floor(particleDensity * dpr));
+      const step = Math.max(1, Math.round(effectiveDensity * dpr));
 
       for (let y = 0; y < textCoordinates.height; y += step) {
         for (let x = 0; x < textCoordinates.width; x += step) {
           const index = (y * textCoordinates.width + x) * 4;
           const alpha = textCoordinates.data[index + 3] || 0;
 
-          if (alpha > 65) {
+          if (alpha > 45) {
             const r = textCoordinates.data[index];
             const g = textCoordinates.data[index + 1];
             const b = textCoordinates.data[index + 2];
             const a = alpha / 255;
-            const effectiveAlpha = isDark ? (a > 0.85 ? 1 : a) : Math.min(1, a * 1.2);
+            const effectiveAlpha = isDark ? (a > 0.8 ? 1 : a) : Math.min(1, a * 1.3);
             const particleColor = `rgba(${r},${g},${b},${effectiveAlpha.toFixed(2)})`;
 
             particles.push(
               new Particle(
                 x / dpr,
                 y / dpr,
-                particleSize,
+                effectiveParticleSize,
                 particleColor,
                 dispersionStrength,
                 returnSpeed

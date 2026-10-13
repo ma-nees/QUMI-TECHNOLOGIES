@@ -48,8 +48,8 @@ export function Hero() {
               ]}
               className="h-[155px] sm:h-[165px] md:h-[195px] lg:h-[220px]"
               fontSize={66}
-              particleDensity={4}
-              particleSize={1.7}
+              particleDensity={2.5}
+              particleSize={1.8}
               dispersionStrength={14}
               returnSpeed={0.08}
             />
