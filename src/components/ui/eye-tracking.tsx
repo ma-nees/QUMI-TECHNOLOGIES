@@ -37,6 +37,10 @@ interface EyeTrackingProps {
   reactivePupil?: boolean;
   /** Eyelid visibility */
   showEyelids?: boolean;
+  /** Eyebrow visibility */
+  showEyebrows?: boolean;
+  /** Eyebrow color */
+  eyebrowColor?: string;
 }
 
 interface EyeProps {
@@ -52,6 +56,8 @@ interface EyeProps {
   variant: "realistic" | "cartoon" | "minimal" | "cyber";
   reactivePupil: boolean;
   showEyelids: boolean;
+  showEyebrows?: boolean;
+  eyebrowColor?: string;
   mouseX: React.MutableRefObject<number>;
   mouseY: React.MutableRefObject<number>;
   index: number;
@@ -70,8 +76,11 @@ function Eye({
   variant,
   reactivePupil,
   showEyelids,
+  showEyebrows = true,
+  eyebrowColor,
   mouseX,
   mouseY,
+  index,
 }: EyeProps) {
   const eyeRef = React.useRef<HTMLDivElement>(null);
   const [isBlinking, setIsBlinking] = React.useState(false);
@@ -151,6 +160,25 @@ function Eye({
   // Rotation transform for iris detail
   const irisRotation = useTransform(springX, [-maxOffset, maxOffset], [-15, 15]);
 
+  // Reactive Eyebrow Physics: eyebrows tilt and elevate in coordination with eye direction and blinking
+  const isLeft = index === 0;
+  // Upward/downward gaze shifts eyebrow height
+  const eyebrowY = useTransform(springY, [-maxOffset, maxOffset], [-8, 5]);
+  // Gaze direction and facial asymmetry tilts the brow naturally
+  const eyebrowRotate = useTransform(
+    springX,
+    [-maxOffset, maxOffset],
+    isLeft ? [-7, 9] : [-9, 7]
+  );
+  // Brow arch bends subtly when looking up vs down
+  const eyebrowArch = useTransform(springY, [-maxOffset, maxOffset], [-4, 3]);
+
+  const resolvedEyebrowColor =
+    eyebrowColor ||
+    (variant === "cyber"
+      ? "#00E5FF"
+      : "#1E293B");
+
   const eyeAspect = variant === "cartoon" ? 1 : 0.85;
   const borderRadius = "50%";
 
@@ -165,12 +193,65 @@ function Eye({
   const eyeHeight = eyeSize * eyeAspect;
 
   return (
-    <motion.div
-      ref={eyeRef}
-      className={cn(
-        "relative overflow-hidden",
-        variant === "cyber" && "border border-cyan-500/30"
+    <div className="relative flex flex-col items-center">
+      {/* Animated Eyebrow Above Eye */}
+      {showEyebrows && (
+        <motion.div
+          className="absolute pointer-events-none select-none z-20"
+          style={{
+            top: -Math.round(eyeSize * 0.28),
+            y: eyebrowY,
+            rotate: eyebrowRotate,
+            width: eyeWidth * 0.96,
+            height: Math.round(eyeSize * 0.16),
+          }}
+          animate={{
+            // When blinking, eyebrows twitch downward slightly for hyper-realistic motion
+            y: isBlinking ? 4 : 0,
+            scaleY: isBlinking ? 0.9 : 1,
+          }}
+          transition={{
+            duration: 0.12,
+            ease: "easeInOut",
+          }}
+        >
+          {/* Eyebrow Arch SVG rendering elegant tapered shape */}
+          <svg
+            viewBox="0 0 120 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-full overflow-visible"
+            style={{
+              filter:
+                variant === "cyber"
+                  ? "drop-shadow(0 0 6px rgba(0,229,255,0.7))"
+                  : "drop-shadow(0 1.5px 3px rgba(15,23,42,0.18))",
+            }}
+          >
+            {isLeft ? (
+              // Left Eyebrow (higher arch near center, tapering gently to the left temple)
+              <path
+                d="M 6 18 C 30 5, 80 4, 114 11 C 94 9, 44 8, 14 20 Z"
+                fill={resolvedEyebrowColor}
+              />
+            ) : (
+              // Right Eyebrow (higher arch near center, tapering gently to the right temple)
+              <path
+                d="M 6 11 C 40 4, 90 5, 114 18 C 106 20, 76 8, 26 9 Z"
+                fill={resolvedEyebrowColor}
+              />
+            )}
+          </svg>
+        </motion.div>
       )}
+
+      {/* Eye Orb Container */}
+      <motion.div
+        ref={eyeRef}
+        className={cn(
+          "relative overflow-hidden",
+          variant === "cyber" && "border border-cyan-500/30"
+        )}
       style={{
         width: eyeWidth,
         height: eyeHeight,
@@ -403,7 +484,8 @@ function Eye({
           }}
         />
       )}
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -424,6 +506,8 @@ export function EyeTracking({
   variant = "cyber",
   reactivePupil = true,
   showEyelids = true,
+  showEyebrows = true,
+  eyebrowColor,
 }: EyeTrackingProps) {
   const mouseX = React.useRef(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
   const mouseY = React.useRef(typeof window !== "undefined" ? window.innerHeight / 2 : 0);
@@ -541,6 +625,8 @@ export function EyeTracking({
           variant={variant}
           reactivePupil={reactivePupil}
           showEyelids={showEyelids}
+          showEyebrows={showEyebrows}
+          eyebrowColor={eyebrowColor}
           mouseX={mouseX}
           mouseY={mouseY}
         />
@@ -607,8 +693,8 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 flex flex-col items-center gap-6"
           >
-            {/* Eye Card */}
-            <div className="relative p-10 sm:p-14 rounded-3xl bg-white/80 border border-white/90 backdrop-blur-2xl shadow-[0_24px_70px_-15px_rgba(2,132,199,0.18),0_0_0_1px_rgba(255,255,255,0.8)]">
+            {/* Free-Floating Eyes */}
+            <div className="relative">
               <EyeTracking
                 eyeSize={130}
                 gap={36}
@@ -624,6 +710,8 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
                 showReflection={true}
                 showIrisDetail={true}
                 showEyelids={true}
+                showEyebrows={true}
+                eyebrowColor="#0F172A"
               />
             </div>
 
