@@ -46,7 +46,7 @@ export function Hero() {
 
           {/* Articulate Purpose Statement */}
           <p
-            className="animate-rise mt-4 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground text-balance"
+            className="animate-rise mt-4 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-900 font-medium text-balance"
             style={{ animationDelay: "160ms" }}
           >
             QUMI Technologies designs and deploys mission-critical custom software, high-throughput cloud infrastructure, and intelligent data systems for organizations that cannot afford fragile code.
