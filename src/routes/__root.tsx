@@ -142,10 +142,10 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <EyePreloader duration={5000} />
       <QueryClientProvider client={queryClient}>
-        <div className="relative bg-background text-foreground min-h-screen">
+        <div className="relative">
           <Suspense fallback={null}>
             <Global3DBackground />
           </Suspense>
