@@ -584,42 +584,42 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[99999] flex flex-col justify-between p-8 sm:p-14 bg-[#060B12] text-foreground select-none overflow-hidden"
+          className="fixed inset-0 z-[99999] flex flex-col justify-between p-8 sm:p-14 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
         >
-          {/* Subtle architectural grain & ambient light */}
+          {/* Subtle glacier atmospheric ambient glow & precision subpixel grid */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-sky-950/20 via-blue-900/10 to-transparent rounded-full blur-[160px]" />
-            <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-[#D4E8F8]/70 via-[#E1F0FA]/80 to-transparent rounded-full blur-[140px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(rgba(2,132,199,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
           </div>
 
           {/* Top telemetry bar */}
-          <div className="relative z-10 flex items-center justify-between font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-400">
+          <div className="relative z-10 flex items-center justify-between font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500">
             <div className="flex items-center gap-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-              <span className="font-semibold text-neutral-200">QUMI TECHNOLOGIES</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+              <span className="font-semibold text-[#0B1F3A]">QUMI TECHNOLOGIES</span>
             </div>
-            <div className="hidden sm:flex items-center gap-6 text-neutral-500">
+            <div className="hidden sm:flex items-center gap-6 text-neutral-400">
               <span>SYSTEM RIGOR 2.0</span>
               <span>KATHMANDU / GLOBAL</span>
             </div>
           </div>
 
-          {/* Centerpiece: Precision Engineered Optical Module */}
+          {/* Centerpiece: Precision Engineered Optical Module on Frosted Glacier Glass */}
           <motion.div
             initial={{ scale: 0.92, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 flex flex-col items-center justify-center my-auto"
           >
-            <div className="relative p-10 sm:p-14 rounded-3xl bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-2xl shadow-[0_24px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <div className="relative p-10 sm:p-14 rounded-3xl bg-white/80 border border-white/90 backdrop-blur-2xl shadow-[0_24px_70px_-15px_rgba(2,132,199,0.18),0_0_0_1px_rgba(255,255,255,0.8)]">
               <EyeTracking
                 eyeSize={125}
                 gap={36}
                 variant="minimal"
-                irisColor="#2563EB"
-                irisColorSecondary="#60A5FA"
-                pupilColor="#050B14"
-                scleraColor="#E5E9F0"
+                irisColor="#0047AB"
+                irisColorSecondary="#38BDF8"
+                pupilColor="#051329"
+                scleraColor="#FFFFFF"
                 reactivePupil={true}
                 blinkInterval={3600}
                 idleAnimation={true}
@@ -629,20 +629,20 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
           </motion.div>
 
           {/* Bottom Precision Loading Bar */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-400">
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500">
             <div className="flex items-center gap-4 w-full sm:w-auto">
-              <span className="tracking-[0.25em] uppercase text-neutral-300 font-medium">INITIALIZING ARCHITECTURE</span>
+              <span className="tracking-[0.25em] uppercase text-[#0B1F3A] font-semibold">INITIALIZING ARCHITECTURE</span>
             </div>
 
             {/* Micro hairline progress gauge */}
             <div className="flex items-center gap-4 w-full sm:w-80">
-              <div className="relative flex-1 h-[2px] bg-neutral-800 rounded-full overflow-hidden">
+              <div className="relative flex-1 h-[2px] bg-[#D4E4F0] rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-400 rounded-full"
+                  className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <span className="w-10 text-right tracking-widest text-neutral-200 font-medium">
+              <span className="w-10 text-right tracking-widest text-[#0B1F3A] font-medium">
                 {String(progress).padStart(2, "0")}%
               </span>
             </div>
