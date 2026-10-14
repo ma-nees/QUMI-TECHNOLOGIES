@@ -592,64 +592,71 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
         <motion.div
           key="eye-preloader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#F3F7FA] select-none overflow-hidden"
+          exit={{ opacity: 0, filter: "blur(8px)" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[99999] flex flex-col justify-between p-8 sm:p-14 bg-[#060B12] text-foreground select-none overflow-hidden"
         >
-          {/* Subtle glacier atmospheric ambient glow & crystal grid */}
+          {/* Subtle architectural grain & ambient light */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#CDE6F5]/60 rounded-full blur-[140px]" />
-            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-[#E0F2FE]/80 rounded-full blur-[90px]" />
-            <div className="absolute inset-0 bg-[radial-gradient(#0284c718_1px,transparent_1px)] [background-size:24px_24px] opacity-60" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-sky-950/20 via-blue-900/10 to-transparent rounded-full blur-[160px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px]" />
           </div>
 
+          {/* Top telemetry bar */}
+          <div className="relative z-10 flex items-center justify-between font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-400">
+            <div className="flex items-center gap-3">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+              <span className="font-semibold text-neutral-200">QUMI TECHNOLOGIES</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-6 text-neutral-500">
+              <span>SYSTEM RIGOR 2.0</span>
+              <span>KATHMANDU / GLOBAL</span>
+            </div>
+          </div>
+
+          {/* Centerpiece: Precision Engineered Optical Module */}
           <motion.div
-            initial={{ scale: 0.88, opacity: 0 }}
+            initial={{ scale: 0.92, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative z-10 flex flex-col items-center gap-8"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 flex flex-col items-center justify-center my-auto"
           >
-            {/* Eye Tracking component on pristine frosted glacier glass */}
-            <div className="p-8 rounded-3xl bg-white/75 border border-white/80 shadow-[0_20px_60px_-15px_rgba(56,189,248,0.25),0_0_0_1px_rgba(255,255,255,0.9)] backdrop-blur-2xl">
+            <div className="relative p-10 sm:p-14 rounded-3xl bg-neutral-900/40 border border-neutral-800/80 backdrop-blur-2xl shadow-[0_24px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]">
               <EyeTracking
-                eyeSize={110}
-                gap={32}
-                variant="realistic"
-                irisColor="#0284c7"
-                irisColorSecondary="#38bdf8"
-                pupilColor="#082f49"
-                scleraColor="#FFFFFF"
+                eyeSize={125}
+                gap={36}
+                variant="minimal"
+                irisColor="#2563EB"
+                irisColorSecondary="#60A5FA"
+                pupilColor="#050B14"
+                scleraColor="#E5E9F0"
                 reactivePupil={true}
-                blinkInterval={3200}
+                blinkInterval={3600}
                 idleAnimation={true}
+                pupilRange={0.65}
               />
             </div>
+          </motion.div>
 
-            {/* Status / Branding */}
-            <div className="flex flex-col items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500" />
-                </span>
-                <span className="font-mono text-xs uppercase tracking-[0.3em] text-sky-900 font-semibold">
-                  INITIALIZING QUMI SYSTEM
-                </span>
-              </div>
+          {/* Bottom Precision Loading Bar */}
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-400">
+            <div className="flex items-center gap-4 w-full sm:w-auto">
+              <span className="tracking-[0.25em] uppercase text-neutral-300 font-medium">INITIALIZING ARCHITECTURE</span>
+            </div>
 
-              {/* Glacier Ice Progress Bar */}
-              <div className="w-56 h-[4px] bg-sky-100 rounded-full overflow-hidden border border-sky-200/80 shadow-inner">
+            {/* Micro hairline progress gauge */}
+            <div className="flex items-center gap-4 w-full sm:w-80">
+              <div className="relative flex-1 h-[2px] bg-neutral-800 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-sky-400 via-cyan-400 to-blue-500 rounded-full shadow-[0_0_12px_rgba(56,189,248,0.6)]"
+                  className="h-full bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-400 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-
-              <span className="font-mono text-[11px] text-sky-800/70 font-medium tracking-widest">
-                {progress}%
+              <span className="w-10 text-right tracking-widest text-neutral-200 font-medium">
+                {String(progress).padStart(2, "0")}%
               </span>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
