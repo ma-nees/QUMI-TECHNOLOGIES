@@ -646,6 +646,36 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
   const [isVisible, setIsVisible] = React.useState(true);
   const [progress, setProgress] = React.useState(0);
 
+  // Lock body & html scroll completely while preloader is active
+  React.useEffect(() => {
+    if (!isVisible) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalWidth = document.body.style.width;
+    const originalTouchAction = document.body.style.touchAction;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("wheel", preventDefault, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = originalTouchAction;
+      window.removeEventListener("wheel", preventDefault);
+      window.removeEventListener("touchmove", preventDefault);
+    };
+  }, [isVisible]);
+
   React.useEffect(() => {
     setMounted(true);
     const startTime = Date.now();
