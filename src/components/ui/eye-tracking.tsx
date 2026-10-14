@@ -600,18 +600,6 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
             <div className="absolute inset-0 bg-[radial-gradient(rgba(2,132,199,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
           </div>
 
-          {/* Top telemetry bar */}
-          <div className="relative z-10 flex items-center justify-between font-mono text-[11px] tracking-[0.2em] uppercase text-neutral-500">
-            <div className="flex items-center gap-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-              <span className="font-semibold text-[#0B1F3A]">QUMI TECHNOLOGIES</span>
-            </div>
-            <div className="hidden sm:flex items-center gap-6 text-neutral-400">
-              <span>SYSTEM RIGOR 2.0</span>
-              <span>KATHMANDU / GLOBAL</span>
-            </div>
-          </div>
-
           {/* Centerpiece: Precision Engineered Optical Module on Frosted Glacier Glass */}
           <motion.div
             initial={{ scale: 0.92, opacity: 0 }}
