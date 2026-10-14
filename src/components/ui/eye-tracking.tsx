@@ -235,60 +235,68 @@ function Eye({
                 : `inset 0 1px 4px rgba(0,0,0,0.2)`,
         }}
       >
-        {/* Iris detail pattern */}
+        {/* Limbal Ring (natural dark perimeter framing the iris) */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{
+            boxShadow: "inset 0 0 0 2.5px rgba(2, 20, 50, 0.75), inset 0 0 6px rgba(0, 0, 0, 0.5)",
+          }}
+        />
+
+        {/* Dense realistic iris detail pattern */}
         {showIrisDetail && (
           <motion.div
             className="absolute inset-0 rounded-full overflow-hidden"
             style={{ rotate: irisRotation }}
           >
-            {variant === "cyber" ? (
-              // Cyber circuit pattern
-              <>
+            {/* 48 radiating iris trabeculae & fibers */}
+            {[...Array(48)].map((_, i) => {
+              const angle = i * 7.5;
+              const isAccentRay = i % 3 === 0;
+              const isLong = i % 2 === 0;
+              return (
                 <div
-                  className="absolute inset-[15%] rounded-full border border-dashed opacity-40"
-                  style={{ borderColor: irisColor }}
-                />
-                <div
-                  className="absolute inset-[30%] rounded-full border opacity-30"
-                  style={{ borderColor: irisColorSecondary }}
-                />
-                {[...Array(8)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute left-1/2 top-1/2 origin-left opacity-25"
-                    style={{
-                      width: irisSize * 0.45,
-                      height: "1px",
-                      background: irisColor,
-                      transform: `rotate(${i * 45}deg)`,
-                    }}
-                  />
-                ))}
-              </>
-            ) : (
-              // Realistic iris fibers
-              <>
-                {[...Array(24)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute left-1/2 top-1/2 origin-left"
-                    style={{
-                      width: irisSize * 0.45,
-                      height: "1px",
-                      background: `linear-gradient(to right, transparent 20%, ${irisColor}44 50%, transparent 80%)`,
-                      transform: `rotate(${i * 15}deg)`,
-                      opacity: 0.3 + (i % 3) * 0.15,
-                    }}
-                  />
-                ))}
-                <div
-                  className="absolute inset-[20%] rounded-full"
+                  key={i}
+                  className="absolute left-1/2 top-1/2 origin-left pointer-events-none"
                   style={{
-                    border: `1px solid ${irisColor}33`,
+                    width: irisSize * (isLong ? 0.48 : 0.38),
+                    height: isAccentRay ? "1.5px" : "1px",
+                    background: isAccentRay
+                      ? `linear-gradient(to right, transparent 15%, #93c5fd 40%, ${irisColorSecondary} 70%, transparent 95%)`
+                      : `linear-gradient(to right, transparent 20%, ${irisColor} 50%, rgba(255,255,255,0.25) 75%, transparent 100%)`,
+                    transform: `rotate(${angle}deg)`,
+                    opacity: 0.35 + (i % 5) * 0.12,
                   }}
                 />
-              </>
-            )}
+              );
+            })}
+
+            {/* Inner collarette ring (wavy sphincter ring around pupil) */}
+            <div
+              className="absolute inset-[24%] rounded-full pointer-events-none"
+              style={{
+                border: `1.5px dashed ${irisColorSecondary}`,
+                opacity: 0.55,
+                boxShadow: `0 0 4px ${irisColorSecondary}44`,
+              }}
+            />
+
+            {/* Mid iris crypts ring */}
+            <div
+              className="absolute inset-[15%] rounded-full pointer-events-none"
+              style={{
+                border: `1px solid ${irisColor}55`,
+                opacity: 0.4,
+              }}
+            />
+
+            {/* Micro-fiber cloud noise layer */}
+            <div
+              className="absolute inset-0 rounded-full opacity-25 mix-blend-overlay pointer-events-none"
+              style={{
+                background: `conic-gradient(from 0deg, transparent, #ffffff, transparent, #38bdf8, transparent, #ffffff, transparent)`,
+              }}
+            />
           </motion.div>
         )}
 
@@ -613,17 +621,20 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
           >
             <div className="relative p-10 sm:p-14 rounded-3xl bg-white/80 border border-white/90 backdrop-blur-2xl shadow-[0_24px_70px_-15px_rgba(2,132,199,0.18),0_0_0_1px_rgba(255,255,255,0.8)]">
               <EyeTracking
-                eyeSize={125}
+                eyeSize={130}
                 gap={36}
-                variant="minimal"
-                irisColor="#0047AB"
+                variant="realistic"
+                irisColor="#1D4ED8"
                 irisColorSecondary="#38BDF8"
-                pupilColor="#051329"
-                scleraColor="#FFFFFF"
+                pupilColor="#020817"
+                scleraColor="#F8FAFC"
                 reactivePupil={true}
                 blinkInterval={3600}
                 idleAnimation={true}
                 pupilRange={0.65}
+                showReflection={true}
+                showIrisDetail={true}
+                showEyelids={true}
               />
             </div>
           </motion.div>
