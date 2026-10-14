@@ -592,7 +592,7 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[99999] flex flex-col justify-between p-8 sm:p-14 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-8 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
         >
           {/* Subtle glacier atmospheric ambient glow & precision subpixel grid */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -600,13 +600,14 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
             <div className="absolute inset-0 bg-[radial-gradient(rgba(2,132,199,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
           </div>
 
-          {/* Centerpiece: Precision Engineered Optical Module on Frosted Glacier Glass */}
+          {/* Centerpiece: Eye Card + Status and Progress directly underneath */}
           <motion.div
             initial={{ scale: 0.92, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex flex-col items-center justify-center my-auto"
+            className="relative z-10 flex flex-col items-center gap-6"
           >
+            {/* Eye Card */}
             <div className="relative p-10 sm:p-14 rounded-3xl bg-white/80 border border-white/90 backdrop-blur-2xl shadow-[0_24px_70px_-15px_rgba(2,132,199,0.18),0_0_0_1px_rgba(255,255,255,0.8)]">
               <EyeTracking
                 eyeSize={130}
@@ -625,27 +626,27 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
                 showEyelids={true}
               />
             </div>
-          </motion.div>
 
-          {/* Bottom Precision Loading Bar */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500">
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <span className="tracking-[0.25em] uppercase text-[#0B1F3A] font-semibold">INITIALIZING ARCHITECTURE</span>
-            </div>
-
-            {/* Micro hairline progress gauge */}
-            <div className="flex items-center gap-4 w-full sm:w-80">
-              <div className="relative flex-1 h-[2px] bg-[#D4E4F0] rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 rounded-full"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <span className="w-10 text-right tracking-widest text-[#0B1F3A] font-medium">
-                {String(progress).padStart(2, "0")}%
+            {/* Status & Progress Gauge directly below the eye card */}
+            <div className="flex flex-col items-center gap-3 w-full max-w-xs font-mono text-[11px]">
+              <span className="tracking-[0.25em] uppercase text-[#0B1F3A] font-semibold text-center">
+                INITIALIZING ARCHITECTURE
               </span>
+
+              {/* Progress hairline & percentage indicator */}
+              <div className="flex items-center gap-3 w-full">
+                <div className="relative flex-1 h-[2px] bg-[#D4E4F0] rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 rounded-full"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <span className="w-8 text-right tracking-widest text-[#0B1F3A] font-semibold">
+                  {String(progress).padStart(2, "0")}%
+                </span>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
