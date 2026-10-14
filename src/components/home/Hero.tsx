@@ -35,7 +35,7 @@ export function Hero() {
                 { text: "Engineering digital products" },
                 { text: "built to last.", isAccent: true },
               ]}
-              className="h-[105px] sm:h-[125px] md:h-[155px] lg:h-[175px]"
+              className="h-[125px] sm:h-[135px] md:h-[155px] lg:h-[175px]"
               fontSize={66}
               particleDensity={2.5}
               particleSize={1.8}
@@ -46,7 +46,7 @@ export function Hero() {
 
           {/* Articulate Purpose Statement */}
           <p
-            className="animate-rise mt-4 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-900 font-medium text-balance"
+            className="animate-rise mt-3 sm:mt-4 max-w-2xl text-xs sm:text-base md:text-lg leading-relaxed text-slate-900 font-medium text-balance px-2 sm:px-0"
             style={{ animationDelay: "160ms" }}
           >
             QUMI Technologies designs and deploys mission-critical custom software, high-throughput cloud infrastructure, and intelligent data systems for organizations that cannot afford fragile code.
@@ -54,14 +54,14 @@ export function Hero() {
 
           {/* Clear Call to Action Hierarchy */}
           <div
-            className="animate-rise mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0"
+            className="animate-rise mt-5 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto px-4 sm:px-0 max-w-xs sm:max-w-none mx-auto"
             style={{ animationDelay: "240ms" }}
           >
             <Link
               to="/contact"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "h-11 sm:h-12 w-full sm:w-auto px-7 sm:px-8 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all text-center justify-center"
+                "h-11 sm:h-12 w-full sm:w-auto px-6 sm:px-8 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all text-center justify-center text-sm sm:text-base"
               )}
             >
               Initiate an Engagement <ArrowRight weight="bold" className="ml-2 arrow-nudge" />
@@ -70,7 +70,7 @@ export function Hero() {
               to="/services"
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
-                "h-11 sm:h-12 w-full sm:w-auto px-6 sm:px-7 border-border/80 bg-surface/60 backdrop-blur-md hover:bg-surface hover:-translate-y-0.5 transition-all text-center justify-center"
+                "h-11 sm:h-12 w-full sm:w-auto px-5 sm:px-7 border-border/80 bg-surface/60 backdrop-blur-md hover:bg-surface hover:-translate-y-0.5 transition-all text-center justify-center text-sm sm:text-base"
               )}
             >
               Explore Capabilities
@@ -79,20 +79,20 @@ export function Hero() {
 
           {/* Engineering Credibility Strip */}
           <div
-            className="animate-rise mt-8 sm:mt-9 grid w-full max-w-2xl grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-4 border-t border-border/70 pt-5 sm:pt-6"
+            className="animate-rise mt-6 sm:mt-9 grid w-full max-w-2xl grid-cols-3 gap-2 sm:gap-4 border-t border-border/70 pt-4 sm:pt-6"
             style={{ animationDelay: "320ms" }}
           >
-            <div className="flex flex-col items-center">
-              <span className="font-display text-3xl font-black text-foreground">99.9%</span>
-              <span className="mt-1 text-xs text-muted-foreground leading-snug">Production Uptime & Reliability</span>
+            <div className="flex flex-col items-center text-center">
+              <span className="font-display text-xl sm:text-3xl font-black text-foreground">99.9%</span>
+              <span className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground leading-tight text-center">Uptime & Reliability</span>
             </div>
-            <div className="flex flex-col items-center sm:border-l sm:border-border/60 sm:pl-4">
-              <span className="font-display text-3xl font-black text-foreground">100%</span>
-              <span className="mt-1 text-xs text-muted-foreground leading-snug">Senior-Led Guild Delivery</span>
+            <div className="flex flex-col items-center text-center border-l border-border/60 pl-2 sm:pl-4">
+              <span className="font-display text-xl sm:text-3xl font-black text-foreground">100%</span>
+              <span className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground leading-tight text-center">Senior Guild Delivery</span>
             </div>
-            <div className="flex flex-col items-center sm:border-l sm:border-border/60 sm:pl-4">
-              <span className="font-display text-3xl font-black text-foreground">Global</span>
-              <span className="mt-1 text-xs text-muted-foreground leading-snug">Multi-Region Architectures</span>
+            <div className="flex flex-col items-center text-center border-l border-border/60 pl-2 sm:pl-4">
+              <span className="font-display text-xl sm:text-3xl font-black text-foreground">Global</span>
+              <span className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground leading-tight text-center">Multi-Region Scale</span>
             </div>
           </div>
         </div>

@@ -33,31 +33,34 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b bg-surface transition-[box-shadow,border-color] duration-300",
-        scrolled ? "border-transparent shadow-header" : "border-border",
+        "sticky top-0 z-50 border-b bg-surface/95 backdrop-blur-md transition-[box-shadow,border-color,background-color] duration-300",
+        scrolled ? "border-transparent shadow-header" : "border-border/80",
       )}
     >
       <div
         className={cn(
           "container-site flex items-center justify-between transition-[height] duration-300",
-          scrolled ? "h-13 sm:h-16" : "h-14 sm:h-20",
+          scrolled ? "h-12 md:h-13.5" : "h-13.5 md:h-15.5",
         )}
       >
         <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center h-full">
-          <Logo className={scrolled ? "h-11 sm:h-14 md:h-15" : "h-12 sm:h-17 md:h-18"} />
+          <Logo className={cn(
+            "transition-all duration-300",
+            scrolled ? "h-7 sm:h-7.5 md:h-8" : "h-8 sm:h-8.5 md:h-9.5"
+          )} />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
           {navItems.map((n) => (
-            <Link key={n.to} to={n.to} preload="intent" className="nav-link text-[0.9rem] font-medium">
+            <Link key={n.to} to={n.to} preload="intent" className="nav-link text-[0.86rem] font-medium text-foreground/85 hover:text-foreground">
               {n.label}
             </Link>
           ))}
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <Link to="/contact" className={buttonVariants()}>
-            Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
+          <Link to="/contact" className={cn(buttonVariants({ size: "sm" }), "h-8.5 px-4 text-xs font-semibold shadow-xs")}>
+            Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-1.5" />
           </Link>
         </div>
 

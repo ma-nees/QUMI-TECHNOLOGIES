@@ -250,11 +250,12 @@ export function CursorDrivenParticleTypography({
 
       ctx.font = `800 ${calculatedFontSize}px ${fontFamily}`;
 
-      // Scale down font size if first line exceeds maxWidth on medium+ screens
-      if (containerWidth >= 640 && initialLines[0]) {
+      // Dynamically scale down font size so lines fit within available width smoothly on all screens
+      if (initialLines[0]) {
+        const minFont = containerWidth < 480 ? 24 : 34;
         while (
           ctx.measureText(initialLines[0].text).width > maxWidth &&
-          calculatedFontSize > 36
+          calculatedFontSize > minFont
         ) {
           calculatedFontSize -= 1;
           ctx.font = `800 ${calculatedFontSize}px ${fontFamily}`;
@@ -264,7 +265,9 @@ export function CursorDrivenParticleTypography({
       const activeLines = layoutLines(initialLines, ctx, maxWidth);
       const lineHeight = calculatedFontSize * (containerWidth < 480 ? 1.25 : 1.16);
       const totalTextHeight = (activeLines.length - 1) * lineHeight;
-      const startY = (containerHeight - totalTextHeight) / 2;
+      // Ensure startY has a safe margin so letters with accents or ascenders are never cut off
+      const minTopMargin = calculatedFontSize * 0.58;
+      const startY = Math.max(minTopMargin, (containerHeight - totalTextHeight) / 2);
 
       ctx.clearRect(0, 0, containerWidth, containerHeight);
       ctx.textAlign = "center";
