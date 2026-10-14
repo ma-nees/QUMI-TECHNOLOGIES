@@ -15,7 +15,7 @@ export function Logo({
         width={800}
         height={268}
         className={cn(
-          "h-11 sm:h-12 md:h-14 w-auto max-h-14 object-contain transition-all duration-200",
+          "h-8 sm:h-12 md:h-14 w-auto max-h-14 object-contain transition-all duration-200",
           className
         )}
         fetchPriority="high"

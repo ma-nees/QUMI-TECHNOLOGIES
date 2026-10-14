@@ -40,11 +40,11 @@ export function Header() {
       <div
         className={cn(
           "container-site flex items-center justify-between transition-[height] duration-300",
-          scrolled ? "h-16" : "h-20",
+          scrolled ? "h-13 sm:h-16" : "h-14 sm:h-20",
         )}
       >
-        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center py-1">
-          <Logo className={scrolled ? "h-10 sm:h-11" : "h-12 sm:h-14"} />
+        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center py-0.5">
+          <Logo className={scrolled ? "h-8 sm:h-10 md:h-11" : "h-9 sm:h-12 md:h-14"} />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
@@ -64,12 +64,12 @@ export function Header() {
         <div className="flex items-center gap-3 lg:hidden">
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border transition-all duration-150 ease-out active:scale-75"
+            className="inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-border/80 bg-surface/50 text-foreground transition-all duration-150 ease-out active:scale-75 shadow-xs"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={20} className="animate-in spin-in-90 duration-150" /> : <List size={20} className="animate-in spin-in-90 duration-150" />}
+            {open ? <X size={18} className="animate-in spin-in-90 duration-150" /> : <List size={18} className="animate-in spin-in-90 duration-150" />}
           </button>
         </div>
       </div>
