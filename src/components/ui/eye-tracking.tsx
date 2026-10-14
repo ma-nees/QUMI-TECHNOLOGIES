@@ -549,11 +549,20 @@ interface EyePreloaderProps {
 
 export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps) {
   const [mounted, setMounted] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(true);
+  const [isVisible, setIsVisible] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
     setMounted(true);
+    // Only run on the very first page load in a user session
+    const hasLoaded = sessionStorage.getItem("qumi_preloader_shown");
+    if (hasLoaded) {
+      setIsVisible(false);
+      onComplete?.();
+      return;
+    }
+
+    setIsVisible(true);
     const startTime = Date.now();
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -562,6 +571,7 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
 
       if (elapsed >= duration) {
         clearInterval(interval);
+        sessionStorage.setItem("qumi_preloader_shown", "true");
         setTimeout(() => {
           setIsVisible(false);
           onComplete?.();
@@ -572,10 +582,8 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
     return () => clearInterval(interval);
   }, [duration, onComplete]);
 
-  if (!mounted) {
-    return (
-      <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#FAF3E7] select-none" />
-    );
+  if (!mounted || !isVisible) {
+    return null;
   }
 
   return (

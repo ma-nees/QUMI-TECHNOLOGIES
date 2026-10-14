@@ -71,7 +71,7 @@ export function Header() {
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {navItems.map((n) => (
-            <Link key={n.to} to={n.to} className="nav-link text-[0.9rem] font-medium">
+            <Link key={n.to} to={n.to} preload="intent" className="nav-link text-[0.9rem] font-medium">
               {n.label}
             </Link>
           ))}
