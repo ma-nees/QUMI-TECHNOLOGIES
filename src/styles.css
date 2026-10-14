@@ -88,37 +88,6 @@
   --shadow-header: 0 1px 0 var(--border), 0 6px 20px -14px oklch(0.236 0.056 257 / 20%);
 }
 
-.dark {
-  --background: #021526;
-  --surface: color-mix(in srgb, #021526 90%, transparent);
-  --foreground: #E2E2B6;
-  --card: color-mix(in srgb, #03346E 80%, transparent);
-  --card-foreground: #E2E2B6;
-  --popover: color-mix(in srgb, #021526 85%, transparent);
-  --popover-foreground: #E2E2B6;
-  --primary: #6EACDA;
-  --primary-hover: color-mix(in srgb, #6EACDA 85%, #000);
-  --primary-soft: color-mix(in srgb, #6EACDA 15%, transparent);
-  --primary-foreground: #021526;
-  --secondary: #03346E;
-  --secondary-foreground: #E2E2B6;
-  --muted: #03346E;
-  --muted-foreground: color-mix(in srgb, #E2E2B6 70%, transparent);
-  --accent: #03346E;
-  --accent-foreground: #6EACDA;
-  --highlight: #6EACDA;
-  --ink: #E2E2B6;
-  --ink-foreground: #021526;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #03346E;
-  --border-strong: color-mix(in srgb, #6EACDA 50%, #03346E);
-  --input: #03346E;
-  --ring: #6EACDA;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px -12px rgb(0 0 0 / 60%);
-  --shadow-header: 0 1px 0 var(--border), 0 6px 20px -14px rgb(0 0 0 / 50%);
-}
-
 @layer base {
   * {
     border-color: var(--color-border);

@@ -4,28 +4,6 @@ import { List, X, ArrowRight } from "@phosphor-icons/react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
-import { useTheme } from "next-themes";
-import { Moon, Sun } from "@phosphor-icons/react";
-
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return <div className="w-10 h-10" />;
-
-  return (
-    <Button
-      variant="outline"
-      size="icon"
-      className="rounded-full w-10 h-10 border-border"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      aria-label="Toggle theme"
-    >
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-    </Button>
-  );
-}
 
 export const navItems = [
   { to: "/", label: "Home" },
@@ -78,14 +56,12 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <ThemeToggle />
           <Link to="/contact" className={buttonVariants()}>
             Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-2" />
           </Link>
         </div>
 
         <div className="flex items-center gap-3 lg:hidden">
-          <ThemeToggle />
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border transition-all duration-150 ease-out active:scale-75"
