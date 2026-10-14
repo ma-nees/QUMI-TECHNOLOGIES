@@ -146,11 +146,9 @@ function RootComponent() {
       <EyePreloader duration={5000} />
       <QueryClientProvider client={queryClient}>
         <div className="relative bg-background text-foreground min-h-screen">
-          {shouldLoad3D && (
-            <Suspense fallback={null}>
-              <Global3DBackground />
-            </Suspense>
-          )}
+          <Suspense fallback={null}>
+            <Global3DBackground />
+          </Suspense>
           <div className="relative z-10 flex min-h-screen flex-col bg-transparent">
             <div className="flex-1 flex flex-col">
               <a

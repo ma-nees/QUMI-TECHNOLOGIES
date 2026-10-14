@@ -7,9 +7,9 @@ import { CursorDrivenParticleTypography } from "@/components/ui/cursor-driven-pa
 export function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-border/70 pt-14 pb-20 md:pt-20 md:pb-28 lg:pt-24 lg:pb-32 text-center">
-      {/* Contrast Safeguard Layer: Soft radial vignette ensuring 100% typography contrast against 3D background */}
+      {/* Contrast Safeguard Layer: Soft radial vignette allowing full visibility of 3D background */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,_var(--color-background)_0%,_transparent_100%)] opacity-95"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,_var(--color-background)_0%,_transparent_100%)] opacity-35"
         aria-hidden="true"
       />
       {/* Subtle Atmospheric Accent Glow behind center */}
