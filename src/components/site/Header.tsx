@@ -62,11 +62,11 @@ export function Header() {
       <div
         className={cn(
           "container-site flex items-center justify-between transition-[height] duration-300",
-          scrolled ? "h-14" : "h-16",
+          scrolled ? "h-16" : "h-20",
         )}
       >
-        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)}>
-          <Logo />
+        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center py-1">
+          <Logo className={scrolled ? "h-10 sm:h-11" : "h-12 sm:h-14"} />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">

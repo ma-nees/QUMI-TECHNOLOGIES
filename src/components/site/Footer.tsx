@@ -49,7 +49,7 @@ export function Footer() {
     <footer className="bg-ink text-ink-foreground dark:bg-[#010d17] dark:text-foreground dark:border-t dark:border-border">
       <div className="container-site grid gap-12 py-8 md:py-12 md:grid-cols-12">
         <div className="md:col-span-5">
-          <Logo inverse />
+          <Logo inverse className="h-12 sm:h-14" />
           <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-70">
             A Nepal-based technology partner engineering software, cloud and data systems for organisations
             in Nepal and abroad.

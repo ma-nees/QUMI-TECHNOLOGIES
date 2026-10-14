@@ -22,6 +22,7 @@ import { Toaster } from "@/components/ui/sonner";
 import React, { Suspense, lazy } from "react";
 const Global3DBackground = lazy(() => import("@/components/three/Global3DBackground"));
 import { Button } from "@/components/ui/button";
+import { EyePreloader } from "@/components/ui/eye-tracking";
 
 function NotFoundComponent() {
   return (
@@ -142,6 +143,7 @@ function RootComponent() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+      <EyePreloader duration={5000} />
       <QueryClientProvider client={queryClient}>
         <div className="relative">
           {shouldLoad3D && (
