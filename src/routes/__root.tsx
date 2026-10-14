@@ -145,7 +145,7 @@ function RootComponent() {
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <EyePreloader duration={5000} />
       <QueryClientProvider client={queryClient}>
-        <div className="relative">
+        <div className="relative bg-background text-foreground min-h-screen">
           {shouldLoad3D && (
             <Suspense fallback={null}>
               <Global3DBackground />
