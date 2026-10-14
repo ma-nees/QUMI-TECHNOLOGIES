@@ -43,8 +43,8 @@ export function Header() {
           scrolled ? "h-13 sm:h-16" : "h-14 sm:h-20",
         )}
       >
-        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center py-0.5">
-          <Logo className={scrolled ? "h-8 sm:h-10 md:h-11" : "h-9 sm:h-12 md:h-14"} />
+        <Link to="/" aria-label="QUMI Technologies home" onClick={() => setOpen(false)} className="flex items-center">
+          <Logo className={scrolled ? "h-10 sm:h-11 md:h-12" : "h-11.5 sm:h-13 md:h-14"} />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
