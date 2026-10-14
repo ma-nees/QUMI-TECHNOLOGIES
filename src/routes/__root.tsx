@@ -107,6 +107,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 import { ThemeProvider } from "next-themes";
 
+import { FloatingMascot } from "@/components/mascot/FloatingMascot";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -163,6 +165,7 @@ function RootComponent() {
               <Footer />
             </div>
           </div>
+          <FloatingMascot />
           <Toaster position="bottom-right" />
         </div>
       </QueryClientProvider>
