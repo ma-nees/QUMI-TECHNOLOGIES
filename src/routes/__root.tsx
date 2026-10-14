@@ -142,7 +142,7 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <EyePreloader duration={5000} />
       <QueryClientProvider client={queryClient}>
         <div className="relative">
