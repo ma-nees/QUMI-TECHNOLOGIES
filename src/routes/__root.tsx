@@ -80,7 +80,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preload", as: "style", href: appCss },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/logo.jpeg", type: "image/jpeg" },
+      { rel: "apple-touch-icon", href: "/logo.jpeg" },
       { rel: "manifest", href: "/manifest.json" },
     ],
   }),
@@ -113,12 +114,12 @@ function RootComponent() {
 
   useEffect(() => {
     const handleInteraction = () => setShouldLoad3D(true);
-    
+
     // Load on first interaction
     window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
     window.addEventListener('mousemove', handleInteraction, { once: true, passive: true });
     window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
-    
+
     // Fallback: load after 3.5 seconds regardless
     const timer = setTimeout(() => setShouldLoad3D(true), 3500);
 
