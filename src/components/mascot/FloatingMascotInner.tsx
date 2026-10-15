@@ -309,11 +309,11 @@ export default function FloatingMascotInner() {
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
             className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-2rem)] max-w-[305px] sm:max-w-[370px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            {/* Chatbot Header - Suitable & balanced */}
-            <div className="flex items-center justify-between border-b border-border/70 px-3 py-1.5 sm:px-4 sm:py-2 bg-secondary/30">
+            {/* Chatbot Header - Spacious & balanced */}
+            <div className="flex items-center justify-between border-b border-border/70 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-secondary/30">
               <div className="flex items-center gap-2">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-7.5 w-7.5 sm:h-8 sm:w-8 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-8 w-8 sm:h-8.5 sm:w-8.5 flex items-center justify-center filter drop-shadow-xs">
                   <StrobiAvatar
                     animation={animation}
                     size="100%"
@@ -330,7 +330,7 @@ export default function FloatingMascotInner() {
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-muted-foreground font-medium capitalize leading-none">
+                  <p className="text-[9.5px] sm:text-[10.5px] text-muted-foreground font-medium capitalize leading-none">
                     QUMI AI · {animation}
                   </p>
                 </div>
@@ -341,28 +341,28 @@ export default function FloatingMascotInner() {
                   type="button"
                   onClick={handleReset}
                   title="Reset conversation"
-                  className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  className="rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <ArrowsCounterClockwise size={12} className="sm:hidden" />
-                  <ArrowsCounterClockwise size={14} className="hidden sm:block" />
+                  <ArrowsCounterClockwise size={13} className="sm:hidden" />
+                  <ArrowsCounterClockwise size={15} className="hidden sm:block" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   title="Close assistant"
-                  className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  className="rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <X size={13} className="sm:hidden" />
-                  <X size={15} className="hidden sm:block" />
+                  <X size={14} className="sm:hidden" />
+                  <X size={16} className="hidden sm:block" />
                 </button>
               </div>
             </div>
 
-            {/* In-Built Message Card Display - Perfectly sized, zero scroll */}
-            <div className="p-2 sm:p-2.5 flex flex-col justify-center [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {/* In-Built Message Card Display - Generous height & breathable */}
+            <div className="p-2.5 sm:p-3 flex flex-col justify-center min-h-[180px] sm:min-h-[195px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {/* Optional user prompt badge if asked a custom question */}
               {userQuery && (
-                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-primary max-w-[90%] truncate">
+                <div className="mb-1.5 self-end rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-primary max-w-[90%] truncate">
                   {userQuery}
                 </div>
               )}
@@ -375,14 +375,14 @@ export default function FloatingMascotInner() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card p-2.5 text-[11px] text-muted-foreground"
+                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card p-3 text-[11px] text-muted-foreground"
                   >
                     <span className="flex gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
                     </span>
-                    <span className="font-medium text-[10px]">Thinking...</span>
+                    <span className="font-medium text-[10.5px]">Thinking...</span>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -391,46 +391,46 @@ export default function FloatingMascotInner() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15 }}
-                    className="rounded-lg sm:rounded-xl border border-border/70 bg-card/95 p-2 sm:p-2.5 shadow-2xs space-y-1 sm:space-y-1.5 text-foreground"
+                    className="rounded-lg sm:rounded-xl border border-border/70 bg-card/95 p-2.5 sm:p-3 shadow-2xs space-y-1.5 text-foreground"
                   >
                     {/* Title & Badge */}
                     <div className="flex items-center justify-between gap-1 border-b border-border/50 pb-1">
-                      <span className="text-[11px] sm:text-xs font-bold text-foreground">
+                      <span className="text-[11.5px] sm:text-xs font-bold text-foreground">
                         {activeTopic.title}
                       </span>
-                      <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[8px] sm:text-[9px] font-semibold text-primary">
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-semibold text-primary">
                         {activeTopic.badge}
                       </span>
                     </div>
 
                     {/* Summary */}
-                    <p className="text-[10px] sm:text-[11px] leading-snug text-foreground/90 font-medium">
+                    <p className="text-[10.5px] sm:text-[11.5px] leading-relaxed text-foreground/90 font-medium">
                       {activeTopic.summary}
                     </p>
 
                     {/* Compact Points - clean and readable */}
-                    <ul className="space-y-0.5 sm:space-y-1 pt-0.5 text-[9px] sm:text-[10px] text-muted-foreground">
+                    <ul className="space-y-1 pt-0.5 text-[9.5px] sm:text-[10.5px] text-muted-foreground">
                       {activeTopic.points.map((pt, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-1 leading-tight"
+                          className="flex items-start gap-1.5 leading-snug"
                         >
                           <CheckCircle
-                            size={11}
+                            size={11.5}
                             weight="fill"
                             className="text-primary shrink-0 mt-0.5"
                           />
-                          <span className="leading-snug">{pt}</span>
+                          <span>{pt}</span>
                         </li>
                       ))}
                     </ul>
 
                     {/* Action Button */}
-                    <div className="pt-0.5 sm:pt-1">
+                    <div className="pt-1">
                       <Link
                         to={activeTopic.actionLink}
                         onClick={() => setIsOpen(false)}
-                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10.5px] font-semibold text-primary-foreground shadow-2xs transition-colors"
+                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-3 py-1 text-[9.5px] sm:text-[11px] font-semibold text-primary-foreground shadow-2xs transition-colors"
                       >
                         <span>{activeTopic.actionLabel}</span>
                         <ArrowRight size={10} weight="bold" />
@@ -442,14 +442,14 @@ export default function FloatingMascotInner() {
             </div>
 
             {/* In-Built Quick Topic Chips - Single horizontal scroll row (zero scrollbars) */}
-            <div className="border-t border-border/50 bg-secondary/15 px-2 py-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
+            <div className="border-t border-border/50 bg-secondary/15 px-2.5 py-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
                 {QUICK_BUTTONS.map((btn) => (
                   <button
                     key={btn.key}
                     type="button"
                     onClick={() => selectInbuiltTopic(btn.key, btn.label)}
-                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
+                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-2.5 py-1 text-[9px] sm:text-[10px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
                   >
                     {btn.label}
                   </button>
@@ -457,25 +457,25 @@ export default function FloatingMascotInner() {
               </div>
             </div>
 
-            {/* Input Field - Comfortable & compact */}
+            {/* Input Field - Comfortable & breathable */}
             <form
               onSubmit={handleCustomSubmit}
-              className="flex items-center gap-1 sm:gap-1.5 border-t border-border/70 p-1 sm:p-1.5 bg-surface"
+              className="flex items-center gap-1.5 border-t border-border/70 p-1.5 sm:p-2 bg-surface"
             >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask Strobi..."
-                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2.5 py-0.5 text-[10px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-7 sm:h-7.5"
+                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2.5 py-1 text-[10.5px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-8 sm:h-8.5"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
+                className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
                 title="Send inquiry"
               >
-                <PaperPlaneRight size={11} weight="fill" />
+                <PaperPlaneRight size={12} weight="fill" />
               </button>
             </form>
           </motion.div>
