@@ -7,14 +7,9 @@ import { CursorDrivenParticleTypography } from "@/components/ui/cursor-driven-pa
 export function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-border/70 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-16 md:pb-20 text-center">
-      {/* Contrast Safeguard Layer: Soft radial vignette allowing full visibility of 3D background */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,_var(--color-background)_0%,_transparent_100%)] opacity-35"
-        aria-hidden="true"
-      />
       {/* Subtle Atmospheric Accent Glow behind center */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 h-[400px] w-[600px] rounded-full bg-primary/10 blur-[140px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 h-[350px] w-[500px] rounded-full bg-primary/5 blur-[120px]"
         aria-hidden="true"
       />
 

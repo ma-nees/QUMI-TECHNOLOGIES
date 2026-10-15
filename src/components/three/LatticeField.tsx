@@ -37,23 +37,23 @@ export function LatticeField({ className }: { className?: string }) {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const mobile = window.matchMedia("(max-width: 768px)").matches;
 
-      // ─── 1. OPTIMIZED GEOMETRY BUDGET ───
-      // Tuned to give silky smooth ribbons while cutting vertex evaluations by 69%
-      const ROWS = mobile ? 34 : 58;
-      const COLS = mobile ? 65 : 124;
+      // ─── 1. OPTIMIZED GEOMETRY BUDGET (HD RENDER) ───
+      // Tuned to give silky smooth ribbons in full HD resolution across mobile & desktop
+      const ROWS = mobile ? 44 : 58;
+      const COLS = mobile ? 90 : 124;
       const W = 32;
       const D = 22;
 
       const renderer = new THREE.WebGLRenderer({
-        antialias: !mobile,
+        antialias: true,
         alpha: true,
         powerPreference: "high-performance",
         depth: false,
         stencil: false,
       });
 
-      // Capping at 1.5 on desktop and 1.0 on mobile saves massive fill-rate on high-DPI displays
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.0 : 1.5));
+      // Render in crystal-clear HD across all Retina and high-DPI mobile/desktop screens
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
       renderer.setClearColor(0x000000, 0);
       host.appendChild(renderer.domElement);
       renderer.domElement.style.cssText = "width:100%;height:100%;display:block";
