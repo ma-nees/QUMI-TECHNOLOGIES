@@ -9,9 +9,15 @@ create table if not exists public.case_studies (
   technology text not null,
   result text,
   image_url text,
+  github_url text,
+  live_url text,
   is_published boolean not null default true,
   created_at timestamptz not null default now()
 );
+
+-- Ensure optional columns exist if table was already created
+alter table public.case_studies add column if not exists github_url text;
+alter table public.case_studies add column if not exists live_url text;
 
 -- Enable Row Level Security
 alter table public.case_studies enable row level security;

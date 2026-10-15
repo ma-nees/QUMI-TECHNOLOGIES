@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, X, Sparkle } from "@phosphor-icons/react";
+import { ArrowRight, ArrowUpRight, X, Sparkle, Globe, GithubLogo, ArrowSquareOut } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Reveal, SectionHeader } from "@/components/site/primitives";
 import { services, technologies, industries, process, principles, engagementModels } from "@/lib/content";
@@ -200,64 +200,92 @@ export function CaseStudiesSection() {
                   className="group card-interactive flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
                 >
                   <div>
-                    <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                    {/* Image Banner */}
+                    <div className="relative aspect-[16/9] overflow-hidden bg-muted">
                       <img
                         src={image}
                         alt={`${title} preview`}
                         width={1280}
-                        height={880}
+                        height={720}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
                       />
                       <div className="absolute inset-0 bg-ink/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                      <div className="absolute left-3 top-3 flex items-center gap-2">
-                        <span className="rounded-md bg-surface/90 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
+                      
+                      {/* Top left badge */}
+                      <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5">
+                        <span className="rounded-md bg-surface/90 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
                           {c.industry}
                         </span>
                       </div>
+
+                      {/* Top right quick links */}
+                      <div className="absolute right-2.5 top-2.5 flex items-center gap-1.5">
+                        {c.live_url && (
+                          <a
+                            href={c.live_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex h-6 w-6 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            title="Open live project"
+                          >
+                            <Globe size={13} />
+                          </a>
+                        )}
+                        {c.github_url && (
+                          <a
+                            href={c.github_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex h-6 w-6 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            title="View GitHub repository"
+                          >
+                            <GithubLogo size={13} />
+                          </a>
+                        )}
+                      </div>
+
                       {c.client && (
-                        <span className="absolute bottom-3 left-3 rounded-md bg-background/80 px-2.5 py-0.5 text-[11px] font-medium text-foreground backdrop-blur-sm">
+                        <span className="absolute bottom-2.5 left-2.5 rounded-md bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-sm">
                           {c.client}
                         </span>
                       )}
                     </div>
 
-                    <div className="p-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <h3 className="text-lg font-bold leading-snug group-hover:text-primary transition-colors">
+                    {/* Compact Card Content */}
+                    <div className="p-4 sm:p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-base sm:text-lg font-bold leading-snug group-hover:text-primary transition-colors line-clamp-2">
                           {title}
                         </h3>
-                        <ArrowUpRight size={20} className="arrow-nudge shrink-0 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        <ArrowUpRight size={18} className="arrow-nudge shrink-0 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </div>
 
-                      <dl className="mt-5 space-y-3 text-xs sm:text-sm">
-                        <div className="grid grid-cols-[80px_1fr] gap-2">
-                          <dt className="text-muted-foreground font-semibold">Challenge</dt>
-                          <dd className="line-clamp-2 text-foreground/90">{c.problem}</dd>
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                        {c.solution || c.problem}
+                      </p>
+
+                      {c.result && (
+                        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-primary font-medium">
+                          <Sparkle size={13} weight="fill" className="shrink-0 text-primary" />
+                          <span className="truncate">{c.result}</span>
                         </div>
-                        <div className="grid grid-cols-[80px_1fr] gap-2">
-                          <dt className="text-muted-foreground font-semibold">Solution</dt>
-                          <dd className="line-clamp-2 text-foreground/90">{c.solution}</dd>
-                        </div>
-                        {c.result && (
-                          <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-primary font-medium">
-                            <span className="font-semibold block text-[10px] uppercase tracking-wider mb-0.5">Impact</span>
-                            <span className="line-clamp-2 leading-relaxed">{c.result}</span>
-                          </div>
-                        )}
-                      </dl>
+                      )}
                     </div>
                   </div>
 
-                  <div className="border-t border-border/60 bg-surface-alt/40 px-6 py-3">
-                    <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
+                  {/* Compact Card Footer */}
+                  <div className="border-t border-border/60 bg-surface-alt/40 px-4 sm:px-5 py-2.5">
+                    <div className="flex flex-wrap items-center gap-1 font-mono text-[10px] text-muted-foreground">
                       {tech?.split(',').slice(0, 3).map((t: string) => (
-                        <span key={t} className="rounded bg-background/80 px-2 py-0.5 border border-border/50">
+                        <span key={t} className="rounded bg-background/80 px-1.5 py-0.5 border border-border/50">
                           {t.trim()}
                         </span>
                       ))}
                       {tech?.split(',').length > 3 && (
-                        <span className="text-[10px]">+{tech.split(',').length - 3} more</span>
+                        <span className="text-[10px]">+{tech.split(',').length - 3}</span>
                       )}
                     </div>
                   </div>
@@ -303,35 +331,64 @@ export function CaseStudiesSection() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+            <div className="flex-1 overflow-y-auto p-5 md:p-7 space-y-5">
               <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight">
                   {selectedCase.title || selectedCase.name}
                 </h2>
                 {selectedCase.client && (
-                  <p className="mt-1 text-sm text-muted-foreground">Engineered for {selectedCase.client}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">Engineered for {selectedCase.client}</p>
                 )}
               </div>
 
-              <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
-                <div className="rounded-xl border border-border/80 bg-background/60 p-5">
-                  <h4 className="font-bold text-foreground text-sm flex items-center gap-2 mb-2">
+              {/* Action Links (GitHub & Live Link) */}
+              {(selectedCase.live_url || selectedCase.github_url) && (
+                <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                  {selectedCase.live_url && (
+                    <a
+                      href={selectedCase.live_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition"
+                    >
+                      <Globe size={14} />
+                      <span>Visit Live Project</span>
+                      <ArrowSquareOut size={13} />
+                    </a>
+                  )}
+                  {selectedCase.github_url && (
+                    <a
+                      href={selectedCase.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-1.5 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition"
+                    >
+                      <GithubLogo size={14} />
+                      <span>GitHub Repository</span>
+                    </a>
+                  )}
+                </div>
+              )}
+
+              <div className="space-y-3.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-4">
+                  <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                     <span className="h-2 w-2 rounded-full bg-primary" /> The Problem & Challenge
                   </h4>
                   <p>{selectedCase.problem}</p>
                 </div>
 
-                <div className="rounded-xl border border-border/80 bg-background/60 p-5">
-                  <h4 className="font-bold text-foreground text-sm flex items-center gap-2 mb-2">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-4">
+                  <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                     <span className="h-2 w-2 rounded-full bg-highlight" /> The Architectural Solution
                   </h4>
                   <p>{selectedCase.solution}</p>
                 </div>
 
                 {selectedCase.result && (
-                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-5 text-primary">
-                    <h4 className="font-bold text-sm flex items-center gap-2 mb-2">
-                      <Sparkle size={16} weight="fill" /> Key Results & Measurable Impact
+                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-primary">
+                    <h4 className="font-bold text-xs sm:text-sm flex items-center gap-2 mb-1.5">
+                      <Sparkle size={15} weight="fill" /> Key Results & Measurable Impact
                     </h4>
                     <p className="font-medium text-foreground">{selectedCase.result}</p>
                   </div>
@@ -339,21 +396,21 @@ export function CaseStudiesSection() {
               </div>
 
               <div>
-                <h4 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">Technologies Used</h4>
-                <div className="flex flex-wrap gap-2">
+                <h4 className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mb-1.5">Technologies Used</h4>
+                <div className="flex flex-wrap gap-1.5">
                   {(selectedCase.technology || selectedCase.tech)?.split(',').map((t: string) => (
-                    <span key={t} className="rounded-lg border border-border/80 bg-background px-3 py-1 text-xs font-mono font-medium">
+                    <span key={t} className="rounded-md border border-border/80 bg-background px-2.5 py-0.5 text-xs font-mono font-medium">
                       {t.trim()}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-border flex items-center justify-between">
+              <div className="pt-3 border-t border-border flex items-center justify-between">
                 <p className="text-xs text-muted-foreground">Looking for similar technical architecture?</p>
                 <Link
                   to="/contact"
-                  className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition"
+                  className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition"
                   onClick={() => setSelectedCase(null)}
                 >
                   Discuss Your Project
