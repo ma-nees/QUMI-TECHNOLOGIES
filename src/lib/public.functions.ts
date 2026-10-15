@@ -370,8 +370,11 @@ export const submitContact = createServerFn({ method: "POST" })
 
     try {
       const brand = getBrand();
-      // Ensure we have an email set for fallback
+      const settings = await fetchCompanySettings();
+      if (settings?.email) brand.supportEmail = settings.email;
+      if (settings?.location) brand.address = settings.location;
       brand.supportEmail = brand.supportEmail || getEnv("SMTP_USER");
+
       const ref = makeReference("CT");
       const notification = contactNotification(brand, payload, ref);
       const ack = contactAcknowledgement(brand, payload, ref);
@@ -414,7 +417,11 @@ export const submitApplication = createServerFn({ method: "POST" })
 
     try {
       const brand = getBrand();
+      const settings = await fetchCompanySettings();
+      if (settings?.email) brand.supportEmail = settings.email;
+      if (settings?.location) brand.address = settings.location;
       brand.supportEmail = brand.supportEmail || getEnv("SMTP_USER");
+
       const ref = makeReference("AP");
 
       let jobTitle = "General Application";

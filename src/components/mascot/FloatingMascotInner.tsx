@@ -12,6 +12,8 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchCompanySettings } from "@/lib/public.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 const StrobiAvatar = createAvatar(definition);
 
@@ -144,10 +146,10 @@ const INBUILT_TOPICS: Record<string, StructuredTopic> = {
 const QUICK_BUTTONS = [
   { key: "services", label: "Services" },
   { key: "about", label: "About" },
+  { key: "contact", label: "Contact" },
   { key: "tech", label: "Tech Stack" },
-  { key: "industries", label: "Industries" },
-  { key: "start", label: "Kickoff" },
   { key: "careers", label: "Careers" },
+  { key: "start", label: "Kickoff" },
 ];
 
 // Automatic expression rotation sequence when floating idle
@@ -169,6 +171,23 @@ export default function FloatingMascotInner() {
   const [isHovered, setIsHovered] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
+  // Live admin settings & jobs state
+  const [settings, setSettings] = useState<any>(null);
+  const [jobs, setJobs] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchCompanySettings().then(setSettings).catch(() => {});
+    supabase
+      .from("jobs")
+      .select("id, title, department, employment_type")
+      .eq("is_open", true)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (data) setJobs(data);
+      })
+      .catch(() => {});
+  }, []);
 
   // Active in-built topic card (fits perfectly without requiring scrolling)
   const [activeTopic, setActiveTopic] = useState<StructuredTopic>(
@@ -194,8 +213,46 @@ export default function FloatingMascotInner() {
     return () => clearInterval(interval);
   }, [isOpen, isHovered]);
 
+  const getDynamicTopic = (key: string): StructuredTopic => {
+    if (key === "contact") {
+      return {
+        title: "Contact & Headquarters",
+        badge: "Direct Contact",
+        summary: "Reach our leadership and engineering team directly:",
+        points: [
+          `Email: ${settings?.email || "qumitechnologies.web@gmail.com"}`,
+          `Phone: ${settings?.mobile_number || "+977 1-0000000"}`,
+          `Location: ${settings?.location || "Kathmandu, Nepal"}`,
+        ],
+        actionLabel: "Send an Enquiry",
+        actionLink: "/contact",
+        animation: "happy",
+      };
+    }
+    if (key === "careers") {
+      return {
+        title: "Open Opportunities",
+        badge: jobs.length > 0 ? `${jobs.length} Open ${jobs.length === 1 ? "Role" : "Roles"}` : "We're Hiring!",
+        summary: jobs.length > 0
+          ? `We currently have ${jobs.length} active position${jobs.length === 1 ? "" : "s"} listed on our careers portal:`
+          : "Passionate about hard engineering problems and distributed systems? Join our guild:",
+        points: jobs.length > 0
+          ? jobs.slice(0, 3).map((j: any) => `${j.title} (${j.department || "Engineering"} • ${j.employment_type || "Full-time"})`)
+          : [
+              "Autonomous, engineering-first culture with continuous growth.",
+              "Work with global clients on mission-critical architectures.",
+              "Flexible hybrid work environment in Kathmandu, Nepal.",
+            ],
+        actionLabel: "View All Positions & Apply",
+        actionLink: "/careers",
+        animation: "playful",
+      };
+    }
+    return INBUILT_TOPICS[key] || INBUILT_TOPICS.services;
+  };
+
   const selectInbuiltTopic = (key: string, queryLabel?: string) => {
-    const topic = INBUILT_TOPICS[key] || INBUILT_TOPICS.services;
+    const topic = getDynamicTopic(key);
     setUserQuery(queryLabel || topic.title);
     setIsTyping(true);
     setAnimation("thinking");
@@ -225,8 +282,22 @@ export default function FloatingMascotInner() {
         query.includes("build") ||
         query.includes("capability")
       ) {
-        setActiveTopic(INBUILT_TOPICS.services);
-        setAnimation(INBUILT_TOPICS.services.animation);
+        const topic = getDynamicTopic("services");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
+      } else if (
+        query.includes("contact") ||
+        query.includes("email") ||
+        query.includes("phone") ||
+        query.includes("call") ||
+        query.includes("office") ||
+        query.includes("address") ||
+        query.includes("reach") ||
+        query.includes("location")
+      ) {
+        const topic = getDynamicTopic("contact");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else if (
         query.includes("about") ||
         query.includes("who") ||
@@ -234,8 +305,9 @@ export default function FloatingMascotInner() {
         query.includes("nepal") ||
         query.includes("kathmandu")
       ) {
-        setActiveTopic(INBUILT_TOPICS.about);
-        setAnimation(INBUILT_TOPICS.about.animation);
+        const topic = getDynamicTopic("about");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else if (
         query.includes("tech") ||
         query.includes("stack") ||
@@ -244,33 +316,41 @@ export default function FloatingMascotInner() {
         query.includes("aws") ||
         query.includes("python")
       ) {
-        setActiveTopic(INBUILT_TOPICS.tech);
-        setAnimation(INBUILT_TOPICS.tech.animation);
+        const topic = getDynamicTopic("tech");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else if (
         query.includes("industry") ||
         query.includes("fintech") ||
         query.includes("health") ||
         query.includes("domain")
       ) {
-        setActiveTopic(INBUILT_TOPICS.industries);
-        setAnimation(INBUILT_TOPICS.industries.animation);
+        const topic = getDynamicTopic("industries");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else if (
         query.includes("start") ||
         query.includes("hire") ||
-        query.includes("contact") ||
         query.includes("price") ||
         query.includes("quote")
       ) {
-        setActiveTopic(INBUILT_TOPICS.start);
-        setAnimation(INBUILT_TOPICS.start.animation);
+        const topic = getDynamicTopic("start");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else if (
         query.includes("job") ||
         query.includes("career") ||
         query.includes("apply") ||
-        query.includes("hiring")
+        query.includes("hiring") ||
+        query.includes("position") ||
+        query.includes("role") ||
+        query.includes("intern") ||
+        query.includes("devops") ||
+        query.includes("developer")
       ) {
-        setActiveTopic(INBUILT_TOPICS.careers);
-        setAnimation(INBUILT_TOPICS.careers.animation);
+        const topic = getDynamicTopic("careers");
+        setActiveTopic(topic);
+        setAnimation(topic.animation);
       } else {
         // Fallback structured card
         setActiveTopic({
