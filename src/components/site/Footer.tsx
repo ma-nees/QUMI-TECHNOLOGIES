@@ -47,14 +47,14 @@ export function Footer() {
 
   return (
     <footer className="bg-ink text-ink-foreground dark:bg-[#010d17] dark:text-foreground dark:border-t dark:border-border">
-      <div className="container-site grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-6 sm:gap-8 md:gap-8 lg:gap-12 py-6 sm:py-8 md:py-12">
+      <div className="container-site grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-6 sm:gap-8 md:gap-8 lg:gap-10 py-6 sm:py-7 md:py-8 lg:py-9">
         <div className="col-span-1 sm:col-span-2 md:col-span-5">
-          <Logo inverse className="h-10 sm:h-12 md:h-14" />
-          <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed opacity-70">
+          <Logo inverse className="h-9 sm:h-10 md:h-11" />
+          <p className="mt-2.5 sm:mt-3 max-w-sm text-xs sm:text-sm leading-relaxed opacity-70">
             A Nepal-based technology partner engineering software, cloud and data systems for organisations
             in Nepal and abroad.
           </p>
-          <div className="mt-4 sm:mt-5 flex gap-2.5 sm:gap-3">
+          <div className="mt-3.5 sm:mt-4 flex gap-2.5 sm:gap-3">
             {socials.map(({ Icon, label, url }) => (
               <a
                 key={label}
@@ -74,7 +74,7 @@ export function Footer() {
           {cols.map((c) => (
             <div key={c.title} className="md:col-span-2">
               <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">{c.title}</h3>
-              <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
+              <ul className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
                 {c.links.map((l) => (
                   <li key={l.to}>
                     <Link to={l.to} className="opacity-85 transition-opacity hover:opacity-100 hover:text-highlight">
@@ -89,7 +89,7 @@ export function Footer() {
 
         <div className="col-span-1 sm:col-span-2 md:col-span-3">
           <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">Get in touch</h3>
-          <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
+          <ul className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
             <li className="flex items-center gap-2 sm:gap-2.5">
               <EnvelopeSimple size={15} className="opacity-60 shrink-0" />
               <a href={`mailto:${settings?.email || company.email}`} className="hover:text-highlight break-all">{settings?.email || company.email}</a>
@@ -106,7 +106,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-ink-foreground/10 dark:border-border">
-        <div className="container-site flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 py-4 sm:py-5 text-xs opacity-70 text-center sm:text-left">
+        <div className="container-site flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 py-3.5 sm:py-4 text-xs opacity-70 text-center sm:text-left">
           <p>© {new Date().getFullYear()} {company.name}. All rights reserved.</p>
           <div className="flex gap-4 sm:gap-6 justify-center">
             <Link to="/privacy-policy" className="hover:opacity-100 transition-opacity">Privacy Policy</Link>

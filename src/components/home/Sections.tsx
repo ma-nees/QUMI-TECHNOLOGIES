@@ -184,14 +184,14 @@ export function CaseStudiesSection() {
   }, []);
 
   return (
-    <section className="py-8 sm:py-12 md:py-16">
+    <section className="py-8 sm:py-10 md:py-12">
       <div className="container-site">
         <SectionHeader
           eyebrow="Selected work"
           title="Project Case Studies"
           intro="Demonstrated technical delivery and architectural outcomes engineered across high-scale industries."
         />
-        <div className="mt-8 sm:mt-10 md:mt-14 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
+        <div className="mt-6 sm:mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
           {items.map((c, i) => {
             const title = c.title || c.name;
             const tech = c.technology || c.tech;
@@ -507,14 +507,14 @@ export function PrinciplesSection() {
 
 export function EngagementSection() {
   return (
-    <section className="border-t border-border bg-surface py-8 sm:py-10 md:py-14">
+    <section className="border-t border-border bg-surface py-8 sm:py-10 md:py-11">
       <div className="container-site">
         <SectionHeader
           eyebrow="How we work with teams"
           title="Three ways to engage."
           intro="Choose the model that fits your organisation. Many clients start with one and move to another as needs evolve."
         />
-        <div className="mt-8 sm:mt-10 md:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 sm:mt-8 md:mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {engagementModels.map((m, i) => (
             <Reveal
               key={m.title}
@@ -539,9 +539,9 @@ export function EngagementSection() {
 
 export function CtaSection() {
   return (
-    <section className="py-8 sm:py-10 md:py-14">
+    <section className="py-6 sm:py-8 md:py-10">
       <div className="container-site">
-        <Reveal className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-primary px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-16 text-primary-foreground">
+        <Reveal className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-primary px-5 py-7 sm:px-8 sm:py-10 md:px-12 md:py-12 text-primary-foreground">
           <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "linear-gradient(var(--color-primary-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary-foreground) 1px, transparent 1px)", backgroundSize: "56px 56px" }} aria-hidden="true" />
           <div className="relative grid items-center gap-6 sm:gap-8 md:grid-cols-12">
             <div className="md:col-span-8">
