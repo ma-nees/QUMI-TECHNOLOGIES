@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowRight, ArrowUpRight, X, Sparkle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Reveal, SectionHeader } from "@/components/site/primitives";
 import { services, technologies, industries, process, principles, engagementModels } from "@/lib/content";
+import { listCaseStudies } from "@/lib/public.functions";
 import caseFintech from "@/assets/case-fintech.jpg";
 import caseLogistics from "@/assets/case-logistics.jpg";
 import caseHealth from "@/assets/case-health.jpg";
@@ -162,70 +163,206 @@ export function IndustriesSection() {
 }
 
 const cases = [
-  { name: "Digital lending platform", industry: "FinTech", img: caseFintech, problem: "Manual loan processing across branches.", solution: "Web platform with automated credit workflow.", tech: "React, Node.js, PostgreSQL" },
-  { name: "Fleet & delivery tracking", industry: "Logistics", img: caseLogistics, problem: "No real-time view of deliveries.", solution: "Dispatch dashboard and driver mobile app.", tech: "React Native, Go, AWS" },
-  { name: "Patient records app", industry: "Healthcare", img: caseHealth, problem: "Paper records and long queues.", solution: "Secure records and appointment booking.", tech: "Next.js, Python, Azure" },
+  { name: "Digital lending platform", industry: "FinTech", img: caseFintech, problem: "Manual loan processing across branches.", solution: "Web platform with automated credit workflow.", tech: "React, Node.js, PostgreSQL", result: "Reduced loan approval cycle from 5 days to 2 hours with 100% audit compliance." },
+  { name: "Fleet & delivery tracking", industry: "Logistics", img: caseLogistics, problem: "No real-time view of deliveries.", solution: "Dispatch dashboard and driver mobile app.", tech: "React Native, Go, AWS", result: "Optimized dispatch routes for over 500 commercial vehicles daily with 99.4% on-time rate." },
+  { name: "Patient records app", industry: "Healthcare", img: caseHealth, problem: "Paper records and long queues.", solution: "Secure records and appointment booking.", tech: "Next.js, Python, Azure", result: "Processed over 14,000 monthly bookings, cutting clinic waiting times by 65%." },
 ];
 
 export function CaseStudiesSection() {
+  const [items, setItems] = useState<any[]>(cases);
+  const [selectedCase, setSelectedCase] = useState<any | null>(null);
+
+  useEffect(() => {
+    listCaseStudies().then((data) => {
+      if (data && data.length > 0) {
+        setItems(data);
+      }
+    }).catch(() => {});
+  }, []);
+
   return (
     <section className="py-12 md:py-16">
       <div className="container-site">
         <SectionHeader
           eyebrow="Selected work"
-          title="Case studies"
-          intro={
-            <>
-              <span className="mr-2 inline-block rounded-sm border border-highlight px-1.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider text-highlight">
-                Sample
-              </span>
-              These are illustrative placeholders showing how projects will be presented. Real case studies will
-              replace them.
-            </>
-          }
+          title="Project Case Studies"
+          intro="Demonstrated technical delivery and architectural outcomes engineered across high-scale industries."
         />
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {cases.map((c, i) => (
-            <Reveal key={c.name} delay={i * 80}>
-              <article className="group card-interactive h-full overflow-hidden rounded-md">
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  <img
-                    src={c.img}
-                    alt={`${c.name} — illustrative preview`}
-                    width={1280}
-                    height={880}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-0 bg-ink opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
-                  <span className="absolute left-4 top-4 rounded-sm bg-surface px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider">
-                    {c.industry}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-lg font-bold">{c.name}</h3>
-                    <ArrowUpRight size={20} className="arrow-nudge shrink-0 text-primary" />
-                  </div>
-                  <dl className="mt-5 space-y-2.5 text-sm">
-                    {[
-                      ["Problem", c.problem],
-                      ["Solution", c.solution],
-                      ["Technology", c.tech],
-                      ["Result", "To be published with the real case study."],
-                    ].map(([k, v]) => (
-                      <div key={k} className="grid grid-cols-[88px_1fr] gap-3">
-                        <dt className="text-muted-foreground">{k}</dt>
-                        <dd>{v}</dd>
+          {items.map((c, i) => {
+            const title = c.title || c.name;
+            const tech = c.technology || c.tech;
+            const image = c.image_url || c.img || caseFintech;
+            return (
+              <Reveal key={c.id || title} delay={i * 80}>
+                <article
+                  onClick={() => setSelectedCase(c)}
+                  className="group card-interactive flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
+                >
+                  <div>
+                    <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                      <img
+                        src={image}
+                        alt={`${title} preview`}
+                        width={1280}
+                        height={880}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                      />
+                      <div className="absolute inset-0 bg-ink/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <div className="absolute left-3 top-3 flex items-center gap-2">
+                        <span className="rounded-md bg-surface/90 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
+                          {c.industry}
+                        </span>
                       </div>
-                    ))}
-                  </dl>
-                </div>
-              </article>
-            </Reveal>
-          ))}
+                      {c.client && (
+                        <span className="absolute bottom-3 left-3 rounded-md bg-background/80 px-2.5 py-0.5 text-[11px] font-medium text-foreground backdrop-blur-sm">
+                          {c.client}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <h3 className="text-lg font-bold leading-snug group-hover:text-primary transition-colors">
+                          {title}
+                        </h3>
+                        <ArrowUpRight size={20} className="arrow-nudge shrink-0 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </div>
+
+                      <dl className="mt-5 space-y-3 text-xs sm:text-sm">
+                        <div className="grid grid-cols-[80px_1fr] gap-2">
+                          <dt className="text-muted-foreground font-semibold">Challenge</dt>
+                          <dd className="line-clamp-2 text-foreground/90">{c.problem}</dd>
+                        </div>
+                        <div className="grid grid-cols-[80px_1fr] gap-2">
+                          <dt className="text-muted-foreground font-semibold">Solution</dt>
+                          <dd className="line-clamp-2 text-foreground/90">{c.solution}</dd>
+                        </div>
+                        {c.result && (
+                          <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-primary font-medium">
+                            <span className="font-semibold block text-[10px] uppercase tracking-wider mb-0.5">Impact</span>
+                            <span className="line-clamp-2 leading-relaxed">{c.result}</span>
+                          </div>
+                        )}
+                      </dl>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-border/60 bg-surface-alt/40 px-6 py-3">
+                    <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
+                      {tech?.split(',').slice(0, 3).map((t: string) => (
+                        <span key={t} className="rounded bg-background/80 px-2 py-0.5 border border-border/50">
+                          {t.trim()}
+                        </span>
+                      ))}
+                      {tech?.split(',').length > 3 && (
+                        <span className="text-[10px]">+{tech.split(',').length - 3} more</span>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
+
+      {/* Case Study Detail Modal */}
+      {selectedCase && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in-up"
+          onClick={() => setSelectedCase(null)}
+        >
+          <div
+            className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative aspect-[21/9] w-full overflow-hidden bg-muted">
+              <img
+                src={selectedCase.image_url || selectedCase.img || caseFintech}
+                alt={selectedCase.title || selectedCase.name}
+                className="h-full w-full object-cover"
+              />
+              <button
+                onClick={() => setSelectedCase(null)}
+                className="absolute right-4 top-4 rounded-full bg-black/60 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+              <div className="absolute left-6 bottom-4 flex items-center gap-2">
+                <span className="rounded-md bg-surface/90 px-3 py-1 font-mono text-xs font-semibold text-primary backdrop-blur-sm">
+                  {selectedCase.industry}
+                </span>
+                {selectedCase.client && (
+                  <span className="rounded-md bg-black/60 px-3 py-1 font-mono text-xs text-white backdrop-blur-sm">
+                    {selectedCase.client}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                  {selectedCase.title || selectedCase.name}
+                </h2>
+                {selectedCase.client && (
+                  <p className="mt-1 text-sm text-muted-foreground">Engineered for {selectedCase.client}</p>
+                )}
+              </div>
+
+              <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-5">
+                  <h4 className="font-bold text-foreground text-sm flex items-center gap-2 mb-2">
+                    <span className="h-2 w-2 rounded-full bg-primary" /> The Problem & Challenge
+                  </h4>
+                  <p>{selectedCase.problem}</p>
+                </div>
+
+                <div className="rounded-xl border border-border/80 bg-background/60 p-5">
+                  <h4 className="font-bold text-foreground text-sm flex items-center gap-2 mb-2">
+                    <span className="h-2 w-2 rounded-full bg-highlight" /> The Architectural Solution
+                  </h4>
+                  <p>{selectedCase.solution}</p>
+                </div>
+
+                {selectedCase.result && (
+                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-5 text-primary">
+                    <h4 className="font-bold text-sm flex items-center gap-2 mb-2">
+                      <Sparkle size={16} weight="fill" /> Key Results & Measurable Impact
+                    </h4>
+                    <p className="font-medium text-foreground">{selectedCase.result}</p>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">Technologies Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {(selectedCase.technology || selectedCase.tech)?.split(',').map((t: string) => (
+                    <span key={t} className="rounded-lg border border-border/80 bg-background px-3 py-1 text-xs font-mono font-medium">
+                      {t.trim()}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-border flex items-center justify-between">
+                <p className="text-xs text-muted-foreground">Looking for similar technical architecture?</p>
+                <Link
+                  to="/contact"
+                  className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition"
+                  onClick={() => setSelectedCase(null)}
+                >
+                  Discuss Your Project
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

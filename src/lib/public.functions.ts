@@ -327,6 +327,37 @@ export const getJob = createServerFn({ method: "GET" })
     return data;
   });
 
+export const listCaseStudies = createServerFn({ method: "GET" })
+  .handler(async () => {
+    // 1. Try Supabase case_studies table first
+    try {
+      // @ts-ignore - case_studies table might be dynamically added
+      const { data, error } = await supabase
+        .from('case_studies')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        return data;
+      }
+    } catch (e) {
+      // Fallback if table not created yet in Supabase
+    }
+
+    // 2. Fallback to local sync file
+    try {
+      const p = path.resolve(process.cwd(), 'src/data/case-studies.json');
+      if (fs.existsSync(p)) {
+        const raw = fs.readFileSync(p, 'utf-8');
+        const parsed = JSON.parse(raw);
+        return parsed.filter((c: any) => c.is_published !== false);
+      }
+    } catch (e) {}
+
+    return [];
+  });
+
 import fs from 'fs';
 import path from 'path';
 

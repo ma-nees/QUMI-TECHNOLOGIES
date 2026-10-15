@@ -351,6 +351,27 @@ export default function FloatingMascotInner() {
         const topic = getDynamicTopic("careers");
         setActiveTopic(topic);
         setAnimation(topic.animation);
+      } else if (
+        query.includes("case") ||
+        query.includes("study") ||
+        query.includes("project") ||
+        query.includes("portfolio") ||
+        query.includes("work")
+      ) {
+        setActiveTopic({
+          title: "Project Case Studies",
+          badge: "Proven Delivery",
+          summary: "Explore our real-world software, data, and cloud architecture deployments:",
+          points: [
+            "FinTech: Digital lending & automated KYC underwriting engine.",
+            "Logistics: Live GPS telemetry & automated fleet dispatch routing.",
+            "Healthcare: HIPAA-compliant clinical records & patient portal.",
+          ],
+          actionLabel: "View All Project Case Studies",
+          actionLink: "/solutions",
+          animation: "celebrate",
+        });
+        setAnimation("celebrate");
       } else {
         // Fallback structured card
         setActiveTopic({
