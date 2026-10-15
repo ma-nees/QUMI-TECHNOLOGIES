@@ -19,14 +19,14 @@ export function ServicesGrid({ limit }: { limit?: number }) {
           <Link
             to="/services"
             hash={s.slug}
-            className="group card-interactive flex h-full flex-col border-0 p-7 hover:z-10"
+            className="group card-interactive flex h-full flex-col border-0 p-5 sm:p-6 md:p-7 hover:z-10"
           >
             <div className="flex items-center gap-3 md:block">
               <s.icon size={28} weight="light" className="icon-nudge text-primary shrink-0" />
               <h3 className="text-lg font-bold leading-snug md:mt-8">{s.title}</h3>
             </div>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{s.summary}</p>
-            <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+            <p className="mt-2.5 sm:mt-3 flex-1 text-xs sm:text-sm leading-relaxed text-muted-foreground">{s.summary}</p>
+            <span className="mt-4 sm:mt-6 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-primary">
               Learn more <ArrowRight className="arrow-nudge" />
             </span>
           </Link>
@@ -38,9 +38,9 @@ export function ServicesGrid({ limit }: { limit?: number }) {
 
 export function ServicesSection() {
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-8 sm:py-10 md:py-12">
       <div className="container-site flex flex-col gap-6">
-        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-sm">
+        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl shadow-sm">
           <SectionHeader
             eyebrow="What we do"
             title="Services built around real delivery, not buzzwords."
@@ -57,17 +57,17 @@ export function ServicesSection() {
 
 export function AboutSection() {
   return (
-    <section className="border-y border-border bg-surface py-12 md:py-16">
-      <div className="container-site grid gap-12 md:grid-cols-12">
+    <section className="border-y border-border bg-surface py-8 sm:py-12 md:py-16">
+      <div className="container-site grid gap-8 md:gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-6">
           <p className="eyebrow">The company</p>
-          <p className="mt-6 text-3xl font-bold leading-[1.2] md:text-[2.4rem]">
+          <p className="mt-4 sm:mt-6 text-2xl sm:text-3xl font-bold leading-[1.2] md:text-[2.4rem]">
             We believe good software is engineered, not assembled — and that world-class work can be built
             from Kathmandu.
           </p>
         </Reveal>
         <Reveal delay={120} className="md:col-span-5 md:col-start-8">
-          <div className="space-y-5 text-base leading-relaxed text-muted-foreground">
+          <div className="space-y-4 sm:space-y-5 text-sm sm:text-base leading-relaxed text-muted-foreground">
             <p>
               QUMI Technologies is a Nepal-based IT company. We work with organisations that need software
               they can depend on: systems that scale, stay secure and remain maintainable long after launch.
@@ -77,14 +77,14 @@ export function AboutSection() {
               testing, documentation — so the products we build can grow with the businesses that use them.
             </p>
           </div>
-          <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-3 text-sm font-medium">
+          <ul className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 sm:gap-y-3 text-sm font-medium">
             {["Engineering-driven development", "Scalable architecture", "Long-term partnerships", "Modern technology stack"].map((t) => (
               <li key={t} className="flex items-center gap-2.5">
-                <span className="h-1.5 w-1.5 bg-primary" /> {t}
+                <span className="h-1.5 w-1.5 bg-primary shrink-0" /> {t}
               </li>
             ))}
           </ul>
-          <Button asChild variant="link" className="mt-8">
+          <Button asChild variant="link" className="mt-6 sm:mt-8 px-0 sm:px-4">
             <Link to="/about">
               More about QUMI <ArrowRight className="arrow-nudge" />
             </Link>
@@ -97,20 +97,20 @@ export function AboutSection() {
 
 export function TechnologySection() {
   return (
-    <section className="py-8 md:py-12">
-      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
+    <section className="py-8 sm:py-10 md:py-12">
+      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl shadow-sm">
         <SectionHeader
           eyebrow="Technology"
           title="A focused, proven stack."
           intro="We choose mature tools with strong ecosystems, and we choose them per project — not by habit."
         />
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
+        <div className="mt-8 sm:mt-10 md:mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
           {technologies.map((g, i) => (
-            <Reveal key={g.group} delay={i * 60} className="border border-border/60 bg-background/60 p-6 rounded-xl shadow-sm transition-all hover:bg-background">
+            <Reveal key={g.group} delay={i * 60} className="border border-border/60 bg-background/60 p-5 sm:p-6 rounded-xl shadow-sm transition-all hover:bg-background">
               <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{g.group}</h3>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-4 sm:mt-5 space-y-2.5 sm:space-y-3">
                 {g.items.map((t) => (
-                  <li key={t} className="flex items-center justify-between border-b border-border/50 pb-3 text-[0.95rem] font-semibold last:border-0">
+                  <li key={t} className="flex items-center justify-between border-b border-border/50 pb-2.5 sm:pb-3 text-xs sm:text-[0.95rem] font-semibold last:border-0">
                     {t}
                   </li>
                 ))}
@@ -125,17 +125,19 @@ export function TechnologySection() {
 
 export function IndustriesList({ full = false }: { full?: boolean }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3.5 sm:gap-4">
       {industries.map((ind, i) => (
         <Reveal key={ind.name} delay={(i % 4) * 40}>
-          <div className="group grid gap-4 border border-border bg-surface/80 backdrop-blur-md p-5 md:p-6 rounded-lg shadow-sm transition-all hover:bg-surface hover:shadow-md md:grid-cols-12 md:gap-6">
-            <span className="font-mono text-xs text-muted-foreground md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
-            <h3 className="text-xl font-bold transition-colors group-hover:text-primary md:col-span-3">{ind.name}</h3>
-            <p className="text-sm leading-relaxed text-muted-foreground md:col-span-4">
+          <div className="group grid gap-3 sm:gap-4 border border-border bg-surface/80 backdrop-blur-md p-4 sm:p-5 md:p-6 rounded-xl shadow-sm transition-all hover:bg-surface hover:shadow-md md:grid-cols-12 md:gap-6">
+            <div className="flex items-center gap-3 md:col-span-4">
+              <span className="font-mono text-xs text-muted-foreground shrink-0">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="text-lg sm:text-xl font-bold transition-colors group-hover:text-primary">{ind.name}</h3>
+            </div>
+            <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground md:col-span-4">
               <span className="font-semibold text-foreground">Challenge. </span>
               {ind.problem}
             </p>
-            <p className="text-sm leading-relaxed text-muted-foreground md:col-span-4">
+            <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground md:col-span-4">
               <span className="font-semibold text-foreground">{full ? "Our approach. " : "Approach. "}</span>
               {ind.approach}
             </p>
@@ -148,14 +150,14 @@ export function IndustriesList({ full = false }: { full?: boolean }) {
 
 export function IndustriesSection() {
   return (
-    <section className="border-t border-border bg-surface py-12 md:py-16">
+    <section className="border-t border-border bg-surface py-8 sm:py-12 md:py-16">
       <div className="container-site">
         <SectionHeader
           eyebrow="Industries"
           title="Solving specific problems in specific sectors."
           intro="Every industry has its own constraints — regulation, scale, connectivity, legacy systems. We design for them."
         />
-        <div className="mt-14">
+        <div className="mt-8 sm:mt-10 md:mt-14">
           <IndustriesList />
         </div>
       </div>
@@ -443,12 +445,12 @@ export function ProcessSection() {
   }, []);
 
   return (
-    <section className="bg-ink py-8 text-ink-foreground md:py-12">
-      <div className="container-site grid gap-12 md:grid-cols-12">
+    <section className="bg-ink py-8 sm:py-10 text-ink-foreground md:py-14">
+      <div className="container-site grid gap-8 md:gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-4">
           <p className="eyebrow">How we deliver</p>
-          <h2 className="mt-4 text-3xl font-bold leading-[1.12] md:text-[2.6rem]">A process designed for predictability.</h2>
-          <p className="mt-5 leading-relaxed opacity-70">
+          <h2 className="mt-3 sm:mt-4 text-2xl sm:text-3xl font-bold leading-[1.15] md:text-[2.6rem]">A process designed for predictability.</h2>
+          <p className="mt-3 sm:mt-5 text-sm sm:text-base leading-relaxed opacity-70">
             Seven stages, each with a clear output — so you always know what is happening and what comes next.
           </p>
         </Reveal>
@@ -462,16 +464,16 @@ export function ProcessSection() {
           {process.map((s, i) => {
             const active = progress >= i / (process.length - 1) - 0.02;
             return (
-              <li key={s.n} className="relative grid grid-cols-[32px_1fr] gap-4 pb-9 last:pb-0">
+              <li key={s.n} className="relative grid grid-cols-[28px_1fr] sm:grid-cols-[32px_1fr] gap-3 sm:gap-4 pb-7 sm:pb-9 last:pb-0">
                 <span
-                  className={`mt-1.5 h-[15px] w-[15px] border-2 transition-colors duration-300 ${active ? "border-highlight bg-highlight" : "border-ink-foreground/30 bg-ink"}`}
+                  className={`mt-1.5 h-[14px] w-[14px] sm:h-[15px] sm:w-[15px] border-2 transition-colors duration-300 ${active ? "border-highlight bg-highlight" : "border-ink-foreground/30 bg-ink"}`}
                 />
                 <div>
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-2.5 sm:gap-3">
                     <span className="font-mono text-xs opacity-60">{s.n}</span>
-                    <h3 className="text-xl font-bold">{s.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold">{s.title}</h3>
                   </div>
-                  <p className="mt-2 max-w-md text-sm leading-relaxed opacity-70">{s.text}</p>
+                  <p className="mt-1.5 sm:mt-2 max-w-md text-xs sm:text-sm leading-relaxed opacity-70">{s.text}</p>
                 </div>
               </li>
             );
@@ -484,14 +486,14 @@ export function ProcessSection() {
 
 export function PrinciplesSection() {
   return (
-    <section className="py-8 md:py-12">
-      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm">
+    <section className="py-8 sm:py-10 md:py-12">
+      <div className="container-site border border-border bg-surface/90 backdrop-blur-md p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl shadow-sm">
         <SectionHeader eyebrow="Why QUMI" title="The principles we work by." />
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 sm:mt-10 md:mt-14 grid gap-4 sm:gap-6 md:grid-cols-2">
           {principles.map((p, i) => (
-            <Reveal key={p.title} delay={i * 60} className="border border-border/60 bg-background/60 p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-background">
-              <h3 className="text-xl font-bold">{p.title}</h3>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{p.text}</p>
+            <Reveal key={p.title} delay={i * 60} className="border border-border/60 bg-background/60 p-5 sm:p-6 md:p-8 rounded-xl shadow-sm transition-all hover:bg-background">
+              <h3 className="text-lg sm:text-xl font-bold">{p.title}</h3>
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">{p.text}</p>
             </Reveal>
           ))}
         </div>

@@ -35,12 +35,12 @@ export const Route = createFileRoute("/")({
 
 function ValuePropositionSection() {
   return (
-    <section className="py-12 md:py-20">
+    <section className="py-8 sm:py-12 md:py-20">
       <div className="container-site">
-        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-sm">
+        <div className="border border-border/60 bg-surface/90 backdrop-blur-md p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl shadow-sm">
           <SectionHeader eyebrow="Why Qumi" title="Built for modern digital demands." intro="We combine silicon-valley engineering standards with the incredible technical talent pool in Kathmandu." />
           
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <div className="mt-8 sm:mt-10 md:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 icon: Code,
@@ -58,12 +58,17 @@ function ValuePropositionSection() {
                 desc: "We integrate directly with your teams. No black-box development. Total transparency in our sprints, codebases, and infrastructure."
               }
             ].map((v, i) => (
-              <Reveal key={v.title} delay={i * 100} className="rounded-xl bg-background/50 border border-border/50 p-6">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <v.icon size={24} weight="duotone" />
+              <Reveal
+                key={v.title}
+                delay={i * 80}
+                className={`rounded-xl bg-background/50 border border-border/50 p-5 sm:p-6 ${i === 2 ? "sm:col-span-2 lg:col-span-1" : ""}`}
+              >
+                <div className="mb-3.5 sm:mb-4 inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <v.icon size={22} weight="duotone" className="sm:hidden" />
+                  <v.icon size={24} weight="duotone" className="hidden sm:block" />
                 </div>
-                <h3 className="text-xl font-bold">{v.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.desc}</p>
+                <h3 className="text-lg sm:text-xl font-bold">{v.title}</h3>
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">{v.desc}</p>
               </Reveal>
             ))}
           </div>

@@ -16,12 +16,12 @@ function AboutPage() {
         title="A technology company from Nepal, built for the long term."
         intro="We exist to show that dependable, well-engineered software can be designed and built in Nepal — for clients here and around the world."
       />
-      <section className="container-site py-8 md:py-12">
-        <div className="border border-border bg-surface/80 backdrop-blur-md p-8 md:p-12 rounded-xl shadow-sm grid gap-12 md:grid-cols-12">
+      <section className="container-site py-8 sm:py-10 md:py-12">
+        <div className="border border-border bg-surface/80 backdrop-blur-md p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl shadow-sm grid gap-6 sm:gap-8 md:gap-12 md:grid-cols-12">
           <Reveal className="md:col-span-5">
-            <h2 className="text-3xl font-bold leading-tight">What we stand for</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold leading-tight">What we stand for</h2>
           </Reveal>
-          <Reveal delay={100} className="space-y-5 text-lg leading-relaxed text-muted-foreground md:col-span-7">
+          <Reveal delay={100} className="space-y-4 sm:space-y-5 text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground md:col-span-7">
             <p>
               We treat software as infrastructure for the organisations that rely on it. That means thinking about
               security, performance and maintainability from the first line of code — not after launch.

@@ -59,8 +59,8 @@ function ContactPage() {
         title="Tell us what you're building."
         intro="Share a few details about your project or question. A member of our team will reply by email."
       />
-      <section className="container-site grid gap-8 py-8 md:gap-14 md:grid-cols-12 md:py-12">
-        <div className="md:col-span-7 border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
+      <section className="container-site grid gap-6 py-8 sm:gap-8 md:gap-14 md:grid-cols-12 md:py-12">
+        <div className="md:col-span-7 border border-border bg-surface/90 backdrop-blur-md p-5 sm:p-7 md:p-10 rounded-xl sm:rounded-2xl shadow-sm">
           {status === "sent" ? (
             <div className="animate-rise">
               <CheckCircle size={36} weight="light" className="text-primary" />
@@ -71,7 +71,7 @@ function ContactPage() {
               </Button>
             </div>
           ) : (
-            <form onSubmit={onSubmit} noValidate className="grid gap-5 md:grid-cols-2">
+            <form onSubmit={onSubmit} noValidate className="grid gap-4 sm:gap-5 md:grid-cols-2">
               <Honeypot />
               <Field label="Full name" name="name" autoComplete="name" error={errors["name"]} />
               <Field label="Work email" name="email" type="email" autoComplete="email" error={errors["email"]} />
@@ -82,11 +82,11 @@ function ContactPage() {
                   {topics.map((t) => <option key={t}>{t}</option>)}
                 </select>
               </div>
-              <TextArea label="How can we help?" name="message" className="md:col-span-2" error={errors["message"]} rows={6} />
+              <TextArea label="How can we help?" name="message" className="md:col-span-2" error={errors["message"]} rows={5} />
               {status === "error" && <p role="alert" className="text-sm text-destructive md:col-span-2">{serverError}</p>}
-              <div className="flex flex-wrap items-center justify-between gap-4 md:col-span-2">
-                <p className="text-xs text-muted-foreground">We use your details only to respond to this enquiry.</p>
-                <Button type="submit" size="lg" disabled={status === "sending"}>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 md:col-span-2 pt-1 sm:pt-2">
+                <p className="text-xs text-muted-foreground text-center sm:text-left">We use your details only to respond to this enquiry.</p>
+                <Button type="submit" size="lg" disabled={status === "sending" || status === "sent"} className="w-full sm:w-auto justify-center">
                   {status === "sending" ? "Sending…" : "Send message"} <ArrowRight weight="bold" className="arrow-nudge" />
                 </Button>
               </div>
@@ -94,14 +94,14 @@ function ContactPage() {
           )}
         </div>
         
-        <aside className="md:col-span-5 h-fit border border-border bg-surface/90 backdrop-blur-md p-6 md:p-10 rounded-2xl shadow-sm">
+        <aside className="md:col-span-5 h-fit border border-border bg-surface/90 backdrop-blur-md p-5 sm:p-7 md:p-10 rounded-xl sm:rounded-2xl shadow-sm">
           <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">Direct contact</h2>
-          <ul className="mt-6 divide-y divide-border/50 border-y border-border/50">
-            <li className="flex items-center gap-4 py-5"><EnvelopeSimple size={22} weight="light" className="text-primary" /><a href={`mailto:${email}`} className="font-semibold hover:text-primary">{email}</a></li>
-            <li className="flex items-center gap-4 py-5"><Phone size={22} weight="light" className="text-primary" /><a href={`tel:${phone.replace(/\s/g, "")}`} className="font-semibold hover:text-primary">{phone}</a></li>
-            <li className="flex items-center gap-4 py-5"><MapPin size={22} weight="light" className="text-primary" /><span className="font-semibold">{address}</span></li>
+          <ul className="mt-5 sm:mt-6 divide-y divide-border/50 border-y border-border/50">
+            <li className="flex items-center gap-3.5 sm:gap-4 py-4 sm:py-5"><EnvelopeSimple size={22} weight="light" className="text-primary shrink-0" /><a href={`mailto:${email}`} className="font-semibold hover:text-primary break-all text-xs sm:text-sm">{email}</a></li>
+            <li className="flex items-center gap-3.5 sm:gap-4 py-4 sm:py-5"><Phone size={22} weight="light" className="text-primary shrink-0" /><a href={`tel:${phone.replace(/\s/g, "")}`} className="font-semibold hover:text-primary text-xs sm:text-sm">{phone}</a></li>
+            <li className="flex items-center gap-3.5 sm:gap-4 py-4 sm:py-5"><MapPin size={22} weight="light" className="text-primary shrink-0" /><span className="font-semibold text-xs sm:text-sm">{address}</span></li>
           </ul>
-          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">Office hours: Sunday to Friday, Nepal Time (UTC+5:45).</p>
+          <p className="mt-5 sm:mt-6 text-xs sm:text-sm leading-relaxed text-muted-foreground">Office hours: Sunday to Friday, Nepal Time (UTC+5:45).</p>
         </aside>
       </section>
     </>

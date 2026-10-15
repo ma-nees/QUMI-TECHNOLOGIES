@@ -415,7 +415,7 @@ export default function FloatingMascotInner() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.94 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-2rem)] max-w-[305px] sm:max-w-[370px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-1.75rem)] max-w-[350px] sm:max-w-[380px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             {/* Chatbot Header - Spacious & balanced */}
             <div className="flex items-center justify-between border-b border-border/70 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-secondary/30">
