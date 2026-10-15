@@ -1,9 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { createAvatar } from "@bible-strong/avatar-react";
 import "@bible-strong/avatar-react/styles.css";
 import definition from "@/assets/strobi.avatar.json";
-import { X, Sparkle, ArrowRight } from "@phosphor-icons/react";
+import {
+  X,
+  Sparkle,
+  ArrowRight,
+  PaperPlaneRight,
+  ArrowsCounterClockwise,
+  CheckCircle,
+} from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const StrobiAvatar = createAvatar(definition);
@@ -18,165 +25,472 @@ type AnimationName =
   | "proud"
   | "curious"
   | "waking"
-  | "confused";
+  | "listening"
+  | "searching";
 
-const MESSAGES: Record<string, string> = {
-  idle: "Hi there! I'm Strobi, QUMI's AI companion. How can we help you build today?",
-  happy: "Glad you stopped by! We build high-throughput, mission-critical systems.",
-  excited: "Ready to launch something groundbreaking? Let's engineer it!",
-  celebrate: "Woohoo! Ship fast, scale gracefully, and build to last!",
-  thinking: "Architecting zero-downtime distributed systems... fascinating problem!",
-  playful: "Code doesn't have to be boring when it's built with high precision.",
-  proud: "Senior engineering talent from Kathmandu serving global enterprises.",
-  curious: "Have an ambitious software or AI challenge? We'd love to hear it.",
+interface StructuredTopic {
+  title: string;
+  badge: string;
+  summary: string;
+  points: string[];
+  actionLabel: string;
+  actionLink: string;
+  animation: AnimationName;
+}
+
+// In-built structured company topics designed to fit without any scrolling
+const INBUILT_TOPICS: Record<string, StructuredTopic> = {
+  welcome: {
+    title: "Hello! I'm Strobi 👋",
+    badge: "QUMI AI Assistant",
+    summary:
+      "I'm QUMI's intelligent companion. Select a topic below or type any question to explore our capabilities.",
+    points: [
+      "Custom Software, Cloud Architecture & AI Systems.",
+      "Senior Guild Delivery with 99.9% uptime track record.",
+      "Headquartered in Kathmandu, Nepal serving global scale.",
+    ],
+    actionLabel: "Initiate an Engagement",
+    actionLink: "/contact",
+    animation: "happy",
+  },
+  services: {
+    title: "Engineering Services",
+    badge: "8 Core Domains",
+    summary:
+      "Purpose-built systems designed for resilience, throughput, and zero fragile code:",
+    points: [
+      "Custom Software: Scalable back-office systems & internal tools.",
+      "Cloud & DevOps: AWS/Azure architecture & automated CI/CD.",
+      "Data & AI: Practical intelligence grounded in operational data.",
+    ],
+    actionLabel: "Explore All Services",
+    actionLink: "/services",
+    animation: "proud",
+  },
+  about: {
+    title: "About QUMI Technologies",
+    badge: "Kathmandu, Nepal",
+    summary:
+      "Silicon Valley engineering standards combined with premier technical talent in Kathmandu:",
+    points: [
+      "Senior Guild: Direct collaboration with seasoned engineers.",
+      "High Reliability: 99.9% uptime across production platforms.",
+      "Global Scale: Multi-region deployments built to international standards.",
+    ],
+    actionLabel: "Read Our Story",
+    actionLink: "/about",
+    animation: "celebrate",
+  },
+  tech: {
+    title: "Technology Stack",
+    badge: "Production-Grade",
+    summary:
+      "Resilient, modern technologies selected for scale and maintainability:",
+    points: [
+      "Frontend: React, Next.js, React Native, TypeScript.",
+      "Backend: Node.js, Python, Go, Java distributed services.",
+      "Cloud & Data: AWS, Azure, Docker, Kubernetes, PostgreSQL.",
+    ],
+    actionLabel: "View Case Studies",
+    actionLink: "/solutions",
+    animation: "thinking",
+  },
+  industries: {
+    title: "Industries We Serve",
+    badge: "Specialized Domains",
+    summary:
+      "Deep technical expertise solving domain-specific data and infrastructure challenges:",
+    points: [
+      "FinTech: Ledger-safe architectures & real-time transaction tracking.",
+      "Healthcare: Secure clinical records & HIPAA compliant workflows.",
+      "Logistics & Retail: Fleet dispatch routing & omnichannel commerce.",
+    ],
+    actionLabel: "View Industry Solutions",
+    actionLink: "/industries",
+    animation: "curious",
+  },
+  start: {
+    title: "Initiate an Engagement",
+    badge: "Quick Kickoff",
+    summary:
+      "Every project begins with a structured architectural discovery sprint:",
+    points: [
+      "Phase 1: Architecture & Technical Scope Definition.",
+      "Phase 2: Transparent Bi-weekly Agile Sprint Iterations.",
+      "Flexible Model: Dedicated senior team extension or fixed delivery.",
+    ],
+    actionLabel: "Start a Project Now",
+    actionLink: "/contact",
+    animation: "excited",
+  },
+  careers: {
+    title: "QUMI Engineering Guild",
+    badge: "We're Hiring!",
+    summary:
+      "Passionate about hard engineering problems and distributed systems? Join our guild:",
+    points: [
+      "Autonomous, engineering-first culture with continuous growth.",
+      "Work with global clients on mission-critical architectures.",
+      "Based in Kathmandu, Nepal with flexible hybrid/remote options.",
+    ],
+    actionLabel: "Browse Open Positions",
+    actionLink: "/careers",
+    animation: "playful",
+  },
 };
 
-const REACTIONS: { key: AnimationName; label: string; icon: string }[] = [
-  { key: "celebrate", label: "Celebrate", icon: "🎉" },
-  { key: "thinking", label: "Think", icon: "🤔" },
-  { key: "excited", label: "Excited", icon: "⚡" },
-  { key: "playful", label: "Play", icon: "🎈" },
-  { key: "proud", label: "Proud", icon: "✨" },
+// In-built quick inquiry buttons (cleanly horizontal, zero scrollbar)
+const QUICK_BUTTONS = [
+  { key: "services", label: "Services" },
+  { key: "about", label: "About" },
+  { key: "tech", label: "Tech Stack" },
+  { key: "industries", label: "Industries" },
+  { key: "start", label: "Kickoff" },
+  { key: "careers", label: "Careers" },
+];
+
+// Automatic expression rotation sequence when floating idle
+const AUTOMATIC_EXPRESSIONS: AnimationName[] = [
+  "idle",
+  "curious",
+  "thinking",
+  "happy",
+  "playful",
+  "proud",
+  "excited",
+  "celebrate",
+  "waking",
 ];
 
 export default function FloatingMascotInner() {
   const [isOpen, setIsOpen] = useState(false);
   const [animation, setAnimation] = useState<AnimationName>("idle");
   const [isHovered, setIsHovered] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
-  // Return to idle after a reaction animation finishes
+  // Active in-built topic card (fits perfectly without requiring scrolling)
+  const [activeTopic, setActiveTopic] = useState<StructuredTopic>(
+    INBUILT_TOPICS.welcome
+  );
+  const [userQuery, setUserQuery] = useState<string | null>(null);
+
+  const autoExpressionIndex = useRef(0);
+
+  // 1. AUTOMATIC EXPRESSION ROTATION (cycles expressions automatically every 4.5s)
   useEffect(() => {
-    if (animation !== "idle") {
-      const timer = setTimeout(() => {
-        setAnimation("idle");
-      }, 4500);
-      return () => clearTimeout(timer);
-    }
-  }, [animation]);
+    if (isOpen || isHovered) return;
 
-  const handleReactionClick = (key: AnimationName) => {
-    setAnimation(key);
-    setHasInteracted(true);
+    const interval = setInterval(() => {
+      autoExpressionIndex.current =
+        (autoExpressionIndex.current + 1) % AUTOMATIC_EXPRESSIONS.length;
+      const nextAnimation = AUTOMATIC_EXPRESSIONS[autoExpressionIndex.current];
+      if (nextAnimation) {
+        setAnimation(nextAnimation);
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [isOpen, isHovered]);
+
+  const selectInbuiltTopic = (key: string, queryLabel?: string) => {
+    const topic = INBUILT_TOPICS[key] || INBUILT_TOPICS.services;
+    setUserQuery(queryLabel || topic.title);
+    setIsTyping(true);
+    setAnimation("thinking");
+
+    setTimeout(() => {
+      setActiveTopic(topic);
+      setAnimation(topic.animation);
+      setIsTyping(false);
+    }, 380);
   };
 
-  const currentMessage = MESSAGES[animation] || MESSAGES.idle;
+  const handleCustomSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const query = inputValue.trim().toLowerCase();
+    if (!query) return;
+
+    setUserQuery(inputValue.trim());
+    setInputValue("");
+    setIsTyping(true);
+    setAnimation("thinking");
+
+    setTimeout(() => {
+      // Smart intent matching to in-built structured message types
+      if (
+        query.includes("service") ||
+        query.includes("offer") ||
+        query.includes("build") ||
+        query.includes("capability")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.services);
+        setAnimation(INBUILT_TOPICS.services.animation);
+      } else if (
+        query.includes("about") ||
+        query.includes("who") ||
+        query.includes("qumi") ||
+        query.includes("nepal") ||
+        query.includes("kathmandu")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.about);
+        setAnimation(INBUILT_TOPICS.about.animation);
+      } else if (
+        query.includes("tech") ||
+        query.includes("stack") ||
+        query.includes("react") ||
+        query.includes("cloud") ||
+        query.includes("aws") ||
+        query.includes("python")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.tech);
+        setAnimation(INBUILT_TOPICS.tech.animation);
+      } else if (
+        query.includes("industry") ||
+        query.includes("fintech") ||
+        query.includes("health") ||
+        query.includes("domain")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.industries);
+        setAnimation(INBUILT_TOPICS.industries.animation);
+      } else if (
+        query.includes("start") ||
+        query.includes("hire") ||
+        query.includes("contact") ||
+        query.includes("price") ||
+        query.includes("quote")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.start);
+        setAnimation(INBUILT_TOPICS.start.animation);
+      } else if (
+        query.includes("job") ||
+        query.includes("career") ||
+        query.includes("apply") ||
+        query.includes("hiring")
+      ) {
+        setActiveTopic(INBUILT_TOPICS.careers);
+        setAnimation(INBUILT_TOPICS.careers.animation);
+      } else {
+        // Fallback structured card
+        setActiveTopic({
+          title: "QUMI Engineering Intelligence",
+          badge: "Direct Assistance",
+          summary: `Regarding "${userQuery || query}": QUMI specializes in custom software architectures, cloud infrastructure, and AI engineering.`,
+          points: [
+            "Senior engineers lead every project from kickoff to deployment.",
+            "Explore our 8 service domains or connect directly with our architects.",
+            "Schedule a call to discuss your specific technical requirements.",
+          ],
+          actionLabel: "Connect with Engineering Team",
+          actionLink: "/contact",
+          animation: "happy",
+        });
+        setAnimation("happy");
+      }
+      setIsTyping(false);
+    }, 420);
+  };
+
+  const handleReset = () => {
+    setUserQuery(null);
+    setActiveTopic(INBUILT_TOPICS.welcome);
+    setAnimation("happy");
+  };
 
   return (
-    <div className="fixed bottom-5 right-5 sm:bottom-7 sm:right-7 z-40 flex flex-col items-end select-none">
+    <div className="fixed bottom-2.5 right-2.5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end select-none">
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.92 }}
+            initial={{ opacity: 0, y: 10, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.92 }}
-            transition={{ duration: 0.22, ease: [0.2, 0.7, 0.2, 1] }}
-            className="mb-3 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-border/80 bg-surface/95 p-4 shadow-2xl backdrop-blur-xl sm:w-88"
+            exit={{ opacity: 0, y: 10, scale: 0.94 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-1.5rem)] max-w-[260px] sm:max-w-[360px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-border/60 pb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                </span>
-                <span className="text-xs font-bold tracking-tight text-foreground">
-                  Strobi <span className="text-[10px] font-medium text-muted-foreground">· QUMI Companion</span>
-                </span>
+            {/* Chatbot Header - Ultra-compact */}
+            <div className="flex items-center justify-between border-b border-border/70 px-2.5 py-1 sm:px-3.5 sm:py-2 bg-secondary/30">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* Live Strobi Avatar inside Header */}
+                <div className="relative h-6 w-6 sm:h-7 sm:w-7 flex items-center justify-center filter drop-shadow-xs">
+                  <StrobiAvatar
+                    animation={animation}
+                    size="100%"
+                    ariaLabel="Strobi"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] sm:text-xs font-bold text-foreground tracking-tight">
+                      Strobi
+                    </span>
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    </span>
+                  </div>
+                  <p className="text-[8px] sm:text-[9.5px] text-muted-foreground font-medium capitalize leading-none">
+                    QUMI AI · {animation}
+                  </p>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="rounded-full p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
-                aria-label="Close assistant"
-              >
-                <X size={15} />
-              </button>
+
+              <div className="flex items-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  title="Reset conversation"
+                  className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <ArrowsCounterClockwise size={11} className="sm:hidden" />
+                  <ArrowsCounterClockwise size={13} className="hidden sm:block" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  title="Close assistant"
+                  className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <X size={12} className="sm:hidden" />
+                  <X size={14} className="hidden sm:block" />
+                </button>
+              </div>
             </div>
 
-            {/* Avatar Stage */}
-            <div className="relative my-3 flex flex-col items-center justify-center rounded-xl bg-gradient-to-b from-primary/5 via-secondary/30 to-background/40 py-3 border border-border/40">
-              <div className="relative h-24 w-24 drop-shadow-md">
-                <StrobiAvatar
-                  animation={animation}
-                  size="100%"
-                  ariaLabel="Strobi 3D Avatar"
-                />
-              </div>
+            {/* In-Built Message Card Display - Perfectly sized, zero scroll */}
+            <div className="p-1.5 sm:p-2.5 flex flex-col justify-center [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              {/* Optional user prompt badge if asked a custom question */}
+              {userQuery && (
+                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-1.5 py-0.2 text-[8px] sm:text-[9.5px] font-semibold text-primary max-w-[90%] truncate">
+                  💬 {userQuery}
+                </div>
+              )}
 
-              {/* Dynamic Speech Balloon */}
-              <div className="mt-2 text-center px-3">
-                <p className="text-xs font-medium leading-relaxed text-foreground transition-all duration-200">
-                  {currentMessage}
-                </p>
-              </div>
-            </div>
-
-            {/* Interactive Reactions */}
-            <div className="mt-2">
-              <div className="mb-1.5 flex items-center justify-between">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
-                  Tap to React
-                </span>
-                <span className="text-[10px] text-primary font-medium flex items-center gap-1">
-                  <Sparkle size={10} weight="fill" /> Interactive
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {REACTIONS.map((r) => (
-                  <button
-                    key={r.key}
-                    type="button"
-                    onClick={() => handleReactionClick(r.key)}
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-all duration-150 cursor-pointer ${
-                      animation === r.key
-                        ? "bg-primary text-primary-foreground shadow-xs scale-105"
-                        : "bg-secondary/70 text-foreground hover:bg-secondary hover:scale-102"
-                    }`}
+              {/* Bot Response Box */}
+              <AnimatePresence mode="wait">
+                {isTyping ? (
+                  <motion.div
+                    key="typing"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-card p-2 text-[10px] text-muted-foreground"
                   >
-                    <span>{r.icon}</span>
-                    <span>{r.label}</span>
+                    <span className="flex gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
+                    </span>
+                    <span className="font-medium text-[9.5px]">Thinking...</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={activeTopic.title}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.15 }}
+                    className="rounded-lg sm:rounded-xl border border-border/70 bg-card/95 p-2 sm:p-2.5 shadow-2xs space-y-1 sm:space-y-1.5 text-foreground"
+                  >
+                    {/* Title & Badge */}
+                    <div className="flex items-center justify-between gap-1 border-b border-border/50 pb-1">
+                      <span className="text-[10px] sm:text-xs font-bold text-foreground">
+                        {activeTopic.title}
+                      </span>
+                      <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[7.5px] sm:text-[8.5px] font-semibold text-primary">
+                        {activeTopic.badge}
+                      </span>
+                    </div>
+
+                    {/* Summary - clamped on mobile to keep box ultra-compact */}
+                    <p className="text-[9px] sm:text-[10.5px] leading-snug text-foreground/90 font-medium line-clamp-2 sm:line-clamp-none">
+                      {activeTopic.summary}
+                    </p>
+
+                    {/* Compact Points - 2 punchy bullets on mobile, 3 on desktop */}
+                    <ul className="space-y-0.5 sm:space-y-1 pt-0.5 text-[8.5px] sm:text-[10px] text-muted-foreground">
+                      {activeTopic.points.map((pt, idx) => (
+                        <li
+                          key={idx}
+                          className={`flex items-start gap-1 leading-tight ${
+                            idx >= 2 ? "hidden sm:flex" : ""
+                          }`}
+                        >
+                          <CheckCircle
+                            size={10}
+                            weight="fill"
+                            className="text-primary shrink-0 mt-0.5"
+                          />
+                          <span className="line-clamp-1 sm:line-clamp-none">{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Action Button */}
+                    <div className="pt-0.5 sm:pt-1">
+                      <Link
+                        to={activeTopic.actionLink}
+                        onClick={() => setIsOpen(false)}
+                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8.5px] sm:text-[10px] font-semibold text-primary-foreground shadow-2xs transition-colors"
+                      >
+                        <span>{activeTopic.actionLabel}</span>
+                        <ArrowRight size={9} weight="bold" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* In-Built Quick Topic Chips - Single horizontal scroll row (zero scrollbars) */}
+            <div className="border-t border-border/50 bg-secondary/15 px-2 py-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
+                {QUICK_BUTTONS.map((btn) => (
+                  <button
+                    key={btn.key}
+                    type="button"
+                    onClick={() => selectInbuiltTopic(btn.key, btn.label)}
+                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-1.5 py-0.5 text-[8px] sm:text-[9.5px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
+                  >
+                    {btn.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Quick Navigation CTAs */}
-            <div className="mt-3.5 border-t border-border/60 pt-3 flex flex-col gap-1.5">
-              <Link
-                to="/contact"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary-hover transition-colors shadow-xs"
+            {/* Input Field - Ultra-slim and compact */}
+            <form
+              onSubmit={handleCustomSubmit}
+              className="flex items-center gap-1 sm:gap-1.5 border-t border-border/70 p-1 sm:p-1.5 bg-surface"
+            >
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask Strobi..."
+                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2 py-0.5 text-[9.5px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-6 sm:h-7"
+              />
+              <button
+                type="submit"
+                disabled={!inputValue.trim()}
+                className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
+                title="Send inquiry"
               >
-                <span>Initiate an Engagement</span>
-                <ArrowRight size={13} weight="bold" />
-              </Link>
-              <div className="grid grid-cols-2 gap-1.5 text-center">
-                <Link
-                  to="/services"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-border/70 bg-surface px-2 py-1.5 text-[11px] font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  Services
-                </Link>
-                <Link
-                  to="/about"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-border/70 bg-surface px-2 py-1.5 text-[11px] font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  About QUMI
-                </Link>
-              </div>
-            </div>
+                <PaperPlaneRight size={10} weight="fill" />
+              </button>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Floating Trigger Button */}
+      {/* Pure Floating Avatar Trigger */}
       <motion.button
         type="button"
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.94 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 3.4, ease: "easeInOut" }}
+        whileHover={{ scale: 1.1, rotate: [-2, 3, -1, 0] }}
+        whileTap={{ scale: 0.92 }}
         onClick={() => {
           setIsOpen((prev) => !prev);
           if (!isOpen) {
@@ -185,46 +499,40 @@ export default function FloatingMascotInner() {
         }}
         onMouseEnter={() => {
           setIsHovered(true);
-          if (!isOpen && animation === "idle") {
+          if (!isOpen) {
             setAnimation("curious");
           }
         }}
         onMouseLeave={() => {
           setIsHovered(false);
-          if (!isOpen && animation === "curious") {
+          if (!isOpen) {
             setAnimation("idle");
           }
         }}
-        className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-border/90 bg-surface/90 shadow-xl backdrop-blur-md transition-all duration-200 hover:border-primary/50 hover:shadow-primary/20 cursor-pointer"
-        aria-label="Toggle Strobi interactive companion"
+        className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)] hover:drop-shadow-[0_12px_22px_rgba(91,127,229,0.38)] transition-all duration-200 ${
+          isOpen ? "h-10 w-10 sm:h-14 sm:w-14" : "h-12 w-12 sm:h-16 sm:w-16"
+        }`}
+        aria-label="Chat with Strobi AI companion"
         aria-expanded={isOpen}
       >
-        {/* Subtle Brand Ring */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 via-transparent to-highlight/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        {/* Live Strobi Head preview inside trigger */}
-        <div className="relative h-11 w-11 flex items-center justify-center pointer-events-none">
+        {/* Pure Strobi 3D Avatar */}
+        <div className="w-full h-full flex items-center justify-center pointer-events-none">
           <StrobiAvatar
-            animation={isOpen ? "excited" : animation}
+            animation={isOpen ? "listening" : animation}
             size="100%"
             ariaLabel="Strobi Avatar"
           />
         </div>
 
-        {/* Status Dot */}
-        <span className="absolute bottom-0.5 right-0.5 flex h-3 w-3">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-          <span className="relative inline-flex h-3 w-3 rounded-full border-2 border-surface bg-emerald-500" />
-        </span>
-
         {/* Tooltip on hover if not open */}
-        {!isOpen && !hasInteracted && isHovered && (
+        {!isOpen && isHovered && (
           <motion.div
-            initial={{ opacity: 0, x: -8 }}
+            initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute right-16 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2.5 py-1 text-xs font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none"
+            className="absolute right-full mr-2 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2 py-0.5 text-[10px] font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none flex items-center gap-1"
           >
-            Hi! I'm Strobi 👋
+            <span>Ask Strobi</span>
+            <Sparkle size={10} weight="fill" className="text-primary" />
           </motion.div>
         )}
       </motion.button>
