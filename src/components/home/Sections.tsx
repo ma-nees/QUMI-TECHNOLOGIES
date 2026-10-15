@@ -230,10 +230,10 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-7 w-7 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105"
                             title="Open live project"
                           >
-                            <Globe size={14} />
+                            <Globe size={18} />
                           </a>
                         )}
                         {c.github_url && (
@@ -242,10 +242,10 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-7 w-7 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105"
                             title="View GitHub repository"
                           >
-                            <GithubLogo size={14} />
+                            <GithubLogo size={18} />
                           </a>
                         )}
                       </div>
@@ -355,11 +355,11 @@ export function CaseStudiesSection() {
                       href={selectedCase.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition w-full sm:w-auto text-center"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition w-full sm:w-auto text-center"
                     >
-                      <Globe size={15} />
+                      <Globe size={18} />
                       <span>Visit Live Project</span>
-                      <ArrowSquareOut size={13} />
+                      <ArrowSquareOut size={15} />
                     </a>
                   )}
                   {selectedCase.github_url && (
@@ -367,9 +367,9 @@ export function CaseStudiesSection() {
                       href={selectedCase.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition w-full sm:w-auto text-center"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-xs sm:text-sm font-semibold text-foreground hover:border-primary hover:text-primary transition w-full sm:w-auto text-center"
                     >
-                      <GithubLogo size={15} />
+                      <GithubLogo size={18} />
                       <span>GitHub Repository</span>
                     </a>
                   )}
