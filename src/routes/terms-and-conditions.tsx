@@ -1,3 +1,4 @@
+import { useEffect, useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/primitives";
 import { company } from "@/lib/content";
@@ -5,16 +6,195 @@ import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms-and-conditions")({
   head: () => pageMeta("Terms & Conditions", "Terms governing the use of the QUMI Technologies website."),
-  component: () => (
-    <>
-      <PageHero eyebrow="Legal" title="Terms & Conditions" intro="This template must be reviewed by legal counsel before publication." />
-      <article className="container-site max-w-3xl space-y-8 py-8 md:py-12 leading-relaxed text-muted-foreground [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-foreground">
-        <section><h2>Use of this website</h2><p className="mt-3">This website provides information about {company.name}. By using it you agree to these terms.</p></section>
-        <section><h2>Intellectual property</h2><p className="mt-3">Content, design and branding on this site belong to {company.name} unless stated otherwise.</p></section>
-        <section><h2>No warranty</h2><p className="mt-3">Information is provided in good faith but without warranty of completeness or accuracy.</p></section>
-        <section><h2>Governing law</h2><p className="mt-3">These terms are governed by the laws of Nepal.</p></section>
-        <section><h2>Contact</h2><p className="mt-3">Questions about these terms can be sent to {company.email}.</p></section>
-      </article>
-    </>
-  ),
+  component: TermsAndConditions,
 });
+
+// Update this whenever the terms text changes.
+const LAST_UPDATED = "15 October 2026";
+
+type Section = { id: string; title: string; body: ReactNode };
+
+const sections: Section[] = [
+  {
+    id: "use",
+    title: "Use of this website",
+    body: (
+      <p>
+        This website provides information about {company.name}. By using it, you agree to these terms. If you do
+        not agree, please stop using the site.
+      </p>
+    ),
+  },
+  {
+    id: "ip",
+    title: "Intellectual property",
+    body: (
+      <p>
+        The content, design and branding on this site belong to {company.name} unless stated otherwise. Please ask
+        us before copying or reusing them.
+      </p>
+    ),
+  },
+  {
+    id: "warranty",
+    title: "No warranty",
+    body: (
+      <p>
+        We provide information in good faith, but we do not guarantee that it is complete or accurate. Check
+        important details with us directly before relying on them.
+      </p>
+    ),
+  },
+  {
+    id: "law",
+    title: "Governing law",
+    body: <p>These terms are governed by the laws of Nepal.</p>,
+  },
+  {
+    id: "contact",
+    title: "Contact",
+    body: (
+      <p>
+        Send questions about these terms to <a href={`mailto:${company.email}`}>{company.email}</a>.
+      </p>
+    ),
+  },
+];
+
+const highlights = [
+  { title: "Information only", text: "This site shares information about our company." },
+  { title: "Our content is ours", text: "Ask before reusing our content or branding." },
+  { title: "Nepal law applies", text: "These terms follow the laws of Nepal." },
+];
+
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState(ids[0]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-15% 0px -70% 0px" },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [ids]);
+
+  return active;
+}
+
+function TermsAndConditions() {
+  const active = useActiveSection(sections.map((s) => s.id));
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Legal"
+        title="Terms & Conditions"
+        intro="The ground rules for using the QUMI Technologies website."
+      />
+
+      <div className="container-site py-8 md:py-12">
+        <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-16">
+          <aside className="lg:sticky lg:top-24 lg:self-start">
+            <details className="group rounded-lg border bg-card lg:hidden">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between px-4 text-sm font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+                On this page
+                <span aria-hidden className="transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <TocLinks active={active} className="border-t px-4 py-3" />
+            </details>
+
+            <nav aria-label="On this page" className="hidden lg:block">
+              <p className="mb-3 text-sm font-semibold text-foreground">On this page</p>
+              <TocLinks active={active} />
+              <p className="mt-6 text-sm text-muted-foreground">Last updated {LAST_UPDATED}</p>
+            </nav>
+          </aside>
+
+          <article className="max-w-3xl">
+            <p className="mb-8 text-sm text-muted-foreground lg:hidden">Last updated {LAST_UPDATED}</p>
+
+            <div className="mb-12 grid gap-4 rounded-xl border bg-muted/40 p-5 sm:grid-cols-3 md:p-6">
+              {highlights.map((h) => (
+                <div key={h.title}>
+                  <h2 className="text-base font-semibold text-foreground">{h.title}</h2>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{h.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-12 text-base leading-relaxed text-muted-foreground">
+              {sections.map((s) => (
+                <section key={s.id} id={s.id} className="group scroll-mt-24">
+                  <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground md:text-2xl">
+                    {s.title}
+                    <a
+                      href={`#${s.id}`}
+                      aria-label={`Link to ${s.title}`}
+                      className="rounded px-1 text-muted-foreground opacity-0 transition-opacity focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary group-hover:opacity-100"
+                    >
+                      #
+                    </a>
+                  </h2>
+                  <div className="mt-3 space-y-3 [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4">
+                    {s.body}
+                  </div>
+                </section>
+              ))}
+            </div>
+
+            <div className="mt-14 flex flex-col gap-4 rounded-xl border bg-card p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-foreground">Questions about these terms?</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Write to us and we will get back to you.</p>
+              </div>
+              <a
+                href={`mailto:${company.email}?subject=Question%20about%20terms`}
+                className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                Email us
+              </a>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t pt-6 text-sm text-muted-foreground">
+              <p>These terms are a template and must be reviewed by legal counsel before publication.</p>
+              <a href="#top" className="font-medium text-foreground underline underline-offset-4">
+                Back to top
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function TocLinks({ active, className = "" }: { active: string; className?: string }) {
+  return (
+    <ul className={`space-y-1 ${className}`}>
+      {sections.map((s) => {
+        const isActive = active === s.id;
+        return (
+          <li key={s.id}>
+            <a
+              href={`#${s.id}`}
+              aria-current={isActive ? "location" : undefined}
+              className={`block border-l-2 py-1.5 pl-3 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${isActive
+                  ? "border-primary font-semibold text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+            >
+              {s.title}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
