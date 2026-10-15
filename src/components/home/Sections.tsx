@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, X, Sparkle, Globe, GithubLogo, ArrowSquareOut } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Reveal, SectionHeader } from "@/components/site/primitives";
+import { cn } from "@/lib/utils";
 import { services, technologies, industries, process, principles, engagementModels } from "@/lib/content";
 import { listCaseStudies } from "@/lib/public.functions";
 import caseFintech from "@/assets/case-fintech.jpg";
@@ -181,14 +182,14 @@ export function CaseStudiesSection() {
   }, []);
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 sm:py-12 md:py-16">
       <div className="container-site">
         <SectionHeader
           eyebrow="Selected work"
           title="Project Case Studies"
           intro="Demonstrated technical delivery and architectural outcomes engineered across high-scale industries."
         />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 sm:mt-10 md:mt-14 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((c, i) => {
             const title = c.title || c.name;
             const tech = c.technology || c.tech;
@@ -227,10 +228,10 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-6 w-6 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            className="flex h-7 w-7 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
                             title="Open live project"
                           >
-                            <Globe size={13} />
+                            <Globe size={14} />
                           </a>
                         )}
                         {c.github_url && (
@@ -239,10 +240,10 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-6 w-6 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
+                            className="flex h-7 w-7 items-center justify-center rounded-md bg-black/60 text-white backdrop-blur-sm transition hover:bg-primary"
                             title="View GitHub repository"
                           >
-                            <GithubLogo size={13} />
+                            <GithubLogo size={14} />
                           </a>
                         )}
                       </div>
@@ -299,14 +300,14 @@ export function CaseStudiesSection() {
       {/* Case Study Detail Modal */}
       {selectedCase && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-fade-in-up"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm animate-fade-in-up"
           onClick={() => setSelectedCase(null)}
         >
           <div
-            className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
+            className="flex max-h-[92vh] sm:max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[21/9] w-full overflow-hidden bg-muted">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-muted">
               <img
                 src={selectedCase.image_url || selectedCase.img || caseFintech}
                 alt={selectedCase.title || selectedCase.name}
@@ -314,26 +315,26 @@ export function CaseStudiesSection() {
               />
               <button
                 onClick={() => setSelectedCase(null)}
-                className="absolute right-4 top-4 rounded-full bg-black/60 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
+                className="absolute right-3 top-3 sm:right-4 sm:top-4 z-10 rounded-full bg-black/60 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
                 aria-label="Close modal"
               >
                 <X size={18} />
               </button>
-              <div className="absolute left-6 bottom-4 flex items-center gap-2">
-                <span className="rounded-md bg-surface/90 px-3 py-1 font-mono text-xs font-semibold text-primary backdrop-blur-sm">
+              <div className="absolute left-3 bottom-3 sm:left-6 sm:bottom-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="rounded-md bg-surface/90 px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-xs font-semibold text-primary backdrop-blur-sm">
                   {selectedCase.industry}
                 </span>
                 {selectedCase.client && (
-                  <span className="rounded-md bg-black/60 px-3 py-1 font-mono text-xs text-white backdrop-blur-sm">
+                  <span className="rounded-md bg-black/60 px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-xs text-white backdrop-blur-sm">
                     {selectedCase.client}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-5 md:p-7 space-y-5">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-7 space-y-4 sm:space-y-5">
               <div>
-                <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight">
+                <h2 className="font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tight">
                   {selectedCase.title || selectedCase.name}
                 </h2>
                 {selectedCase.client && (
@@ -343,15 +344,15 @@ export function CaseStudiesSection() {
 
               {/* Action Links (GitHub & Live Link) */}
               {(selectedCase.live_url || selectedCase.github_url) && (
-                <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1">
                   {selectedCase.live_url && (
                     <a
                       href={selectedCase.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition flex-1 sm:flex-initial"
                     >
-                      <Globe size={14} />
+                      <Globe size={15} />
                       <span>Visit Live Project</span>
                       <ArrowSquareOut size={13} />
                     </a>
@@ -361,9 +362,9 @@ export function CaseStudiesSection() {
                       href={selectedCase.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-1.5 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition flex-1 sm:flex-initial"
                     >
-                      <GithubLogo size={14} />
+                      <GithubLogo size={15} />
                       <span>GitHub Repository</span>
                     </a>
                   )}
@@ -371,14 +372,14 @@ export function CaseStudiesSection() {
               )}
 
               <div className="space-y-3.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                <div className="rounded-xl border border-border/80 bg-background/60 p-4">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4">
                   <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                     <span className="h-2 w-2 rounded-full bg-primary" /> The Problem & Challenge
                   </h4>
                   <p>{selectedCase.problem}</p>
                 </div>
 
-                <div className="rounded-xl border border-border/80 bg-background/60 p-4">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4">
                   <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                     <span className="h-2 w-2 rounded-full bg-highlight" /> The Architectural Solution
                   </h4>
@@ -386,7 +387,7 @@ export function CaseStudiesSection() {
                 </div>
 
                 {selectedCase.result && (
-                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-primary">
+                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-3.5 sm:p-4 text-primary">
                     <h4 className="font-bold text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                       <Sparkle size={15} weight="fill" /> Key Results & Measurable Impact
                     </h4>
@@ -406,11 +407,11 @@ export function CaseStudiesSection() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-border flex items-center justify-between">
-                <p className="text-xs text-muted-foreground">Looking for similar technical architecture?</p>
+              <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <p className="text-xs text-muted-foreground text-center sm:text-left">Looking for similar technical architecture?</p>
                 <Link
                   to="/contact"
-                  className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition w-full sm:w-auto"
                   onClick={() => setSelectedCase(null)}
                 >
                   Discuss Your Project
@@ -501,19 +502,28 @@ export function PrinciplesSection() {
 
 export function EngagementSection() {
   return (
-    <section className="border-t border-border bg-surface py-8 md:py-12">
+    <section className="border-t border-border bg-surface py-8 sm:py-10 md:py-14">
       <div className="container-site">
         <SectionHeader
           eyebrow="How we work with teams"
           title="Three ways to engage."
           intro="Choose the model that fits your organisation. Many clients start with one and move to another as needs evolve."
         />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 sm:mt-10 md:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {engagementModels.map((m, i) => (
-            <Reveal key={m.title} delay={i * 70} className="card-interactive rounded-md p-7">
-              <span className="font-mono text-xs text-primary">0{i + 1}</span>
-              <h3 className="mt-6 text-xl font-bold">{m.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{m.text}</p>
+            <Reveal
+              key={m.title}
+              delay={i * 70}
+              className={cn(
+                "card-interactive rounded-xl p-5 sm:p-6 md:p-7 flex flex-col justify-between",
+                i === 2 && "sm:col-span-2 lg:col-span-1"
+              )}
+            >
+              <div>
+                <span className="font-mono text-xs font-semibold text-primary">0{i + 1}</span>
+                <h3 className="mt-4 sm:mt-6 text-lg sm:text-xl font-bold">{m.title}</h3>
+              </div>
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">{m.text}</p>
             </Reveal>
           ))}
         </div>
@@ -524,17 +534,17 @@ export function EngagementSection() {
 
 export function CtaSection() {
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-8 sm:py-10 md:py-14">
       <div className="container-site">
-        <Reveal className="relative overflow-hidden rounded-md bg-primary px-8 py-14 text-primary-foreground md:px-16 md:py-20">
+        <Reveal className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-primary px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-16 text-primary-foreground">
           <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "linear-gradient(var(--color-primary-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary-foreground) 1px, transparent 1px)", backgroundSize: "56px 56px" }} aria-hidden="true" />
-          <div className="relative grid items-end gap-8 md:grid-cols-12">
+          <div className="relative grid items-center gap-6 sm:gap-8 md:grid-cols-12">
             <div className="md:col-span-8">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] opacity-75">Have a product or technology challenge?</p>
-              <h2 className="mt-4 text-3xl font-bold leading-[1.12] md:text-[2.6rem]">Let's build the right solution.</h2>
+              <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] opacity-80">Have a product or technology challenge?</p>
+              <h2 className="mt-3 sm:mt-4 text-2xl sm:text-3xl font-bold leading-[1.15] md:text-[2.6rem]">Let's build the right solution.</h2>
             </div>
             <div className="md:col-span-4 md:text-right">
-              <Button asChild size="lg" variant="inverse">
+              <Button asChild size="lg" variant="inverse" className="w-full sm:w-auto justify-center">
                 <Link to="/contact">
                   Talk to Our Team <ArrowRight weight="bold" className="arrow-nudge" />
                 </Link>

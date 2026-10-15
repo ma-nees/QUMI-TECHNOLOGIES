@@ -25,17 +25,24 @@ function SolutionsPage() {
         title="Technology applied to concrete business problems."
         intro="We start from the outcome you need, then choose the architecture and tools that get you there."
       />
-      <section className="container-site py-8 md:py-12">
+      <section className="container-site py-8 sm:py-10 md:py-14">
         <SectionHeader eyebrow="Common engagements" title="Where we help most." />
-        <div className="mt-12 grid gap-px overflow-hidden rounded-md border border-border bg-border md:grid-cols-3">
+        <Reveal className="mt-8 sm:mt-10 md:mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {solutions.map((s, i) => (
-            <Reveal key={s.title} delay={(i % 3) * 60} className="bg-surface p-8">
-              <span className="font-mono text-xs text-primary">{String(i + 1).padStart(2, "0")}</span>
-              <h2 className="mt-6 text-xl font-bold">{s.title}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
-            </Reveal>
+            <div
+              key={s.title}
+              className="group bg-surface p-5 sm:p-6 md:p-8 flex flex-col justify-between transition-colors duration-200 hover:bg-surface-alt/70"
+            >
+              <div>
+                <span className="font-mono text-xs font-semibold text-primary">{String(i + 1).padStart(2, "0")}</span>
+                <h2 className="mt-4 sm:mt-6 text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                  {s.title}
+                </h2>
+              </div>
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+            </div>
           ))}
-        </div>
+        </Reveal>
       </section>
       <CaseStudiesSection />
       <EngagementSection />

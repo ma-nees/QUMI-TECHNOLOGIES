@@ -16,6 +16,10 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      el.classList.add("is-visible");
+      return;
+    }
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {
@@ -23,7 +27,7 @@ export function Reveal({
           io.disconnect();
         }
       },
-      { threshold: 0.05, rootMargin: "60px 0px 60px 0px" },
+      { threshold: 0.02, rootMargin: "250px 0px 250px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -47,12 +51,12 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <Reveal className={cn("grid gap-6 md:grid-cols-12 md:items-end", className)}>
+    <Reveal className={cn("grid gap-4 sm:gap-6 md:grid-cols-12 md:items-end", className)}>
       <div className="md:col-span-7">
         <p className="eyebrow">{eyebrow}</p>
-        <h2 className="mt-4 text-3xl font-bold leading-[1.12] md:text-[2.6rem]">{title}</h2>
+        <h2 className="mt-3 sm:mt-4 text-2xl sm:text-3xl font-bold leading-[1.15] md:text-[2.6rem]">{title}</h2>
       </div>
-      {intro && <p className="text-base leading-relaxed text-muted-foreground md:col-span-5">{intro}</p>}
+      {intro && <p className="text-sm sm:text-base leading-relaxed text-muted-foreground md:col-span-5">{intro}</p>}
     </Reveal>
   );
 }
@@ -60,17 +64,17 @@ export function SectionHeader({
 export function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: ReactNode; intro?: ReactNode }) {
   return (
     <section className="border-b border-border">
-      <div className="container-site py-8 md:py-12">
+      <div className="container-site py-8 sm:py-10 md:py-14">
         <p className="eyebrow animate-rise">{eyebrow}</p>
         <h1
-          className="animate-rise mt-5 max-w-3xl text-4xl font-bold leading-[1.08] md:text-[3.25rem]"
+          className="animate-rise mt-4 sm:mt-5 max-w-3xl text-3xl sm:text-4xl font-bold leading-[1.12] sm:leading-[1.08] md:text-[3.25rem]"
           style={{ animationDelay: "80ms" }}
         >
           {title}
         </h1>
         {intro && (
           <p
-            className="animate-rise mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
+            className="animate-rise mt-4 sm:mt-6 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-muted-foreground"
             style={{ animationDelay: "160ms" }}
           >
             {intro}
