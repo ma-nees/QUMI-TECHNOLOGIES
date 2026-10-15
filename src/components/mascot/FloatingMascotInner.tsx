@@ -307,13 +307,13 @@ export default function FloatingMascotInner() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.94 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-1.5rem)] max-w-[260px] sm:max-w-[360px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-2rem)] max-w-[305px] sm:max-w-[370px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            {/* Chatbot Header - Ultra-compact */}
-            <div className="flex items-center justify-between border-b border-border/70 px-2.5 py-1 sm:px-3.5 sm:py-2 bg-secondary/30">
-              <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Chatbot Header - Suitable & balanced */}
+            <div className="flex items-center justify-between border-b border-border/70 px-3 py-1.5 sm:px-4 sm:py-2 bg-secondary/30">
+              <div className="flex items-center gap-2">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-7.5 w-7.5 sm:h-8 sm:w-8 flex items-center justify-center filter drop-shadow-xs">
                   <StrobiAvatar
                     animation={animation}
                     size="100%"
@@ -321,8 +321,8 @@ export default function FloatingMascotInner() {
                   />
                 </div>
                 <div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-[10px] sm:text-xs font-bold text-foreground tracking-tight">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs sm:text-sm font-bold text-foreground tracking-tight">
                       Strobi
                     </span>
                     <span className="relative flex h-1.5 w-1.5">
@@ -330,7 +330,7 @@ export default function FloatingMascotInner() {
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                     </span>
                   </div>
-                  <p className="text-[8px] sm:text-[9.5px] text-muted-foreground font-medium capitalize leading-none">
+                  <p className="text-[9px] sm:text-[10px] text-muted-foreground font-medium capitalize leading-none">
                     QUMI AI · {animation}
                   </p>
                 </div>
@@ -343,8 +343,8 @@ export default function FloatingMascotInner() {
                   title="Reset conversation"
                   className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <ArrowsCounterClockwise size={11} className="sm:hidden" />
-                  <ArrowsCounterClockwise size={13} className="hidden sm:block" />
+                  <ArrowsCounterClockwise size={12} className="sm:hidden" />
+                  <ArrowsCounterClockwise size={14} className="hidden sm:block" />
                 </button>
                 <button
                   type="button"
@@ -352,17 +352,17 @@ export default function FloatingMascotInner() {
                   title="Close assistant"
                   className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <X size={12} className="sm:hidden" />
-                  <X size={14} className="hidden sm:block" />
+                  <X size={13} className="sm:hidden" />
+                  <X size={15} className="hidden sm:block" />
                 </button>
               </div>
             </div>
 
             {/* In-Built Message Card Display - Perfectly sized, zero scroll */}
-            <div className="p-1.5 sm:p-2.5 flex flex-col justify-center [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="p-2 sm:p-2.5 flex flex-col justify-center [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {/* Optional user prompt badge if asked a custom question */}
               {userQuery && (
-                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-medium text-primary max-w-[90%] truncate">
+                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-primary max-w-[90%] truncate">
                   {userQuery}
                 </div>
               )}
@@ -375,14 +375,14 @@ export default function FloatingMascotInner() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-card p-2 text-[10px] text-muted-foreground"
+                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card p-2.5 text-[11px] text-muted-foreground"
                   >
                     <span className="flex gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
                       <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
                     </span>
-                    <span className="font-medium text-[9.5px]">Thinking...</span>
+                    <span className="font-medium text-[10px]">Thinking...</span>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -395,34 +395,32 @@ export default function FloatingMascotInner() {
                   >
                     {/* Title & Badge */}
                     <div className="flex items-center justify-between gap-1 border-b border-border/50 pb-1">
-                      <span className="text-[10px] sm:text-xs font-bold text-foreground">
+                      <span className="text-[11px] sm:text-xs font-bold text-foreground">
                         {activeTopic.title}
                       </span>
-                      <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[7.5px] sm:text-[8.5px] font-semibold text-primary">
+                      <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[8px] sm:text-[9px] font-semibold text-primary">
                         {activeTopic.badge}
                       </span>
                     </div>
 
-                    {/* Summary - clamped on mobile to keep box ultra-compact */}
-                    <p className="text-[9px] sm:text-[10.5px] leading-snug text-foreground/90 font-medium line-clamp-2 sm:line-clamp-none">
+                    {/* Summary */}
+                    <p className="text-[10px] sm:text-[11px] leading-snug text-foreground/90 font-medium">
                       {activeTopic.summary}
                     </p>
 
-                    {/* Compact Points - 2 punchy bullets on mobile, 3 on desktop */}
-                    <ul className="space-y-0.5 sm:space-y-1 pt-0.5 text-[8.5px] sm:text-[10px] text-muted-foreground">
+                    {/* Compact Points - clean and readable */}
+                    <ul className="space-y-0.5 sm:space-y-1 pt-0.5 text-[9px] sm:text-[10px] text-muted-foreground">
                       {activeTopic.points.map((pt, idx) => (
                         <li
                           key={idx}
-                          className={`flex items-start gap-1 leading-tight ${
-                            idx >= 2 ? "hidden sm:flex" : ""
-                          }`}
+                          className="flex items-start gap-1 leading-tight"
                         >
                           <CheckCircle
-                            size={10}
+                            size={11}
                             weight="fill"
                             className="text-primary shrink-0 mt-0.5"
                           />
-                          <span className="line-clamp-1 sm:line-clamp-none">{pt}</span>
+                          <span className="leading-snug">{pt}</span>
                         </li>
                       ))}
                     </ul>
@@ -432,10 +430,10 @@ export default function FloatingMascotInner() {
                       <Link
                         to={activeTopic.actionLink}
                         onClick={() => setIsOpen(false)}
-                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8.5px] sm:text-[10px] font-semibold text-primary-foreground shadow-2xs transition-colors"
+                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10.5px] font-semibold text-primary-foreground shadow-2xs transition-colors"
                       >
                         <span>{activeTopic.actionLabel}</span>
-                        <ArrowRight size={9} weight="bold" />
+                        <ArrowRight size={10} weight="bold" />
                       </Link>
                     </div>
                   </motion.div>
@@ -451,7 +449,7 @@ export default function FloatingMascotInner() {
                     key={btn.key}
                     type="button"
                     onClick={() => selectInbuiltTopic(btn.key, btn.label)}
-                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-1.5 py-0.5 text-[8px] sm:text-[9.5px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
+                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
                   >
                     {btn.label}
                   </button>
@@ -459,7 +457,7 @@ export default function FloatingMascotInner() {
               </div>
             </div>
 
-            {/* Input Field - Ultra-slim and compact */}
+            {/* Input Field - Comfortable & compact */}
             <form
               onSubmit={handleCustomSubmit}
               className="flex items-center gap-1 sm:gap-1.5 border-t border-border/70 p-1 sm:p-1.5 bg-surface"
@@ -469,15 +467,15 @@ export default function FloatingMascotInner() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask Strobi..."
-                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2 py-0.5 text-[9.5px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-6 sm:h-7"
+                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2.5 py-0.5 text-[10px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-7 sm:h-7.5"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
+                className="flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
                 title="Send inquiry"
               >
-                <PaperPlaneRight size={10} weight="fill" />
+                <PaperPlaneRight size={11} weight="fill" />
               </button>
             </form>
           </motion.div>
