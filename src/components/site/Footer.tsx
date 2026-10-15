@@ -47,14 +47,14 @@ export function Footer() {
 
   return (
     <footer className="bg-ink text-ink-foreground dark:bg-[#010d17] dark:text-foreground dark:border-t dark:border-border">
-      <div className="container-site grid gap-12 py-8 md:py-12 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <Logo inverse className="h-12 sm:h-14" />
-          <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-70">
+      <div className="container-site grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-6 sm:gap-8 md:gap-8 lg:gap-12 py-6 sm:py-8 md:py-12">
+        <div className="col-span-1 sm:col-span-2 md:col-span-5">
+          <Logo inverse className="h-10 sm:h-12 md:h-14" />
+          <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed opacity-70">
             A Nepal-based technology partner engineering software, cloud and data systems for organisations
             in Nepal and abroad.
           </p>
-          <div className="mt-6 flex gap-3">
+          <div className="mt-4 sm:mt-5 flex gap-2.5 sm:gap-3">
             {socials.map(({ Icon, label, url }) => (
               <a
                 key={label}
@@ -62,53 +62,55 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-foreground/20 dark:border-border dark:hover:border-highlight transition-colors hover:border-highlight hover:text-highlight"
+                className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md border border-ink-foreground/20 dark:border-border dark:hover:border-highlight transition-colors hover:border-highlight hover:text-highlight"
               >
-                <Icon size={18} />
+                <Icon size={17} />
               </a>
             ))}
           </div>
         </div>
 
-        {cols.map((c) => (
-          <div key={c.title} className="md:col-span-2">
-            <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">{c.title}</h3>
-            <ul className="mt-4 space-y-3 text-sm">
-              {c.links.map((l) => (
-                <li key={l.to}>
-                  <Link to={l.to} className="opacity-85 transition-opacity hover:opacity-100 hover:text-highlight">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <div className="col-span-1 grid grid-cols-2 gap-4 sm:gap-6 sm:col-span-2 md:contents">
+          {cols.map((c) => (
+            <div key={c.title} className="md:col-span-2">
+              <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">{c.title}</h3>
+              <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
+                {c.links.map((l) => (
+                  <li key={l.to}>
+                    <Link to={l.to} className="opacity-85 transition-opacity hover:opacity-100 hover:text-highlight">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-        <div className="md:col-span-3">
+        <div className="col-span-1 sm:col-span-2 md:col-span-3">
           <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">Get in touch</h3>
-          <ul className="mt-4 space-y-3 text-sm">
-            <li className="flex items-center gap-2.5">
-              <EnvelopeSimple size={16} className="opacity-60" />
-              <a href={`mailto:${settings?.email || company.email}`} className="hover:text-highlight">{settings?.email || company.email}</a>
+          <ul className="mt-2.5 sm:mt-4 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
+            <li className="flex items-center gap-2 sm:gap-2.5">
+              <EnvelopeSimple size={15} className="opacity-60 shrink-0" />
+              <a href={`mailto:${settings?.email || company.email}`} className="hover:text-highlight break-all">{settings?.email || company.email}</a>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Phone size={16} className="opacity-60" />
+            <li className="flex items-center gap-2 sm:gap-2.5">
+              <Phone size={15} className="opacity-60 shrink-0" />
               <a href={`tel:${(settings?.mobile_number || company.phone).replace(/\s/g, "")}`} className="hover:text-highlight">{settings?.mobile_number || company.phone}</a>
             </li>
-            <li className="flex items-center gap-2.5">
-              <MapPin size={16} className="opacity-60" />
-              {settings?.location || company.address}
+            <li className="flex items-center gap-2 sm:gap-2.5">
+              <MapPin size={15} className="opacity-60 shrink-0" />
+              <span>{settings?.location || company.address}</span>
             </li>
           </ul>
         </div>
       </div>
       <div className="border-t border-ink-foreground/10 dark:border-border">
-        <div className="container-site flex flex-col gap-3 py-6 text-xs opacity-70 md:flex-row md:items-center md:justify-between">
+        <div className="container-site flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 py-4 sm:py-5 text-xs opacity-70 text-center sm:text-left">
           <p>© {new Date().getFullYear()} {company.name}. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link to="/privacy-policy" className="hover:opacity-100">Privacy Policy</Link>
-            <Link to="/terms-and-conditions" className="hover:opacity-100">Terms & Conditions</Link>
+          <div className="flex gap-4 sm:gap-6 justify-center">
+            <Link to="/privacy-policy" className="hover:opacity-100 transition-opacity">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="hover:opacity-100 transition-opacity">Terms & Conditions</Link>
           </div>
         </div>
       </div>
