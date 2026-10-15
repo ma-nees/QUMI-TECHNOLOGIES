@@ -27,19 +27,19 @@ function SolutionsPage() {
       />
       <section className="container-site py-8 sm:py-10 md:py-14">
         <SectionHeader eyebrow="Common engagements" title="Where we help most." />
-        <Reveal className="mt-8 sm:mt-10 md:mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
           {solutions.map((s, i) => (
             <div
               key={s.title}
-              className="group bg-surface p-5 sm:p-6 md:p-8 flex flex-col justify-between transition-colors duration-200 hover:bg-surface-alt/70"
+              className="group bg-surface p-5 sm:p-6 md:p-8 flex flex-col justify-between transition-colors duration-200 hover:bg-surface-alt/70 min-w-0"
             >
-              <div>
+              <div className="min-w-0">
                 <span className="font-mono text-xs font-semibold text-primary">{String(i + 1).padStart(2, "0")}</span>
-                <h2 className="mt-4 sm:mt-6 text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                <h2 className="mt-4 sm:mt-6 text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary break-words">
                   {s.title}
                 </h2>
               </div>
-              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground break-words">{s.text}</p>
             </div>
           ))}
         </Reveal>

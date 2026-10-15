@@ -191,39 +191,39 @@ export function CaseStudiesSection() {
           title="Project Case Studies"
           intro="Demonstrated technical delivery and architectural outcomes engineered across high-scale industries."
         />
-        <div className="mt-8 sm:mt-10 md:mt-14 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 sm:mt-10 md:mt-14 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
           {items.map((c, i) => {
             const title = c.title || c.name;
             const tech = c.technology || c.tech;
             const image = c.image_url || c.img || caseFintech;
             return (
-              <Reveal key={c.id || title} delay={i * 80}>
+              <Reveal key={c.id || title} delay={i * 80} className="w-full min-w-0">
                 <article
                   onClick={() => setSelectedCase(c)}
-                  className="group card-interactive flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
+                  className="group card-interactive flex h-full w-full min-w-0 cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
                 >
-                  <div>
+                  <div className="w-full min-w-0">
                     {/* Image Banner */}
-                    <div className="relative aspect-[16/9] overflow-hidden bg-muted">
+                    <div className="relative aspect-[16/9] w-full min-w-0 overflow-hidden bg-muted">
                       <img
                         src={image}
                         alt={`${title} preview`}
                         width={1280}
                         height={720}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                        className="h-full w-full max-w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
                       />
                       <div className="absolute inset-0 bg-ink/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       
                       {/* Top left badge */}
-                      <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5">
-                        <span className="rounded-md bg-surface/90 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
+                      <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 max-w-[65%]">
+                        <span className="truncate rounded-md bg-surface/90 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
                           {c.industry}
                         </span>
                       </div>
 
                       {/* Top right quick links */}
-                      <div className="absolute right-2.5 top-2.5 flex items-center gap-1.5">
+                      <div className="absolute right-2.5 top-2.5 flex items-center gap-1.5 shrink-0 z-10">
                         {c.live_url && (
                           <a
                             href={c.live_url}
@@ -251,39 +251,41 @@ export function CaseStudiesSection() {
                       </div>
 
                       {c.client && (
-                        <span className="absolute bottom-2.5 left-2.5 rounded-md bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-sm">
-                          {c.client}
-                        </span>
+                        <div className="absolute bottom-2.5 left-2.5 max-w-[80%]">
+                          <span className="truncate block rounded-md bg-background/80 px-2 py-0.5 text-[10px] font-medium text-foreground backdrop-blur-sm">
+                            {c.client}
+                          </span>
+                        </div>
                       )}
                     </div>
 
                     {/* Compact Card Content */}
-                    <div className="p-4 sm:p-5">
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="text-base sm:text-lg font-bold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                    <div className="p-4 sm:p-5 w-full min-w-0">
+                      <div className="flex items-start justify-between gap-2.5 sm:gap-3 w-full min-w-0">
+                        <h3 className="text-base sm:text-lg font-bold leading-snug group-hover:text-primary transition-colors line-clamp-2 min-w-0 break-words flex-1">
                           {title}
                         </h3>
-                        <ArrowUpRight size={18} className="arrow-nudge shrink-0 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        <ArrowUpRight size={18} className="arrow-nudge shrink-0 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 mt-0.5" />
                       </div>
 
-                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground line-clamp-2 min-w-0 break-words">
                         {c.solution || c.problem}
                       </p>
 
                       {c.result && (
-                        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-primary font-medium">
+                        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-primary font-medium w-full min-w-0 overflow-hidden">
                           <Sparkle size={13} weight="fill" className="shrink-0 text-primary" />
-                          <span className="truncate">{c.result}</span>
+                          <span className="truncate block min-w-0 flex-1">{c.result}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
                   {/* Compact Card Footer */}
-                  <div className="border-t border-border/60 bg-surface-alt/40 px-4 sm:px-5 py-2.5">
-                    <div className="flex flex-wrap items-center gap-1 font-mono text-[10px] text-muted-foreground">
+                  <div className="border-t border-border/60 bg-surface-alt/40 px-4 sm:px-5 py-2.5 w-full min-w-0 overflow-hidden">
+                    <div className="flex flex-wrap items-center gap-1 font-mono text-[10px] text-muted-foreground min-w-0">
                       {tech?.split(',').slice(0, 3).map((t: string) => (
-                        <span key={t} className="rounded bg-background/80 px-1.5 py-0.5 border border-border/50">
+                        <span key={t} className="rounded bg-background/80 px-1.5 py-0.5 border border-border/50 truncate max-w-[120px]">
                           {t.trim()}
                         </span>
                       ))}
@@ -302,14 +304,14 @@ export function CaseStudiesSection() {
       {/* Case Study Detail Modal */}
       {selectedCase && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm animate-fade-in-up"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4 backdrop-blur-sm animate-fade-in-up"
           onClick={() => setSelectedCase(null)}
         >
           <div
-            className="flex max-h-[92vh] sm:max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
+            className="flex max-h-[94vh] sm:max-h-[88vh] w-full max-w-2xl min-w-0 flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-muted">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full min-w-0 overflow-hidden bg-muted shrink-0">
               <img
                 src={selectedCase.image_url || selectedCase.img || caseFintech}
                 alt={selectedCase.title || selectedCase.name}
@@ -317,42 +319,43 @@ export function CaseStudiesSection() {
               />
               <button
                 onClick={() => setSelectedCase(null)}
-                className="absolute right-3 top-3 sm:right-4 sm:top-4 z-10 rounded-full bg-black/60 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
+                className="absolute right-2.5 top-2.5 sm:right-4 sm:top-4 z-20 rounded-full bg-black/70 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
                 aria-label="Close modal"
               >
-                <X size={18} />
+                <X size={16} className="sm:hidden" />
+                <X size={18} className="hidden sm:block" />
               </button>
-              <div className="absolute left-3 bottom-3 sm:left-6 sm:bottom-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <span className="rounded-md bg-surface/90 px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-xs font-semibold text-primary backdrop-blur-sm">
+              <div className="absolute left-2.5 bottom-2.5 sm:left-6 sm:bottom-4 flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-[80%]">
+                <span className="truncate rounded-md bg-surface/90 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-xs font-semibold text-primary backdrop-blur-sm">
                   {selectedCase.industry}
                 </span>
                 {selectedCase.client && (
-                  <span className="rounded-md bg-black/60 px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-xs text-white backdrop-blur-sm">
+                  <span className="truncate rounded-md bg-black/60 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-xs text-white backdrop-blur-sm">
                     {selectedCase.client}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-7 space-y-4 sm:space-y-5">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-7 space-y-3.5 sm:space-y-5 min-w-0">
               <div>
-                <h2 className="font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tight">
+                <h2 className="font-display text-base sm:text-xl md:text-2xl font-bold tracking-tight break-words">
                   {selectedCase.title || selectedCase.name}
                 </h2>
                 {selectedCase.client && (
-                  <p className="mt-0.5 text-xs text-muted-foreground">Engineered for {selectedCase.client}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground break-words">Engineered for {selectedCase.client}</p>
                 )}
               </div>
 
               {/* Action Links (GitHub & Live Link) */}
               {(selectedCase.live_url || selectedCase.github_url) && (
-                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 pt-1 min-w-0">
                   {selectedCase.live_url && (
                     <a
                       href={selectedCase.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition flex-1 sm:flex-initial"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition w-full sm:w-auto text-center"
                     >
                       <Globe size={15} />
                       <span>Visit Live Project</span>
@@ -364,7 +367,7 @@ export function CaseStudiesSection() {
                       href={selectedCase.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition flex-1 sm:flex-initial"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:border-primary hover:text-primary transition w-full sm:w-auto text-center"
                     >
                       <GithubLogo size={15} />
                       <span>GitHub Repository</span>
@@ -373,47 +376,47 @@ export function CaseStudiesSection() {
                 </div>
               )}
 
-              <div className="space-y-3.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4">
+              <div className="space-y-3 sm:space-y-3.5 text-xs sm:text-sm leading-relaxed text-muted-foreground min-w-0">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-3 sm:p-4 min-w-0">
                   <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
-                    <span className="h-2 w-2 rounded-full bg-primary" /> The Problem & Challenge
+                    <span className="h-2 w-2 rounded-full bg-primary shrink-0" /> The Problem & Challenge
                   </h4>
-                  <p>{selectedCase.problem}</p>
+                  <p className="break-words">{selectedCase.problem}</p>
                 </div>
 
-                <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4">
+                <div className="rounded-xl border border-border/80 bg-background/60 p-3 sm:p-4 min-w-0">
                   <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
-                    <span className="h-2 w-2 rounded-full bg-highlight" /> The Architectural Solution
+                    <span className="h-2 w-2 rounded-full bg-highlight shrink-0" /> The Architectural Solution
                   </h4>
-                  <p>{selectedCase.solution}</p>
+                  <p className="break-words">{selectedCase.solution}</p>
                 </div>
 
                 {selectedCase.result && (
-                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-3.5 sm:p-4 text-primary">
+                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-3 sm:p-4 text-primary min-w-0">
                     <h4 className="font-bold text-xs sm:text-sm flex items-center gap-2 mb-1.5">
-                      <Sparkle size={15} weight="fill" /> Key Results & Measurable Impact
+                      <Sparkle size={15} weight="fill" className="shrink-0" /> Key Results & Measurable Impact
                     </h4>
-                    <p className="font-medium text-foreground">{selectedCase.result}</p>
+                    <p className="font-medium text-foreground break-words">{selectedCase.result}</p>
                   </div>
                 )}
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h4 className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mb-1.5">Technologies Used</h4>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 min-w-0">
                   {(selectedCase.technology || selectedCase.tech)?.split(',').map((t: string) => (
-                    <span key={t} className="rounded-md border border-border/80 bg-background px-2.5 py-0.5 text-xs font-mono font-medium">
+                    <span key={t} className="rounded-md border border-border/80 bg-background px-2.5 py-0.5 text-xs font-mono font-medium truncate max-w-[150px]">
                       {t.trim()}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 min-w-0">
                 <p className="text-xs text-muted-foreground text-center sm:text-left">Looking for similar technical architecture?</p>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition w-full sm:w-auto"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90 transition w-full sm:w-auto text-center"
                   onClick={() => setSelectedCase(null)}
                 >
                   Discuss Your Project
