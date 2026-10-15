@@ -18,6 +18,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { MobileInstallPrompt } from "@/components/pwa/MobileInstallPrompt";
 import { Toaster } from "@/components/ui/sonner";
 import React, { Suspense, lazy } from "react";
 const Global3DBackground = lazy(() => import("@/components/three/Global3DBackground"));
@@ -183,6 +184,7 @@ function RootComponent() {
                 Skip to content
               </a>
               <Header />
+              <MobileInstallPrompt />
               <main id="main" className="flex-1">
                 <Outlet />
               </main>

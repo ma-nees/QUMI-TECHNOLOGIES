@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { List, X, ArrowRight } from "@phosphor-icons/react";
+import { List, X, ArrowRight, DownloadSimple } from "@phosphor-icons/react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
@@ -92,10 +92,21 @@ export function Header() {
                 <ArrowRight className="opacity-50" />
               </Link>
             ))}
-            <div className="mt-8 flex flex-col gap-4">
+            <div className="mt-8 flex flex-col gap-3">
               <Link to="/contact" onClick={() => setOpen(false)} className={buttonVariants({ size: "lg" })}>
                 Start a Project
               </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  window.dispatchEvent(new CustomEvent("qumi:open-install-prompt"));
+                }}
+                className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 py-3 text-sm font-semibold text-primary hover:bg-primary/20 transition cursor-pointer"
+              >
+                <DownloadSimple size={16} weight="bold" />
+                <span>Install QUMI Web App</span>
+              </button>
             </div>
           </nav>
         </div>
