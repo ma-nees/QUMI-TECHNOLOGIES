@@ -41,7 +41,7 @@ interface StructuredTopic {
 // In-built structured company topics designed to fit without any scrolling
 const INBUILT_TOPICS: Record<string, StructuredTopic> = {
   welcome: {
-    title: "Hello! I'm Strobi 👋",
+    title: "Hello, I'm Strobi",
     badge: "QUMI AI Assistant",
     summary:
       "I'm QUMI's intelligent companion. Select a topic below or type any question to explore our capabilities.",
@@ -313,7 +313,7 @@ export default function FloatingMascotInner() {
             <div className="flex items-center justify-between border-b border-border/70 px-2.5 py-1 sm:px-3.5 sm:py-2 bg-secondary/30">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-6 w-6 sm:h-7 sm:w-7 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center filter drop-shadow-xs">
                   <StrobiAvatar
                     animation={animation}
                     size="100%"
@@ -362,8 +362,8 @@ export default function FloatingMascotInner() {
             <div className="p-1.5 sm:p-2.5 flex flex-col justify-center [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {/* Optional user prompt badge if asked a custom question */}
               {userQuery && (
-                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-1.5 py-0.2 text-[8px] sm:text-[9.5px] font-semibold text-primary max-w-[90%] truncate">
-                  💬 {userQuery}
+                <div className="mb-1 self-end rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-medium text-primary max-w-[90%] truncate">
+                  {userQuery}
                 </div>
               )}
 
@@ -510,7 +510,7 @@ export default function FloatingMascotInner() {
           }
         }}
         className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)] hover:drop-shadow-[0_12px_22px_rgba(91,127,229,0.38)] transition-all duration-200 ${
-          isOpen ? "h-10 w-10 sm:h-14 sm:w-14" : "h-12 w-12 sm:h-16 sm:w-16"
+          isOpen ? "h-12 w-12 sm:h-14 sm:w-14" : "h-15 w-15 sm:h-18 sm:w-18"
         }`}
         aria-label="Chat with Strobi AI companion"
         aria-expanded={isOpen}
