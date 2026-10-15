@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -676,6 +677,22 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
     };
   }, [isVisible]);
 
+  // Broadcast preloader active state globally so chat bot / floating mascot is hidden
+  React.useEffect(() => {
+    if (isVisible) {
+      document.documentElement.setAttribute("data-preloader-active", "true");
+      window.dispatchEvent(new CustomEvent("qumi:preloader-change", { detail: { active: true } }));
+    } else {
+      document.documentElement.removeAttribute("data-preloader-active");
+      window.dispatchEvent(new CustomEvent("qumi:preloader-change", { detail: { active: false } }));
+    }
+
+    return () => {
+      document.documentElement.removeAttribute("data-preloader-active");
+      window.dispatchEvent(new CustomEvent("qumi:preloader-change", { detail: { active: false } }));
+    };
+  }, [isVisible]);
+
   React.useEffect(() => {
     setMounted(true);
     const startTime = Date.now();
@@ -700,15 +717,17 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
     return null;
   }
 
-  return (
+  const preloaderMarkup = (
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          id="eye-preloader-overlay"
+          data-preloader="active"
           key="eye-preloader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-8 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
+          className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-8 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
         >
           {/* Subtle glacier atmospheric ambient glow & precision subpixel grid */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -769,4 +788,10 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
       )}
     </AnimatePresence>
   );
+
+  if (typeof document !== "undefined" && document.body) {
+    return createPortal(preloaderMarkup, document.body);
+  }
+
+  return preloaderMarkup;
 }

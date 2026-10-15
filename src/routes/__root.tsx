@@ -96,6 +96,30 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (window.location.pathname === '/' || window.location.pathname === '') {
+                  document.documentElement.setAttribute('data-preloader-active', 'true');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html[data-preloader-active="true"] [data-mascot-container],
+              html[data-preloader-active="true"] #floating-mascot-root {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+              }
+            `,
+          }}
+        />
       </head>
       <body suppressHydrationWarning>
         {children}

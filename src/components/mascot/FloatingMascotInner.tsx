@@ -299,7 +299,14 @@ export default function FloatingMascotInner() {
   };
 
   return (
-    <div className="fixed bottom-2.5 right-2.5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end select-none">
+    <motion.div
+      id="floating-mascot-root"
+      data-mascot-container="true"
+      initial={{ opacity: 0, scale: 0.85 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed bottom-2.5 right-2.5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end select-none"
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -534,6 +541,6 @@ export default function FloatingMascotInner() {
           </motion.div>
         )}
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
