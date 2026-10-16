@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero, Reveal, SectionHeader } from "@/components/site/primitives";
 import { CaseStudiesSection, CtaSection, EngagementSection } from "@/components/home/Sections";
 import { pageMeta } from "@/lib/seo";
+import { listCaseStudies } from "@/lib/public.functions";
 
 const solutions = [
   { title: "Legacy modernisation", text: "Move ageing systems to maintainable architectures in stages, without stopping the business." },
@@ -13,11 +14,21 @@ const solutions = [
 ];
 
 export const Route = createFileRoute("/solutions")({
+  loader: async () => {
+    try {
+      const caseStudies = await listCaseStudies();
+      return { caseStudies: Array.isArray(caseStudies) ? caseStudies : [] };
+    } catch {
+      return { caseStudies: [] };
+    }
+  },
   head: () => pageMeta("Solutions", "How QUMI Technologies solves business problems: modernisation, digital channels, operations platforms, data, AI and cloud."),
   component: SolutionsPage,
 });
 
 function SolutionsPage() {
+  const { caseStudies } = Route.useLoaderData();
+
   return (
     <>
       <PageHero
@@ -44,7 +55,7 @@ function SolutionsPage() {
           ))}
         </Reveal>
       </section>
-      <CaseStudiesSection />
+      <CaseStudiesSection initialItems={caseStudies} />
       <EngagementSection />
       <CtaSection />
     </>

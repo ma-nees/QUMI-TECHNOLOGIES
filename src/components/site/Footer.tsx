@@ -10,6 +10,7 @@ const cols = [
     title: "Company",
     links: [
       { to: "/about", label: "About" },
+      { to: "/about", hash: "knowledge-network", label: "Knowledge Network" },
       { to: "/careers", label: "Careers" },
       { to: "/contact", label: "Contact" },
     ],
@@ -76,8 +77,12 @@ export function Footer() {
               <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.14em] opacity-60">{c.title}</h3>
               <ul className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
                 {c.links.map((l) => (
-                  <li key={l.to}>
-                    <Link to={l.to} className="opacity-85 transition-opacity hover:opacity-100 hover:text-highlight">
+                  <li key={l.label}>
+                    <Link
+                      to={l.to}
+                      hash={"hash" in l ? (l as { hash?: string }).hash : undefined}
+                      className="opacity-85 transition-opacity hover:opacity-100 hover:text-highlight"
+                    >
                       {l.label}
                     </Link>
                   </li>

@@ -25,6 +25,7 @@ import { listJobs } from "@/lib/public.functions";
 import { principles } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { OrgJourneyMap } from "@/components/organization/OrgJourneyMap";
 
 const jobsQuery = queryOptions({ queryKey: ["jobs"], queryFn: () => listJobs() });
 
@@ -410,8 +411,13 @@ function CareersPage() {
         </div>
       </section>
 
+      {/* Interactive IT Company Organization Journey Map */}
+      <Reveal>
+        <OrgJourneyMap />
+      </Reveal>
+
       {/* Transparent Hiring Process */}
-      <section className="container-site py-16 md:py-24">
+      <section className="container-site pt-8 md:pt-12 pb-16 md:pb-24">
         <Reveal>
           <div className="text-center max-w-2xl mx-auto">
             <p className="eyebrow mx-auto justify-center">The Journey</p>

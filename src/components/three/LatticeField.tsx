@@ -410,28 +410,17 @@ export function LatticeField({ className }: { className?: string }) {
       // ─── 6. SCROLL TRACKING ───
       let scrollTarget = 0;
       let scrollCurrent = 0;
-      let isScrolledPast = false;
 
       const onScroll = () => {
-        lastInteraction = performance.now();
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        scrollTarget = max > 0 ? window.scrollY / max : 0;
-        // Optimization: if scrolled far past the hero section, mark as past
-        isScrolledPast = window.scrollY > window.innerHeight * 1.6;
+        scrollTarget = max > 0 ? Math.min(1.0, Math.max(0, window.scrollY / max)) : 0;
       };
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
 
-      // ─── 7. ADAPTIVE RENDER LOOP ───
-      let visible = true;
+      // ─── 7. CONTINUOUS RENDER LOOP ───
       let raf = 0;
       let lastTime = performance.now();
-
-      const io = new IntersectionObserver(([entry]) => {
-        visible = !!entry?.isIntersecting;
-        if (visible) loop();
-      });
-      io.observe(host);
 
       const onVisibility = () => {
         if (!document.hidden) {
@@ -457,7 +446,7 @@ export function LatticeField({ className }: { className?: string }) {
         sharedUniforms.uScroll.value = scrollCurrent;
         sharedUniforms.uTime.value += dt;
 
-        // Camera positioning
+        // Camera positioning - smooth forward exploration
         const mx = sharedUniforms.uMouse.value.x;
         const my = sharedUniforms.uMouse.value.y;
         camera.position.set(
@@ -503,13 +492,7 @@ export function LatticeField({ className }: { className?: string }) {
 
       function loop() {
         cancelAnimationFrame(raf);
-        if (disposed || !visible || document.hidden) return;
-
-        // If scrolled past the visible hero zone, pause rendering to yield 100% CPU/GPU to page
-        if (isScrolledPast) {
-          raf = requestAnimationFrame(() => loop());
-          return;
-        }
+        if (disposed || document.hidden) return;
 
         raf = requestAnimationFrame((now) => {
           const dt = Math.min((now - lastTime) / 1000, 0.05);
@@ -532,7 +515,6 @@ export function LatticeField({ className }: { className?: string }) {
       cleanup = () => {
         cancelAnimationFrame(raf);
         ro.disconnect();
-        io.disconnect();
         window.removeEventListener("pointermove", onPointer);
         window.removeEventListener("pointerdown", onPointerDown);
         window.removeEventListener("scroll", onScroll);

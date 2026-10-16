@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils";
 import { services, technologies, industries, process, principles, engagementModels } from "@/lib/content";
 import { listCaseStudies } from "@/lib/public.functions";
 import caseFintech from "@/assets/case-fintech.jpg";
-import caseLogistics from "@/assets/case-logistics.jpg";
-import caseHealth from "@/assets/case-health.jpg";
 
 export function ServicesGrid({ limit }: { limit?: number }) {
   const list = limit ? services.slice(0, limit) : services;
@@ -165,33 +163,47 @@ export function IndustriesSection() {
   );
 }
 
-const cases = [
-  { name: "Digital lending platform", industry: "FinTech", img: caseFintech, problem: "Manual loan processing across branches.", solution: "Web platform with automated credit workflow.", tech: "React, Node.js, PostgreSQL", result: "Reduced loan approval cycle from 5 days to 2 hours with 100% audit compliance." },
-  { name: "Fleet & delivery tracking", industry: "Logistics", img: caseLogistics, problem: "No real-time view of deliveries.", solution: "Dispatch dashboard and driver mobile app.", tech: "React Native, Go, AWS", result: "Optimized dispatch routes for over 500 commercial vehicles daily with 99.4% on-time rate." },
-  { name: "Patient records app", industry: "Healthcare", img: caseHealth, problem: "Paper records and long queues.", solution: "Secure records and appointment booking.", tech: "Next.js, Python, Azure", result: "Processed over 14,000 monthly bookings, cutting clinic waiting times by 65%." },
-];
-
-export function CaseStudiesSection() {
-  const [items, setItems] = useState<any[]>(cases);
+export function CaseStudiesSection({ initialItems }: { initialItems?: any[] } = {}) {
+  const [items, setItems] = useState<any[]>(initialItems || []);
+  const [loading, setLoading] = useState(!initialItems || initialItems.length === 0);
   const [selectedCase, setSelectedCase] = useState<any | null>(null);
 
   useEffect(() => {
-    listCaseStudies().then((data) => {
-      if (data && data.length > 0) {
-        setItems(data);
-      }
-    }).catch(() => {});
+    listCaseStudies()
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setItems(data);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <section className="py-8 sm:py-10 md:py-12">
-      <div className="container-site">
+    <section className="py-8 sm:py-12 md:py-16 2xl:py-24">
+      <div className="container-site max-w-7xl 2xl:max-w-[1500px]">
         <SectionHeader
           eyebrow="Selected work"
           title="Project Case Studies"
           intro="Demonstrated technical delivery and architectural outcomes engineered across high-scale industries."
         />
-        <div className="mt-6 sm:mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full min-w-0">
+        {loading && items.length === 0 ? (
+          <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 2xl:gap-8 w-full min-w-0">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="rounded-xl border border-border/70 bg-surface/60 p-4 animate-pulse space-y-3.5">
+                <div className="aspect-[16/9] w-full rounded-lg bg-muted/60" />
+                <div className="h-5 w-3/4 rounded bg-muted/70" />
+                <div className="h-4 w-full rounded bg-muted/50" />
+                <div className="h-4 w-2/3 rounded bg-muted/40" />
+              </div>
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="mt-8 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            No published case studies available.
+          </div>
+        ) : (
+          <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 2xl:gap-8 w-full min-w-0">
           {items.map((c, i) => {
             const title = c.title || c.name;
             const tech = c.technology || c.tech;
@@ -216,7 +228,7 @@ export function CaseStudiesSection() {
                       <div className="absolute inset-0 bg-ink/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       
                       {/* Top left badge */}
-                      <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 max-w-[65%]">
+                      <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 max-w-[55%] sm:max-w-[65%]">
                         <span className="truncate rounded-md bg-surface/90 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-xs">
                           {c.industry}
                         </span>
@@ -230,7 +242,7 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105"
+                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105 active:scale-95"
                             title="Open live project"
                           >
                             <Globe size={18} />
@@ -242,7 +254,7 @@ export function CaseStudiesSection() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105"
+                            className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-lg bg-black/70 text-white shadow-sm backdrop-blur-sm transition hover:bg-primary hover:scale-105 active:scale-95"
                             title="View GitHub repository"
                           >
                             <GithubLogo size={18} />
@@ -299,19 +311,20 @@ export function CaseStudiesSection() {
             );
           })}
         </div>
+      )}
       </div>
 
       {/* Case Study Detail Modal */}
       {selectedCase && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4 backdrop-blur-sm animate-fade-in-up"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4 md:p-6 backdrop-blur-sm animate-fade-in-up"
           onClick={() => setSelectedCase(null)}
         >
           <div
-            className="flex max-h-[94vh] sm:max-h-[88vh] w-full max-w-2xl min-w-0 flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
+            className="flex max-h-[94vh] sm:max-h-[90vh] w-full max-w-2xl lg:max-w-3xl 2xl:max-w-4xl min-w-0 flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-surface shadow-2xl animate-pop-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full min-w-0 overflow-hidden bg-muted shrink-0">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] max-h-[190px] sm:max-h-[280px] md:max-h-[340px] 2xl:max-h-[400px] w-full min-w-0 overflow-hidden bg-muted shrink-0">
               <img
                 src={selectedCase.image_url || selectedCase.img || caseFintech}
                 alt={selectedCase.title || selectedCase.name}
@@ -319,11 +332,10 @@ export function CaseStudiesSection() {
               />
               <button
                 onClick={() => setSelectedCase(null)}
-                className="absolute right-2.5 top-2.5 sm:right-4 sm:top-4 z-20 rounded-full bg-black/70 p-2 text-white hover:bg-black/90 transition backdrop-blur-sm"
+                className="absolute right-2.5 top-2.5 sm:right-4 sm:top-4 z-20 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-black/75 p-0 text-white hover:bg-black transition backdrop-blur-md shadow-md active:scale-95"
                 aria-label="Close modal"
               >
-                <X size={16} className="sm:hidden" />
-                <X size={18} className="hidden sm:block" />
+                <X size={17} />
               </button>
               <div className="absolute left-2.5 bottom-2.5 sm:left-6 sm:bottom-4 flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-[80%]">
                 <span className="truncate rounded-md bg-surface/90 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-[10px] sm:text-xs font-semibold text-primary backdrop-blur-sm">
@@ -337,13 +349,13 @@ export function CaseStudiesSection() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-7 space-y-3.5 sm:space-y-5 min-w-0">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-7 2xl:p-8 space-y-4 sm:space-y-5 min-w-0">
               <div>
-                <h2 className="font-display text-base sm:text-xl md:text-2xl font-bold tracking-tight break-words">
+                <h2 className="font-display text-base sm:text-xl md:text-2xl 2xl:text-3xl font-bold tracking-tight break-words">
                   {selectedCase.title || selectedCase.name}
                 </h2>
                 {selectedCase.client && (
-                  <p className="mt-0.5 text-xs text-muted-foreground break-words">Engineered for {selectedCase.client}</p>
+                  <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground break-words">Engineered for {selectedCase.client}</p>
                 )}
               </div>
 
@@ -377,22 +389,24 @@ export function CaseStudiesSection() {
               )}
 
               <div className="space-y-3 sm:space-y-3.5 text-xs sm:text-sm leading-relaxed text-muted-foreground min-w-0">
-                <div className="rounded-xl border border-border/80 bg-background/60 p-3 sm:p-4 min-w-0">
-                  <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
-                    <span className="h-2 w-2 rounded-full bg-primary shrink-0" /> The Problem & Challenge
-                  </h4>
-                  <p className="break-words">{selectedCase.problem}</p>
-                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 min-w-0">
+                  <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4 min-w-0">
+                    <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
+                      <span className="h-2 w-2 rounded-full bg-primary shrink-0" /> The Problem & Challenge
+                    </h4>
+                    <p className="break-words">{selectedCase.problem}</p>
+                  </div>
 
-                <div className="rounded-xl border border-border/80 bg-background/60 p-3 sm:p-4 min-w-0">
-                  <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
-                    <span className="h-2 w-2 rounded-full bg-highlight shrink-0" /> The Architectural Solution
-                  </h4>
-                  <p className="break-words">{selectedCase.solution}</p>
+                  <div className="rounded-xl border border-border/80 bg-background/60 p-3.5 sm:p-4 min-w-0">
+                    <h4 className="font-bold text-foreground text-xs sm:text-sm flex items-center gap-2 mb-1.5">
+                      <span className="h-2 w-2 rounded-full bg-highlight shrink-0" /> The Architectural Solution
+                    </h4>
+                    <p className="break-words">{selectedCase.solution}</p>
+                  </div>
                 </div>
 
                 {selectedCase.result && (
-                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-3 sm:p-4 text-primary min-w-0">
+                  <div className="rounded-xl border border-primary/30 bg-primary/10 p-3.5 sm:p-4 text-primary min-w-0">
                     <h4 className="font-bold text-xs sm:text-sm flex items-center gap-2 mb-1.5">
                       <Sparkle size={15} weight="fill" className="shrink-0" /> Key Results & Measurable Impact
                     </h4>
