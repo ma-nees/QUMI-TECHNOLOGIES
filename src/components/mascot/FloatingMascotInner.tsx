@@ -406,22 +406,22 @@ export default function FloatingMascotInner() {
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-2.5 right-2.5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end select-none"
+      className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end select-none"
     >
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.94 }}
+            initial={{ opacity: 0, y: 12, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.94 }}
-            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-1.5 sm:mb-2 flex flex-col w-[calc(100vw-1.75rem)] max-w-[350px] sm:max-w-[380px] rounded-xl sm:rounded-2xl border border-border/80 bg-surface/95 shadow-xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            exit={{ opacity: 0, y: 12, scale: 0.94 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-2 sm:mb-3 flex flex-col w-[calc(100vw-1.5rem)] max-w-[420px] sm:max-w-[460px] md:max-w-[500px] rounded-2xl sm:rounded-3xl border border-border/80 bg-surface/95 shadow-2xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             {/* Chatbot Header - Spacious & balanced */}
-            <div className="flex items-center justify-between border-b border-border/70 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-secondary/30">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-border/70 px-4 py-3 sm:px-5 sm:py-3.5 bg-secondary/30">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-8 w-8 sm:h-8.5 sm:w-8.5 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center filter drop-shadow-xs">
                   <StrobiAvatar
                     animation={animation}
                     size="100%"
@@ -430,47 +430,45 @@ export default function FloatingMascotInner() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs sm:text-sm font-bold text-foreground tracking-tight">
+                    <span className="text-sm sm:text-base font-bold text-foreground tracking-tight">
                       Strobi
                     </span>
-                    <span className="relative flex h-1.5 w-1.5">
+                    <span className="relative flex h-2 w-2">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
                   </div>
-                  <p className="text-[9.5px] sm:text-[10.5px] text-muted-foreground font-medium capitalize leading-none">
-                    QUMI AI · {animation}
+                  <p className="text-[10.5px] sm:text-xs text-muted-foreground font-medium capitalize leading-none mt-0.5">
+                    QUMI AI Companion · {animation}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-0.5">
+              <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={handleReset}
                   title="Reset conversation"
-                  className="rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <ArrowsCounterClockwise size={13} className="sm:hidden" />
-                  <ArrowsCounterClockwise size={15} className="hidden sm:block" />
+                  <ArrowsCounterClockwise size={16} />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   title="Close assistant"
-                  className="rounded-md p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <X size={14} className="sm:hidden" />
-                  <X size={16} className="hidden sm:block" />
+                  <X size={17} />
                 </button>
               </div>
             </div>
 
             {/* In-Built Message Card Display - Generous height & breathable */}
-            <div className="p-2.5 sm:p-3 flex flex-col justify-center min-h-[180px] sm:min-h-[195px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="p-3.5 sm:p-4.5 flex flex-col justify-center min-h-[220px] sm:min-h-[250px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {/* Optional user prompt badge if asked a custom question */}
               {userQuery && (
-                <div className="mb-1.5 self-end rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-primary max-w-[90%] truncate">
+                <div className="mb-2 self-end rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-[10px] sm:text-xs font-semibold text-primary max-w-[90%] truncate">
                   {userQuery}
                 </div>
               )}
@@ -483,48 +481,48 @@ export default function FloatingMascotInner() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card p-3 text-[11px] text-muted-foreground"
+                    className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-card p-4 text-xs sm:text-sm text-muted-foreground"
                   >
-                    <span className="flex gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
+                    <span className="flex gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce" />
+                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
+                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
                     </span>
-                    <span className="font-medium text-[10.5px]">Thinking...</span>
+                    <span className="font-medium">Thinking...</span>
                   </motion.div>
                 ) : (
                   <motion.div
                     key={activeTopic.title}
-                    initial={{ opacity: 0, y: 4 }}
+                    initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.15 }}
-                    className="rounded-lg sm:rounded-xl border border-border/70 bg-card/95 p-2.5 sm:p-3 shadow-2xs space-y-1.5 text-foreground"
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.18 }}
+                    className="rounded-xl sm:rounded-2xl border border-border/70 bg-card/95 p-3.5 sm:p-4.5 shadow-2xs space-y-2 text-foreground"
                   >
                     {/* Title & Badge */}
-                    <div className="flex items-center justify-between gap-1 border-b border-border/50 pb-1">
-                      <span className="text-[11.5px] sm:text-xs font-bold text-foreground">
+                    <div className="flex items-center justify-between gap-1.5 border-b border-border/50 pb-1.5">
+                      <span className="text-sm sm:text-[15px] font-bold text-foreground">
                         {activeTopic.title}
                       </span>
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[8.5px] sm:text-[9.5px] font-semibold text-primary">
+                      <span className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[9.5px] sm:text-[10.5px] font-semibold text-primary">
                         {activeTopic.badge}
                       </span>
                     </div>
 
                     {/* Summary */}
-                    <p className="text-[10.5px] sm:text-[11.5px] leading-relaxed text-foreground/90 font-medium">
+                    <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/90 font-medium">
                       {activeTopic.summary}
                     </p>
 
                     {/* Compact Points - clean and readable */}
-                    <ul className="space-y-1 pt-0.5 text-[9.5px] sm:text-[10.5px] text-muted-foreground">
+                    <ul className="space-y-1.5 pt-1 text-[11px] sm:text-xs text-muted-foreground">
                       {activeTopic.points.map((pt, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-1.5 leading-snug"
+                          className="flex items-start gap-2 leading-relaxed"
                         >
                           <CheckCircle
-                            size={11.5}
+                            size={14}
                             weight="fill"
                             className="text-primary shrink-0 mt-0.5"
                           />
@@ -534,14 +532,14 @@ export default function FloatingMascotInner() {
                     </ul>
 
                     {/* Action Button */}
-                    <div className="pt-1">
+                    <div className="pt-2">
                       <Link
                         to={activeTopic.actionLink}
                         onClick={() => setIsOpen(false)}
-                        className="inline-flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-3 py-1 text-[9.5px] sm:text-[11px] font-semibold text-primary-foreground shadow-2xs transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover px-4 py-1.5 text-xs sm:text-[13px] font-semibold text-primary-foreground shadow-2xs transition-colors"
                       >
                         <span>{activeTopic.actionLabel}</span>
-                        <ArrowRight size={10} weight="bold" />
+                        <ArrowRight size={12} weight="bold" />
                       </Link>
                     </div>
                   </motion.div>
@@ -550,14 +548,14 @@ export default function FloatingMascotInner() {
             </div>
 
             {/* In-Built Quick Topic Chips - Single horizontal scroll row (zero scrollbars) */}
-            <div className="border-t border-border/50 bg-secondary/15 px-2.5 py-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
+            <div className="border-t border-border/50 bg-secondary/15 px-3 py-2 sm:px-4 sm:py-2.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
                 {QUICK_BUTTONS.map((btn) => (
                   <button
                     key={btn.key}
                     type="button"
                     onClick={() => selectInbuiltTopic(btn.key, btn.label)}
-                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-2.5 py-1 text-[9px] sm:text-[10px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
+                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-3 py-1.5 text-[10px] sm:text-xs font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
                   >
                     {btn.label}
                   </button>
@@ -568,22 +566,22 @@ export default function FloatingMascotInner() {
             {/* Input Field - Comfortable & breathable */}
             <form
               onSubmit={handleCustomSubmit}
-              className="flex items-center gap-1.5 border-t border-border/70 p-1.5 sm:p-2 bg-surface"
+              className="flex items-center gap-2 border-t border-border/70 p-2 sm:p-3 bg-surface"
             >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask Strobi..."
-                className="flex-1 rounded-md sm:rounded-lg border border-border/80 bg-background/60 px-2.5 py-1 text-[10.5px] sm:text-xs text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-8 sm:h-8.5"
+                placeholder="Ask Strobi anything about QUMI..."
+                className="flex-1 rounded-xl border border-border/80 bg-background/70 px-3.5 py-2 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/40 h-10 sm:h-11"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="flex h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-md sm:rounded-lg bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
+                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
                 title="Send inquiry"
               >
-                <PaperPlaneRight size={12} weight="fill" />
+                <PaperPlaneRight size={15} weight="fill" />
               </button>
             </form>
           </motion.div>
@@ -593,10 +591,10 @@ export default function FloatingMascotInner() {
       {/* Pure Floating Avatar Trigger */}
       <motion.button
         type="button"
-        animate={{ y: [0, -5, 0] }}
+        animate={{ y: [0, -6, 0] }}
         transition={{ repeat: Infinity, duration: 3.4, ease: "easeInOut" }}
-        whileHover={{ scale: 1.1, rotate: [-2, 3, -1, 0] }}
-        whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.08, rotate: [-2, 3, -1, 0] }}
+        whileTap={{ scale: 0.94 }}
         onClick={() => {
           setIsOpen((prev) => !prev);
           if (!isOpen) {
@@ -615,8 +613,10 @@ export default function FloatingMascotInner() {
             setAnimation("idle");
           }
         }}
-        className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)] hover:drop-shadow-[0_12px_22px_rgba(91,127,229,0.38)] transition-all duration-200 ${
-          isOpen ? "h-12 w-12 sm:h-14 sm:w-14" : "h-15 w-15 sm:h-18 sm:w-18"
+        className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_10px_24px_rgba(0,0,0,0.25)] hover:drop-shadow-[0_16px_32px_rgba(91,127,229,0.45)] transition-all duration-200 ${
+          isOpen
+            ? "h-14 w-14 sm:h-16 sm:w-16 md:h-18 md:w-18"
+            : "h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28"
         }`}
         aria-label="Chat with Strobi AI companion"
         aria-expanded={isOpen}
@@ -635,10 +635,10 @@ export default function FloatingMascotInner() {
           <motion.div
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute right-full mr-2 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2 py-0.5 text-[10px] font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none flex items-center gap-1"
+            className="absolute right-full mr-3 whitespace-nowrap rounded-xl border border-border/80 bg-surface/95 px-3 py-1 text-xs font-bold text-foreground shadow-lg backdrop-blur-md pointer-events-none flex items-center gap-1.5"
           >
             <span>Ask Strobi</span>
-            <Sparkle size={10} weight="fill" className="text-primary" />
+            <Sparkle size={12} weight="fill" className="text-primary" />
           </motion.div>
         )}
       </motion.button>

@@ -287,8 +287,8 @@ export function OrgJourneyMap() {
 
       {/* Main Container Card */}
       <div className="relative rounded-2xl sm:rounded-3xl border border-border/80 bg-surface/90 backdrop-blur-md shadow-sm overflow-hidden text-foreground p-3 sm:p-5 md:p-6">
-        {/* Subtle Warm Linen Texture */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF3E7]/40 to-surface pointer-events-none" />
+        {/* Subtle Texture */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 to-surface pointer-events-none" />
         <div
           className="absolute inset-0 opacity-[0.22] pointer-events-none"
           style={{
@@ -609,7 +609,7 @@ export function OrgJourneyMap() {
               </div>
 
               {/* 2. Agile Project Delivery Hub (PM) - Full Cross-Functional Highlight */}
-              <div className="rounded-2xl border-2 border-dashed border-[#F28C28]/40 bg-[#FAF3E7]/50 p-3 sm:p-4 space-y-2">
+              <div className="rounded-2xl border-2 border-dashed border-[#F28C28]/40 bg-background/50 p-3 sm:p-4 space-y-2">
                 <div
                   role="button"
                   tabIndex={0}

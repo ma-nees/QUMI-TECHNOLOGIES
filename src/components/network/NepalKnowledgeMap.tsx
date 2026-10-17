@@ -74,8 +74,8 @@ export function NepalKnowledgeMap({ embedded = false }: { embedded?: boolean } =
 
       {/* Modern, light, website-color map container */}
       <div className="relative rounded-2xl border border-border/80 bg-surface/95 backdrop-blur-md shadow-sm overflow-hidden text-foreground">
-        {/* Subtle warm linen grid texture */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF3E7]/40 to-surface pointer-events-none" />
+        {/* Subtle grid texture */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 to-surface pointer-events-none" />
         <div
           className="absolute inset-0 opacity-[0.25] pointer-events-none"
           style={{

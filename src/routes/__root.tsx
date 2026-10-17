@@ -81,8 +81,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preload", as: "style", href: appCss },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/logo.jpeg", type: "image/jpeg" },
-      { rel: "apple-touch-icon", href: "/logo.jpeg" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/logo.png" },
       { rel: "manifest", href: "/manifest.json" },
     ],
   }),
@@ -187,7 +187,7 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
       <QueryClientProvider client={queryClient}>
         {isHomePage && <EyePreloader duration={2400} />}
         <div id="site-main-layout" className="relative transition-opacity duration-700 ease-out">
