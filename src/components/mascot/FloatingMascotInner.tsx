@@ -40,7 +40,14 @@ interface StructuredTopic {
   animation: AnimationName;
 }
 
-// In-built structured company topics designed to fit without any scrolling
+export interface ChatMessage {
+  id: string;
+  sender: "user" | "bot";
+  text?: string;
+  topic?: StructuredTopic;
+  timestamp: string;
+}
+
 const INBUILT_TOPICS: Record<string, StructuredTopic> = {
   welcome: {
     title: "Hello, I'm Strobi",
@@ -142,7 +149,6 @@ const INBUILT_TOPICS: Record<string, StructuredTopic> = {
   },
 };
 
-// In-built quick inquiry buttons (cleanly horizontal, zero scrollbar)
 const QUICK_BUTTONS = [
   { key: "services", label: "Services" },
   { key: "about", label: "About" },
@@ -152,7 +158,6 @@ const QUICK_BUTTONS = [
   { key: "start", label: "Kickoff" },
 ];
 
-// Automatic expression rotation sequence when floating idle
 const AUTOMATIC_EXPRESSIONS: AnimationName[] = [
   "idle",
   "curious",
@@ -165,6 +170,15 @@ const AUTOMATIC_EXPRESSIONS: AnimationName[] = [
   "waking",
 ];
 
+const STORAGE_KEY = "qumi_strobi_chat_history_v2";
+
+const createWelcomeMessage = (): ChatMessage => ({
+  id: "welcome-0",
+  sender: "bot",
+  topic: INBUILT_TOPICS.welcome,
+  timestamp: "Just now",
+});
+
 export default function FloatingMascotInner() {
   const [isOpen, setIsOpen] = useState(false);
   const [animation, setAnimation] = useState<AnimationName>("idle");
@@ -175,6 +189,24 @@ export default function FloatingMascotInner() {
   // Live admin settings & jobs state
   const [settings, setSettings] = useState<any>(null);
   const [jobs, setJobs] = useState<any[]>([]);
+
+  // Persistent Chat History
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (typeof window === "undefined") return [createWelcomeMessage()];
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return [createWelcomeMessage()];
+  });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const autoExpressionIndex = useRef(0);
 
   useEffect(() => {
     fetchCompanySettings().then(setSettings).catch(() => {});
@@ -189,15 +221,23 @@ export default function FloatingMascotInner() {
       .catch(() => {});
   }, []);
 
-  // Active in-built topic card (fits perfectly without requiring scrolling)
-  const [activeTopic, setActiveTopic] = useState<StructuredTopic>(
-    INBUILT_TOPICS.welcome
-  );
-  const [userQuery, setUserQuery] = useState<string | null>(null);
+  // Save history on changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch {
+      // ignore
+    }
+  }, [messages]);
 
-  const autoExpressionIndex = useRef(0);
+  // Auto-scroll on new messages or typing
+  useEffect(() => {
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isTyping, isOpen]);
 
-  // 1. AUTOMATIC EXPRESSION ROTATION (cycles expressions automatically every 4.5s)
+  // Automatic expression rotation sequence when floating idle
   useEffect(() => {
     if (isOpen || isHovered) return;
 
@@ -251,151 +291,161 @@ export default function FloatingMascotInner() {
     return INBUILT_TOPICS[key] || INBUILT_TOPICS.services;
   };
 
-  const selectInbuiltTopic = (key: string, queryLabel?: string) => {
-    const topic = getDynamicTopic(key);
-    setUserQuery(queryLabel || topic.title);
+  const resolveTopicFromQuery = (rawQuery: string): StructuredTopic => {
+    const query = rawQuery.toLowerCase();
+    if (
+      query.includes("service") ||
+      query.includes("offer") ||
+      query.includes("build") ||
+      query.includes("capability")
+    ) {
+      return getDynamicTopic("services");
+    }
+    if (
+      query.includes("contact") ||
+      query.includes("email") ||
+      query.includes("phone") ||
+      query.includes("call") ||
+      query.includes("office") ||
+      query.includes("address") ||
+      query.includes("reach") ||
+      query.includes("location")
+    ) {
+      return getDynamicTopic("contact");
+    }
+    if (
+      query.includes("about") ||
+      query.includes("who") ||
+      query.includes("qumi") ||
+      query.includes("nepal") ||
+      query.includes("kathmandu")
+    ) {
+      return getDynamicTopic("about");
+    }
+    if (
+      query.includes("tech") ||
+      query.includes("stack") ||
+      query.includes("react") ||
+      query.includes("cloud") ||
+      query.includes("aws") ||
+      query.includes("python")
+    ) {
+      return getDynamicTopic("tech");
+    }
+    if (
+      query.includes("industry") ||
+      query.includes("fintech") ||
+      query.includes("health") ||
+      query.includes("domain")
+    ) {
+      return getDynamicTopic("industries");
+    }
+    if (
+      query.includes("start") ||
+      query.includes("hire") ||
+      query.includes("price") ||
+      query.includes("quote")
+    ) {
+      return getDynamicTopic("start");
+    }
+    if (
+      query.includes("job") ||
+      query.includes("career") ||
+      query.includes("apply") ||
+      query.includes("hiring") ||
+      query.includes("position") ||
+      query.includes("role") ||
+      query.includes("intern") ||
+      query.includes("devops") ||
+      query.includes("developer")
+    ) {
+      return getDynamicTopic("careers");
+    }
+    if (
+      query.includes("case") ||
+      query.includes("study") ||
+      query.includes("project") ||
+      query.includes("portfolio") ||
+      query.includes("work")
+    ) {
+      return {
+        title: "Project Case Studies",
+        badge: "Proven Delivery",
+        summary: "Explore our real-world software, data, and cloud architecture deployments:",
+        points: [
+          "FinTech: Digital lending & automated KYC underwriting engine.",
+          "Logistics: Live GPS telemetry & automated fleet dispatch routing.",
+          "Healthcare: HIPAA-compliant clinical records & patient portal.",
+        ],
+        actionLabel: "View All Project Case Studies",
+        actionLink: "/solutions",
+        animation: "celebrate",
+      };
+    }
+    return {
+      title: "QUMI Engineering Intelligence",
+      badge: "Direct Assistance",
+      summary: `Regarding "${rawQuery}": QUMI specializes in custom software architectures, cloud infrastructure, and AI engineering.`,
+      points: [
+        "Senior engineers lead every project from kickoff to deployment.",
+        "Explore our 8 service domains or connect directly with our architects.",
+        "Schedule a call to discuss your specific technical requirements.",
+      ],
+      actionLabel: "Connect with Engineering Team",
+      actionLink: "/contact",
+      animation: "happy",
+    };
+  };
+
+  const sendQuery = (text: string, matchedTopic?: StructuredTopic) => {
+    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const userMsg: ChatMessage = {
+      id: `u-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      sender: "user",
+      text,
+      timestamp: now,
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
     setAnimation("thinking");
 
     setTimeout(() => {
-      setActiveTopic(topic);
-      setAnimation(topic.animation);
+      const topic = matchedTopic || resolveTopicFromQuery(text);
+      const botMsg: ChatMessage = {
+        id: `b-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        sender: "bot",
+        topic,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+
+      setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
-    }, 380);
+      setAnimation(topic.animation);
+    }, 450);
   };
 
   const handleCustomSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    const query = inputValue.trim().toLowerCase();
+    const query = inputValue.trim();
     if (!query) return;
-
-    setUserQuery(inputValue.trim());
     setInputValue("");
-    setIsTyping(true);
-    setAnimation("thinking");
-
-    setTimeout(() => {
-      // Smart intent matching to in-built structured message types
-      if (
-        query.includes("service") ||
-        query.includes("offer") ||
-        query.includes("build") ||
-        query.includes("capability")
-      ) {
-        const topic = getDynamicTopic("services");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("contact") ||
-        query.includes("email") ||
-        query.includes("phone") ||
-        query.includes("call") ||
-        query.includes("office") ||
-        query.includes("address") ||
-        query.includes("reach") ||
-        query.includes("location")
-      ) {
-        const topic = getDynamicTopic("contact");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("about") ||
-        query.includes("who") ||
-        query.includes("qumi") ||
-        query.includes("nepal") ||
-        query.includes("kathmandu")
-      ) {
-        const topic = getDynamicTopic("about");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("tech") ||
-        query.includes("stack") ||
-        query.includes("react") ||
-        query.includes("cloud") ||
-        query.includes("aws") ||
-        query.includes("python")
-      ) {
-        const topic = getDynamicTopic("tech");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("industry") ||
-        query.includes("fintech") ||
-        query.includes("health") ||
-        query.includes("domain")
-      ) {
-        const topic = getDynamicTopic("industries");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("start") ||
-        query.includes("hire") ||
-        query.includes("price") ||
-        query.includes("quote")
-      ) {
-        const topic = getDynamicTopic("start");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("job") ||
-        query.includes("career") ||
-        query.includes("apply") ||
-        query.includes("hiring") ||
-        query.includes("position") ||
-        query.includes("role") ||
-        query.includes("intern") ||
-        query.includes("devops") ||
-        query.includes("developer")
-      ) {
-        const topic = getDynamicTopic("careers");
-        setActiveTopic(topic);
-        setAnimation(topic.animation);
-      } else if (
-        query.includes("case") ||
-        query.includes("study") ||
-        query.includes("project") ||
-        query.includes("portfolio") ||
-        query.includes("work")
-      ) {
-        setActiveTopic({
-          title: "Project Case Studies",
-          badge: "Proven Delivery",
-          summary: "Explore our real-world software, data, and cloud architecture deployments:",
-          points: [
-            "FinTech: Digital lending & automated KYC underwriting engine.",
-            "Logistics: Live GPS telemetry & automated fleet dispatch routing.",
-            "Healthcare: HIPAA-compliant clinical records & patient portal.",
-          ],
-          actionLabel: "View All Project Case Studies",
-          actionLink: "/solutions",
-          animation: "celebrate",
-        });
-        setAnimation("celebrate");
-      } else {
-        // Fallback structured card
-        setActiveTopic({
-          title: "QUMI Engineering Intelligence",
-          badge: "Direct Assistance",
-          summary: `Regarding "${userQuery || query}": QUMI specializes in custom software architectures, cloud infrastructure, and AI engineering.`,
-          points: [
-            "Senior engineers lead every project from kickoff to deployment.",
-            "Explore our 8 service domains or connect directly with our architects.",
-            "Schedule a call to discuss your specific technical requirements.",
-          ],
-          actionLabel: "Connect with Engineering Team",
-          actionLink: "/contact",
-          animation: "happy",
-        });
-        setAnimation("happy");
-      }
-      setIsTyping(false);
-    }, 420);
+    sendQuery(query);
   };
 
-  const handleReset = () => {
-    setUserQuery(null);
-    setActiveTopic(INBUILT_TOPICS.welcome);
+  const selectInbuiltTopic = (key: string, queryLabel?: string) => {
+    const topic = getDynamicTopic(key);
+    sendQuery(queryLabel || topic.title, topic);
+  };
+
+  const handleClearHistory = () => {
+    const fresh = [createWelcomeMessage()];
+    setMessages(fresh);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
     setAnimation("happy");
   };
 
@@ -406,7 +456,7 @@ export default function FloatingMascotInner() {
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 flex flex-col items-end select-none"
+      className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end select-none"
     >
       <AnimatePresence>
         {isOpen && (
@@ -415,13 +465,13 @@ export default function FloatingMascotInner() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.94 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-2 sm:mb-3 flex flex-col w-[calc(100vw-1.5rem)] max-w-[420px] sm:max-w-[460px] md:max-w-[500px] rounded-2xl sm:rounded-3xl border border-border/80 bg-surface/95 shadow-2xl backdrop-blur-xl overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="mb-2 sm:mb-2.5 flex flex-col w-[calc(100vw-1.5rem)] max-w-[400px] sm:max-w-[440px] md:max-w-[460px] h-[520px] max-h-[82vh] rounded-2xl sm:rounded-3xl border border-border/80 bg-surface/95 shadow-2xl backdrop-blur-xl overflow-hidden"
           >
-            {/* Chatbot Header - Spacious & balanced */}
-            <div className="flex items-center justify-between border-b border-border/70 px-4 py-3 sm:px-5 sm:py-3.5 bg-secondary/30">
-              <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Chatbot Header */}
+            <div className="flex items-center justify-between border-b border-border/70 px-3.5 py-2.5 sm:px-4.5 sm:py-3 bg-secondary/30 shrink-0">
+              <div className="flex items-center gap-2.5">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-8 w-8 sm:h-8.5 sm:w-8.5 flex items-center justify-center filter drop-shadow-xs">
                   <StrobiAvatar
                     animation={animation}
                     size="100%"
@@ -430,7 +480,7 @@ export default function FloatingMascotInner() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-sm sm:text-base font-bold text-foreground tracking-tight">
+                    <span className="text-sm font-bold text-foreground tracking-tight">
                       Strobi
                     </span>
                     <span className="relative flex h-2 w-2">
@@ -438,8 +488,8 @@ export default function FloatingMascotInner() {
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
                   </div>
-                  <p className="text-[10.5px] sm:text-xs text-muted-foreground font-medium capitalize leading-none mt-0.5">
-                    QUMI AI Companion · {animation}
+                  <p className="text-[10px] sm:text-[11px] text-muted-foreground font-medium capitalize leading-none mt-0.5">
+                    QUMI AI · {animation}
                   </p>
                 </div>
               </div>
@@ -447,115 +497,112 @@ export default function FloatingMascotInner() {
               <div className="flex items-center gap-1">
                 <button
                   type="button"
-                  onClick={handleReset}
-                  title="Reset conversation"
-                  className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  onClick={handleClearHistory}
+                  title="Clear conversation history"
+                  className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <ArrowsCounterClockwise size={16} />
+                  <ArrowsCounterClockwise size={15} />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   title="Close assistant"
-                  className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
+                  className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <X size={17} />
+                  <X size={16} />
                 </button>
               </div>
             </div>
 
-            {/* In-Built Message Card Display - Generous height & breathable */}
-            <div className="p-3.5 sm:p-4.5 flex flex-col justify-center min-h-[220px] sm:min-h-[250px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              {/* Optional user prompt badge if asked a custom question */}
-              {userQuery && (
-                <div className="mb-2 self-end rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-[10px] sm:text-xs font-semibold text-primary max-w-[90%] truncate">
-                  {userQuery}
+            {/* Scrollable Message History Area */}
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 [scrollbar-width:thin] text-foreground">
+              {messages.map((msg) => (
+                <div key={msg.id} className="w-full">
+                  {msg.sender === "user" ? (
+                    <div className="flex justify-end">
+                      <div className="rounded-2xl rounded-tr-xs bg-primary px-3.5 py-2 text-xs sm:text-[13px] font-medium text-primary-foreground shadow-xs max-w-[85%] break-words">
+                        {msg.text}
+                      </div>
+                    </div>
+                  ) : msg.topic ? (
+                    <div className="flex flex-col items-start gap-1 max-w-[96%]">
+                      <div className="rounded-xl sm:rounded-2xl border border-border/70 bg-card/95 p-3.5 shadow-2xs space-y-2 text-foreground w-full">
+                        {/* Title & Badge */}
+                        <div className="flex items-center justify-between gap-1.5 border-b border-border/50 pb-1.5">
+                          <span className="text-xs sm:text-[13.5px] font-bold text-foreground">
+                            {msg.topic.title}
+                          </span>
+                          <span className="rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-semibold text-primary">
+                            {msg.topic.badge}
+                          </span>
+                        </div>
+
+                        {/* Summary */}
+                        <p className="text-[11.5px] sm:text-xs leading-relaxed text-foreground/90 font-medium">
+                          {msg.topic.summary}
+                        </p>
+
+                        {/* Compact Points */}
+                        <ul className="space-y-1.5 pt-0.5 text-[10.5px] sm:text-[11.5px] text-muted-foreground">
+                          {msg.topic.points.map((pt, idx) => (
+                            <li
+                              key={idx}
+                              className="flex items-start gap-1.5 leading-snug"
+                            >
+                              <CheckCircle
+                                size={13}
+                                weight="fill"
+                                className="text-primary shrink-0 mt-0.5"
+                              />
+                              <span>{pt}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Action Link */}
+                        {msg.topic.actionLink && (
+                          <div className="pt-1.5">
+                            <Link
+                              to={msg.topic.actionLink}
+                              onClick={() => setIsOpen(false)}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[11px] sm:text-xs font-semibold text-primary-foreground shadow-2xs transition-colors"
+                            >
+                              <span>{msg.topic.actionLabel}</span>
+                              <ArrowRight size={11} weight="bold" />
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[9px] text-muted-foreground/70 px-1">{msg.timestamp}</span>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+
+              {/* Typing Indicator */}
+              {isTyping && (
+                <div className="flex items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-xs text-muted-foreground w-fit">
+                  <span className="flex gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-primary animate-bounce" />
+                    <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
+                    <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
+                  </span>
+                  <span className="font-medium text-[11px]">Thinking...</span>
                 </div>
               )}
 
-              {/* Bot Response Box */}
-              <AnimatePresence mode="wait">
-                {isTyping ? (
-                  <motion.div
-                    key="typing"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-card p-4 text-xs sm:text-sm text-muted-foreground"
-                  >
-                    <span className="flex gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce" />
-                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.15s]" />
-                      <span className="h-2 w-2 rounded-full bg-primary animate-bounce [animation-delay:0.3s]" />
-                    </span>
-                    <span className="font-medium">Thinking...</span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key={activeTopic.title}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.18 }}
-                    className="rounded-xl sm:rounded-2xl border border-border/70 bg-card/95 p-3.5 sm:p-4.5 shadow-2xs space-y-2 text-foreground"
-                  >
-                    {/* Title & Badge */}
-                    <div className="flex items-center justify-between gap-1.5 border-b border-border/50 pb-1.5">
-                      <span className="text-sm sm:text-[15px] font-bold text-foreground">
-                        {activeTopic.title}
-                      </span>
-                      <span className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[9.5px] sm:text-[10.5px] font-semibold text-primary">
-                        {activeTopic.badge}
-                      </span>
-                    </div>
-
-                    {/* Summary */}
-                    <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/90 font-medium">
-                      {activeTopic.summary}
-                    </p>
-
-                    {/* Compact Points - clean and readable */}
-                    <ul className="space-y-1.5 pt-1 text-[11px] sm:text-xs text-muted-foreground">
-                      {activeTopic.points.map((pt, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 leading-relaxed"
-                        >
-                          <CheckCircle
-                            size={14}
-                            weight="fill"
-                            className="text-primary shrink-0 mt-0.5"
-                          />
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Action Button */}
-                    <div className="pt-2">
-                      <Link
-                        to={activeTopic.actionLink}
-                        onClick={() => setIsOpen(false)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover px-4 py-1.5 text-xs sm:text-[13px] font-semibold text-primary-foreground shadow-2xs transition-colors"
-                      >
-                        <span>{activeTopic.actionLabel}</span>
-                        <ArrowRight size={12} weight="bold" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <div ref={messagesEndRef} />
             </div>
 
-            {/* In-Built Quick Topic Chips - Single horizontal scroll row (zero scrollbars) */}
-            <div className="border-t border-border/50 bg-secondary/15 px-3 py-2 sm:px-4 sm:py-2.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
+            {/* Quick Topic Chips */}
+            <div className="border-t border-border/50 bg-secondary/15 px-2.5 py-1.5 sm:px-3 sm:py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shrink-0">
+              <div className="flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-0.5">
                 {QUICK_BUTTONS.map((btn) => (
                   <button
                     key={btn.key}
                     type="button"
                     onClick={() => selectInbuiltTopic(btn.key, btn.label)}
-                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-3 py-1.5 text-[10px] sm:text-xs font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
+                    className="shrink-0 whitespace-nowrap rounded-full border border-border/70 bg-surface px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer shadow-2xs"
                   >
                     {btn.label}
                   </button>
@@ -563,38 +610,38 @@ export default function FloatingMascotInner() {
               </div>
             </div>
 
-            {/* Input Field - Comfortable & breathable */}
+            {/* Input Bar */}
             <form
               onSubmit={handleCustomSubmit}
-              className="flex items-center gap-2 border-t border-border/70 p-2 sm:p-3 bg-surface"
+              className="flex items-center gap-2 border-t border-border/70 p-2 sm:p-2.5 bg-surface shrink-0"
             >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask Strobi anything about QUMI..."
-                className="flex-1 rounded-xl border border-border/80 bg-background/70 px-3.5 py-2 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/40 h-10 sm:h-11"
+                className="flex-1 rounded-xl border border-border/80 bg-background/70 px-3 py-1.5 text-xs sm:text-[13px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-9 sm:h-9.5"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
+                className="flex h-9 w-9 sm:h-9.5 sm:w-9.5 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-primary-hover active:scale-95 shadow-xs shrink-0"
                 title="Send inquiry"
               >
-                <PaperPlaneRight size={15} weight="fill" />
+                <PaperPlaneRight size={14} weight="fill" />
               </button>
             </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Pure Floating Avatar Trigger */}
+      {/* Sleek, Compact Bot Trigger Icon */}
       <motion.button
         type="button"
-        animate={{ y: [0, -6, 0] }}
-        transition={{ repeat: Infinity, duration: 3.4, ease: "easeInOut" }}
+        animate={{ y: [0, -4, 0] }}
+        transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
         whileHover={{ scale: 1.08, rotate: [-2, 3, -1, 0] }}
-        whileTap={{ scale: 0.94 }}
+        whileTap={{ scale: 0.92 }}
         onClick={() => {
           setIsOpen((prev) => !prev);
           if (!isOpen) {
@@ -613,15 +660,15 @@ export default function FloatingMascotInner() {
             setAnimation("idle");
           }
         }}
-        className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_10px_24px_rgba(0,0,0,0.25)] hover:drop-shadow-[0_16px_32px_rgba(91,127,229,0.45)] transition-all duration-200 ${
+        className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)] hover:drop-shadow-[0_8px_20px_rgba(91,127,229,0.35)] transition-all duration-200 ${
           isOpen
-            ? "h-14 w-14 sm:h-16 sm:w-16 md:h-18 md:w-18"
-            : "h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28"
+            ? "h-11 w-11 sm:h-12 sm:w-12"
+            : "h-13 w-13 sm:h-14 sm:w-14"
         }`}
         aria-label="Chat with Strobi AI companion"
         aria-expanded={isOpen}
       >
-        {/* Pure Strobi 3D Avatar */}
+        {/* Compact Strobi Avatar */}
         <div className="w-full h-full flex items-center justify-center pointer-events-none">
           <StrobiAvatar
             animation={isOpen ? "listening" : animation}
@@ -635,10 +682,10 @@ export default function FloatingMascotInner() {
           <motion.div
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute right-full mr-3 whitespace-nowrap rounded-xl border border-border/80 bg-surface/95 px-3 py-1 text-xs font-bold text-foreground shadow-lg backdrop-blur-md pointer-events-none flex items-center gap-1.5"
+            className="absolute right-full mr-2.5 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2.5 py-1 text-[11px] font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none flex items-center gap-1"
           >
             <span>Ask Strobi</span>
-            <Sparkle size={12} weight="fill" className="text-primary" />
+            <Sparkle size={11} weight="fill" className="text-primary" />
           </motion.div>
         )}
       </motion.button>
