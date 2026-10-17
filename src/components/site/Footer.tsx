@@ -2,8 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { EnvelopeSimple, Phone, MapPin, LinkedinLogo, GithubLogo, XLogo, InstagramLogo, RedditLogo, FacebookLogo, LinkSimple } from "@phosphor-icons/react";
 import { company } from "@/lib/content";
 import { Logo } from "./Logo";
-import { useEffect, useState } from "react";
-import { fetchCompanySettings } from "@/lib/public.functions";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const cols = [
   {
@@ -26,11 +25,7 @@ const cols = [
 ] as const;
 
 export function Footer() {
-  const [settings, setSettings] = useState<any>(null);
-
-  useEffect(() => {
-    fetchCompanySettings().then(setSettings);
-  }, []);
+  const { settings, email, phone, address } = useCompanySettings();
 
   // Determine active socials based on settings
   const socials = [];
@@ -97,15 +92,15 @@ export function Footer() {
           <ul className="mt-2.5 sm:mt-3.5 space-y-2 sm:space-y-2.5 text-xs sm:text-sm">
             <li className="flex items-center gap-2 sm:gap-2.5">
               <EnvelopeSimple size={15} className="opacity-60 shrink-0" />
-              <a href={`mailto:${settings?.email || company.email}`} className="hover:text-highlight break-all">{settings?.email || company.email}</a>
+              <a href={`mailto:${email}`} className="hover:text-highlight break-all">{email}</a>
             </li>
             <li className="flex items-center gap-2 sm:gap-2.5">
               <Phone size={15} className="opacity-60 shrink-0" />
-              <a href={`tel:${(settings?.mobile_number || company.phone).replace(/\s/g, "")}`} className="hover:text-highlight">{settings?.mobile_number || company.phone}</a>
+              <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-highlight">{phone}</a>
             </li>
             <li className="flex items-center gap-2 sm:gap-2.5">
               <MapPin size={15} className="opacity-60 shrink-0" />
-              <span>{settings?.location || company.address}</span>
+              <span>{address}</span>
             </li>
           </ul>
         </div>

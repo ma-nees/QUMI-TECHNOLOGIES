@@ -10,13 +10,15 @@ export type Brand = {
   timezone: string;
 };
 
+import { company } from "./content";
+
 export function getBrand(): Brand {
   return {
-    name: process.env.COMPANY_NAME || "QUMI Technologies",
+    name: process.env.COMPANY_NAME || company.name,
     tagline: process.env.COMPANY_TAGLINE || "Engineering excellence, delivered with care",
     website: process.env.COMPANY_WEBSITE || "",
-    supportEmail: process.env.SMTP_USER || "",
-    address: process.env.COMPANY_ADDRESS || "",
+    supportEmail: process.env.SMTP_USER || company.email,
+    address: process.env.COMPANY_ADDRESS || company.address,
     timezone: process.env.COMPANY_TIMEZONE || "Asia/Kolkata",
   };
 }

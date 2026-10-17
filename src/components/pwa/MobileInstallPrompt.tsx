@@ -1,169 +1,244 @@
-import React, { useEffect, useState } from "react";
-import { DownloadSimple, X, Export, PlusSquare, DotsThreeVertical, DeviceMobile, Sparkle } from "@phosphor-icons/react";
+import { useEffect, useState, useCallback } from "react";
+import {
+  DownloadSimple,
+  X,
+  Export,
+  PlusSquare,
+  DotsThreeVertical,
+  DeviceMobile,
+  Sparkle,
+  Desktop,
+  Check,
+} from "@phosphor-icons/react";
+
+type DeviceType = "ios" | "android" | "desktop";
 
 export function MobileInstallPrompt() {
   const [showBanner, setShowBanner] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isIOS, setIsIOS] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [deviceType, setDeviceType] = useState<DeviceType>("android");
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  // Helper to check if already in PWA standalone mode
+  const checkIsStandalone = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as any).standalone === true ||
+      document.referrer.includes("android-app://")
+    );
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Check if already in standalone PWA mode
-    const isStandalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as any).standalone === true;
-
-    if (isStandalone) {
+    // 1. Standalone check
+    if (checkIsStandalone()) {
       setIsInstalled(true);
       return;
     }
 
-    // Check if on mobile viewport or mobile device
-    const isMobileWidth = window.innerWidth < 1024;
-    const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (!isMobileWidth && !isMobileUA) {
-      return;
-    }
-
-    // Check if user dismissed previously
-    const dismissedUntil = localStorage.getItem("qumi_pwa_dismissed_until");
-    if (dismissedUntil && Date.now() < Number(dismissedUntil)) {
-      return;
-    }
-
-    // Detect iOS
+    // 2. Device detection
+    const ua = navigator.userAgent || "";
     const isIOSDevice =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    setIsIOS(isIOSDevice);
+      /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+    const isAndroidDevice = /Android/i.test(ua);
+    const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
 
-    // Listen for Chromium PWA install prompt
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      (window as any).__qumi_deferred_prompt = e;
-      setShowBanner(true);
+    if (isIOSDevice) {
+      setDeviceType("ios");
+    } else if (isAndroidDevice) {
+      setDeviceType("android");
+    } else {
+      setDeviceType("desktop");
+    }
+
+    const handleResize = () => {
+      const mobileWidth = window.innerWidth < 1024;
+      setIsMobile(mobileWidth || isMobileUA);
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
 
-    // On mobile view, show recommendation banner after 800ms
+    // 3. Pick up existing global deferred prompt if already captured early
+    if ((window as any).__qumi_deferred_prompt) {
+      setDeferredPrompt((window as any).__qumi_deferred_prompt);
+    }
+
+    // 4. Capture Chromium beforeinstallprompt
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      (window as any).__qumi_deferred_prompt = e;
+      setDeferredPrompt(e);
+
+      // Auto-show banner on mobile view if not dismissed
+      const dismissedUntil = localStorage.getItem("qumi_pwa_dismissed_until");
+      const isDismissed = dismissedUntil && Date.now() < Number(dismissedUntil);
+      if ((window.innerWidth < 1024 || isMobileUA) && !isDismissed) {
+        setShowBanner(true);
+      }
+    };
+
+    // 5. Timer for auto-showing the recommendation banner on mobile view
     const timer = setTimeout(() => {
-      setShowBanner(true);
-    }, 800);
+      const dismissedUntil = localStorage.getItem("qumi_pwa_dismissed_until");
+      const isDismissed = dismissedUntil && Date.now() < Number(dismissedUntil);
+      const isCurrentlyMobile = window.innerWidth < 1024 || isMobileUA;
 
+      if (isCurrentlyMobile && !isDismissed && !checkIsStandalone()) {
+        setShowBanner(true);
+      }
+    }, 1200);
+
+    // 6. Listen for app installed event
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setShowBanner(false);
+      setShowGuide(false);
       setDeferredPrompt(null);
+      (window as any).__qumi_deferred_prompt = null;
     };
 
+    // 7. Listen for explicit user clicks (from mobile menu or any page element)
     const handleExternalTrigger = () => {
-      setShowBanner(true);
-      // If deferredPrompt is available, prompt immediately, else show guide
-      if ((window as any).__qumi_deferred_prompt) {
-        (window as any).__qumi_deferred_prompt.prompt();
+      const promptEvent =
+        (window as any).__qumi_deferred_prompt || deferredPrompt;
+
+      if (promptEvent && typeof promptEvent.prompt === "function") {
+        promptEvent
+          .prompt()
+          .then(() => promptEvent.userChoice)
+          .then((choice: any) => {
+            if (choice && choice.outcome === "accepted") {
+              setIsInstalled(true);
+              setShowBanner(false);
+              setShowGuide(false);
+            }
+          })
+          .catch(() => {
+            setShowGuide(true);
+          });
       } else {
+        // iOS or browser without deferred prompt support -> Open step-by-step guide
         setShowGuide(true);
       }
     };
 
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
     window.addEventListener("qumi:open-install-prompt", handleExternalTrigger);
 
     return () => {
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
       window.removeEventListener("qumi:open-install-prompt", handleExternalTrigger);
       clearTimeout(timer);
     };
-  }, []);
+  }, [checkIsStandalone, deferredPrompt]);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
+    const promptEvent =
+      deferredPrompt || (window as any).__qumi_deferred_prompt;
+
+    if (promptEvent && typeof promptEvent.prompt === "function") {
       try {
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        if (choiceResult.outcome === "accepted") {
+        await promptEvent.prompt();
+        const choiceResult = await promptEvent.userChoice;
+        if (choiceResult && choiceResult.outcome === "accepted") {
           setShowBanner(false);
+          setIsInstalled(true);
           setDeferredPrompt(null);
+          (window as any).__qumi_deferred_prompt = null;
         }
       } catch (err) {
         console.error("Install prompt error:", err);
+        setShowGuide(true);
       }
     } else {
-      // If iOS or browser doesn't support deferred prompt, show guide
+      // Show step-by-step installation guide for iOS, Safari, or browsers without deferred prompt
       setShowGuide(true);
     }
   };
 
   const handleDismiss = () => {
     setShowBanner(false);
-    // Dismiss for 3 days
+    // Suppress auto-popup for 3 days (explicit clicks in menu will still work)
     localStorage.setItem(
       "qumi_pwa_dismissed_until",
       String(Date.now() + 3 * 24 * 60 * 60 * 1000)
     );
   };
 
-  if (isInstalled || !showBanner) {
+  // Don't render anything if installed and guide is closed
+  if (isInstalled && !showGuide) {
+    return null;
+  }
+
+  // Don't render anything if neither banner nor guide is active
+  if (!showBanner && !showGuide) {
     return null;
   }
 
   return (
     <>
       {/* Mobile Install Smart Recommendation Banner */}
-      <aside
-        aria-label="App installation recommendation"
-        className="sticky top-[52px] sm:top-[60px] z-40 border-b border-primary/20 bg-surface/95 text-foreground backdrop-blur-xl shadow-md transition-all duration-300 lg:hidden"
-      >
-        <div className="container-site flex items-center justify-between gap-3 py-2 px-3 sm:px-4">
-          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <img
-              src="/logo.png"
-              alt="QUMI App icon"
-              className="h-9 w-9 rounded-xl object-cover border border-primary/30 shadow-xs shrink-0"
-            />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <p className="text-xs font-bold leading-tight text-foreground truncate">
-                  Install QUMI App
+      {showBanner && !isInstalled && (
+        <aside
+          aria-label="App installation recommendation"
+          className="relative z-30 border-b border-primary/20 bg-surface/95 text-foreground backdrop-blur-xl shadow-xs transition-all duration-300 lg:hidden"
+        >
+          <div className="container-site flex items-center justify-between gap-3 py-2 px-3 sm:px-4">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <img
+                src="/favicon.png"
+                alt="QUMI App icon"
+                className="h-9 w-9 rounded-xl object-contain p-1 bg-primary/10 border border-primary/30 shadow-2xs shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-xs font-bold leading-tight text-foreground truncate">
+                    Install QUMI App
+                  </p>
+                  <span className="rounded-full bg-primary/15 text-primary text-[9px] font-mono font-semibold px-1.5 py-0.5 shrink-0 flex items-center gap-0.5">
+                    <Sparkle size={9} weight="fill" /> Recommended
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground truncate leading-tight mt-0.5">
+                  Fast offline access & instant loading
                 </p>
-                <span className="rounded-full bg-primary/15 text-primary text-[9px] font-mono font-semibold px-1.5 py-0.5 shrink-0 flex items-center gap-0.5">
-                  <Sparkle size={9} weight="fill" /> Recommended
-                </span>
               </div>
-              <p className="text-[11px] text-muted-foreground truncate leading-tight mt-0.5">
-                Fast offline access & instant loading
-              </p>
+            </div>
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleInstallClick}
+                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition active:scale-95 cursor-pointer"
+              >
+                <DownloadSimple size={13} weight="bold" />
+                <span>Install</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleDismiss}
+                aria-label="Dismiss install recommendation"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-surface-alt hover:text-foreground transition active:scale-90 cursor-pointer"
+              >
+                <X size={15} />
+              </button>
             </div>
           </div>
+        </aside>
+      )}
 
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              onClick={handleInstallClick}
-              className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 transition active:scale-95 cursor-pointer"
-            >
-              <DownloadSimple size={13} weight="bold" />
-              <span>Install</span>
-            </button>
-            <button
-              onClick={handleDismiss}
-              aria-label="Dismiss install recommendation"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-surface-alt hover:text-foreground transition active:scale-90 cursor-pointer"
-            >
-              <X size={15} />
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      {/* Step-by-step Installation Guide Modal (for iOS & unsupported browsers) */}
+      {/* Step-by-step Installation Guide Modal */}
       {showGuide && (
         <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm animate-fade-in-up"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-sm animate-fade-in-up"
           onClick={() => setShowGuide(false)}
         >
           <div
@@ -173,14 +248,23 @@ export function MobileInstallPrompt() {
             <div className="flex items-start justify-between gap-3 mb-4">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <DeviceMobile size={22} weight="bold" />
+                  {deviceType === "desktop" ? (
+                    <Desktop size={22} weight="bold" />
+                  ) : (
+                    <DeviceMobile size={22} weight="bold" />
+                  )}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold leading-snug">Install QUMI on your device</h3>
-                  <p className="text-xs text-muted-foreground">Follow these simple steps</p>
+                  <h3 className="text-sm font-bold leading-snug">
+                    Install QUMI on your device
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    Follow these simple steps
+                  </p>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setShowGuide(false)}
                 className="rounded-lg p-1 text-muted-foreground hover:bg-surface-alt hover:text-foreground transition cursor-pointer"
                 aria-label="Close guide"
@@ -189,14 +273,16 @@ export function MobileInstallPrompt() {
               </button>
             </div>
 
-            {isIOS ? (
+            {deviceType === "ios" ? (
               <div className="space-y-3 text-xs leading-relaxed">
                 <div className="flex items-start gap-2.5 rounded-xl border border-border/70 bg-background/70 p-3">
                   <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary shrink-0 mt-0.5">
                     <Export size={15} weight="bold" />
                   </div>
                   <p>
-                    <strong className="text-foreground">Step 1:</strong> Tap the <strong className="text-primary">Share</strong> button in Safari toolbar at the bottom of the screen.
+                    <strong className="text-foreground">Step 1:</strong> Tap the{" "}
+                    <strong className="text-primary">Share</strong> button in
+                    the Safari toolbar at the bottom of your screen.
                   </p>
                 </div>
 
@@ -205,16 +291,48 @@ export function MobileInstallPrompt() {
                     <PlusSquare size={15} weight="bold" />
                   </div>
                   <p>
-                    <strong className="text-foreground">Step 2:</strong> Scroll down the share sheet and tap <strong className="text-primary">Add to Home Screen</strong>.
+                    <strong className="text-foreground">Step 2:</strong> Scroll
+                    down and tap{" "}
+                    <strong className="text-primary">Add to Home Screen</strong>
+                    .
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2.5 rounded-xl border border-border/70 bg-background/70 p-3">
                   <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary shrink-0 mt-0.5">
-                    <Sparkle size={15} weight="fill" />
+                    <Check size={15} weight="bold" />
                   </div>
                   <p>
-                    <strong className="text-foreground">Step 3:</strong> Tap <strong className="text-primary">Add</strong> in the top-right corner to finish installing.
+                    <strong className="text-foreground">Step 3:</strong> Tap{" "}
+                    <strong className="text-primary">Add</strong> in the
+                    top-right corner to complete installation.
+                  </p>
+                </div>
+              </div>
+            ) : deviceType === "android" ? (
+              <div className="space-y-3 text-xs leading-relaxed">
+                <div className="flex items-start gap-2.5 rounded-xl border border-border/70 bg-background/70 p-3">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary shrink-0 mt-0.5">
+                    <DotsThreeVertical size={15} weight="bold" />
+                  </div>
+                  <p>
+                    <strong className="text-foreground">Step 1:</strong> Tap
+                    your browser menu button (three dots{" "}
+                    <strong className="text-primary">⋮</strong>).
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2.5 rounded-xl border border-border/70 bg-background/70 p-3">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary shrink-0 mt-0.5">
+                    <PlusSquare size={15} weight="bold" />
+                  </div>
+                  <p>
+                    <strong className="text-foreground">Step 2:</strong> Select{" "}
+                    <strong className="text-primary">Install App</strong> or{" "}
+                    <strong className="text-primary">
+                      Add to Home Screen
+                    </strong>
+                    .
                   </p>
                 </div>
               </div>
@@ -222,10 +340,14 @@ export function MobileInstallPrompt() {
               <div className="space-y-3 text-xs leading-relaxed">
                 <div className="flex items-start gap-2.5 rounded-xl border border-border/70 bg-background/70 p-3">
                   <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary shrink-0 mt-0.5">
-                    <DotsThreeVertical size={15} weight="bold" />
+                    <DownloadSimple size={15} weight="bold" />
                   </div>
                   <p>
-                    <strong className="text-foreground">Step 1:</strong> Tap your browser's menu button (three dots <strong className="text-primary">⋮</strong>).
+                    <strong className="text-foreground">Chrome / Edge:</strong>{" "}
+                    Click the <strong className="text-primary">Install</strong>{" "}
+                    icon in your browser's address bar (or menu{" "}
+                    <strong className="text-primary">⋮</strong> → Save & share →
+                    Install QUMI).
                   </p>
                 </div>
 
@@ -234,15 +356,19 @@ export function MobileInstallPrompt() {
                     <PlusSquare size={15} weight="bold" />
                   </div>
                   <p>
-                    <strong className="text-foreground">Step 2:</strong> Select <strong className="text-primary">Install App</strong> or <strong className="text-primary">Add to Home Screen</strong>.
+                    <strong className="text-foreground">Safari (macOS):</strong>{" "}
+                    Click <strong className="text-primary">File</strong> in the
+                    menu bar and select{" "}
+                    <strong className="text-primary">Add to Dock...</strong>
                   </p>
                 </div>
               </div>
             )}
 
             <button
+              type="button"
               onClick={() => setShowGuide(false)}
-              className="mt-4 w-full rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition text-center cursor-pointer"
+              className="mt-4 w-full rounded-xl bg-primary py-2.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition text-center cursor-pointer shadow-xs active:scale-98"
             >
               Got it
             </button>

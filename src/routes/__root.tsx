@@ -101,6 +101,10 @@ function RootShell({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               try {
+                window.addEventListener('beforeinstallprompt', function(e) {
+                  e.preventDefault();
+                  window.__qumi_deferred_prompt = e;
+                });
                 var p = window.location.pathname;
                 if (p === '/' || p === '') {
                   document.documentElement.setAttribute('data-preloader-active', 'true');
@@ -177,12 +181,19 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      const registerSW = () => {
         navigator.serviceWorker.register('/sw.js').catch(err => {
           console.error('Service Worker registration failed:', err);
         });
-      });
+      };
+
+      if (document.readyState === 'complete') {
+        registerSW();
+      } else {
+        window.addEventListener('load', registerSW, { once: true });
+        return () => window.removeEventListener('load', registerSW);
+      }
     }
   }, []);
 

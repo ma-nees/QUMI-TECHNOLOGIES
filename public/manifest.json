@@ -10,15 +10,21 @@
   "theme_color": "#0047AB",
   "icons": [
     {
-      "src": "/logo.png",
-      "sizes": "192x192",
+      "src": "/favicon.png",
+      "sizes": "192x192 256x256",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "/logo.jpeg",
-      "sizes": "512x512",
+      "sizes": "512x512 1024x1024",
       "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "950x694",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

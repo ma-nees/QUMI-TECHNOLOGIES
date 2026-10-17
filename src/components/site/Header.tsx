@@ -81,7 +81,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="absolute inset-x-0 top-full z-40 border-b border-t border-border bg-background pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
+        <div className="absolute inset-x-0 top-full z-40 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-t border-border bg-background pb-8 shadow-2xl lg:hidden animate-in slide-in-from-top-2 zoom-in-95 fade-in duration-150 ease-out origin-top">
           <nav aria-label="Mobile" className="container-site flex flex-col pt-2">
             {navItems.map((n, i) => (
               <Link
@@ -96,10 +96,6 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-6 flex flex-col gap-3">
-              <div className="flex items-center justify-between py-2 border-b border-border/60">
-                <span className="text-sm font-medium text-muted-foreground">Theme</span>
-                <ThemeToggle variant="pill" />
-              </div>
               <Link to="/contact" onClick={() => setOpen(false)} className={buttonVariants({ size: "lg" })}>
                 Start a Project
               </Link>

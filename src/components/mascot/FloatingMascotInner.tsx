@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
 import { createAvatar } from "@bible-strong/avatar-react";
 import "@bible-strong/avatar-react/styles.css";
@@ -13,31 +13,21 @@ import {
 } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchCompanySettings } from "@/lib/public.functions";
+import { company } from "@/lib/content";
 import { supabase } from "@/integrations/supabase/client";
 
 const StrobiAvatar = createAvatar(definition);
 
-type AnimationName =
-  | "idle"
-  | "happy"
-  | "excited"
-  | "celebrate"
-  | "thinking"
-  | "playful"
-  | "proud"
-  | "curious"
-  | "waking"
-  | "listening"
-  | "searching";
+export type AnimationName = keyof typeof definition.animations;
 
-interface StructuredTopic {
+export interface StructuredTopic {
   title: string;
   badge: string;
   summary: string;
   points: string[];
   actionLabel: string;
   actionLink: string;
-  animation: AnimationName;
+  animation?: AnimationName;
 }
 
 export interface ChatMessage {
@@ -53,7 +43,7 @@ const INBUILT_TOPICS: Record<string, StructuredTopic> = {
     title: "Hello, I'm Strobi",
     badge: "QUMI AI Assistant",
     summary:
-      "I'm QUMI's intelligent companion. Select a topic below or type any question to explore our capabilities.",
+      "I'm QUMI's intelligent companion. Select a topic below or type any question to explore our software, cloud, and engineering services!",
     points: [
       "Custom Software, Cloud Architecture & AI Systems.",
       "Senior Guild Delivery with 99.9% uptime track record.",
@@ -115,26 +105,26 @@ const INBUILT_TOPICS: Record<string, StructuredTopic> = {
       "Healthcare: Secure clinical records & HIPAA compliant workflows.",
       "Logistics & Retail: Fleet dispatch routing & omnichannel commerce.",
     ],
-    actionLabel: "View Industry Solutions",
+    actionLabel: "Explore Solutions",
     actionLink: "/industries",
-    animation: "curious",
+    animation: "working",
   },
   start: {
-    title: "Initiate an Engagement",
-    badge: "Quick Kickoff",
+    title: "Kickoff an Initiative",
+    badge: "Fast-Track",
     summary:
-      "Every project begins with a structured architectural discovery sprint:",
+      "Ready to build or scale your system? Our senior guild engages with speed:",
     points: [
-      "Phase 1: Architecture & Technical Scope Definition.",
-      "Phase 2: Transparent Bi-weekly Agile Sprint Iterations.",
-      "Flexible Model: Dedicated senior team extension or fixed delivery.",
+      "Discovery & Architecture: 1-week rapid feasibility sprint.",
+      "Dedicated Pod: Hand-picked engineers aligned to your timezone.",
+      "Weekly Sprints: Live demoable deliverables and transparent telemetry.",
     ],
-    actionLabel: "Start a Project Now",
+    actionLabel: "Schedule Architecture Call",
     actionLink: "/contact",
     animation: "excited",
   },
   careers: {
-    title: "QUMI Engineering Guild",
+    title: "Careers & Culture",
     badge: "We're Hiring!",
     summary:
       "Passionate about hard engineering problems and distributed systems? Join our guild:",
@@ -158,18 +148,6 @@ const QUICK_BUTTONS = [
   { key: "start", label: "Kickoff" },
 ];
 
-const AUTOMATIC_EXPRESSIONS: AnimationName[] = [
-  "idle",
-  "curious",
-  "thinking",
-  "happy",
-  "playful",
-  "proud",
-  "excited",
-  "celebrate",
-  "waking",
-];
-
 const STORAGE_KEY = "qumi_strobi_chat_history_v2";
 
 const createWelcomeMessage = (): ChatMessage => ({
@@ -181,10 +159,10 @@ const createWelcomeMessage = (): ChatMessage => ({
 
 export default function FloatingMascotInner() {
   const [isOpen, setIsOpen] = useState(false);
-  const [animation, setAnimation] = useState<AnimationName>("idle");
   const [isHovered, setIsHovered] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [botAnimation, setBotAnimation] = useState<AnimationName | null>(null);
 
   // Live admin settings & jobs state
   const [settings, setSettings] = useState<any>(null);
@@ -206,7 +184,27 @@ export default function FloatingMascotInner() {
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const autoExpressionIndex = useRef(0);
+  const revertTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Smoothly trigger a reaction animation, then gently revert to natural listening/idle
+  const triggerAnimation = useCallback((anim: AnimationName) => {
+    setBotAnimation(anim);
+    if (revertTimer.current) clearTimeout(revertTimer.current);
+    revertTimer.current = setTimeout(() => {
+      setBotAnimation(null);
+    }, 4500);
+  }, []);
+
+  // Compute the current active animation smoothly based on interaction state
+  const currentAnimation: AnimationName =
+    botAnimation ||
+    (isOpen
+      ? isTyping
+        ? "thinking"
+        : "listening"
+      : isHovered
+      ? "curious"
+      : "idle");
 
   useEffect(() => {
     fetchCompanySettings().then(setSettings).catch(() => {});
@@ -219,6 +217,10 @@ export default function FloatingMascotInner() {
         if (data) setJobs(data);
       })
       .catch(() => {});
+
+    return () => {
+      if (revertTimer.current) clearTimeout(revertTimer.current);
+    };
   }, []);
 
   // Save history on changes
@@ -237,22 +239,6 @@ export default function FloatingMascotInner() {
     }
   }, [messages, isTyping, isOpen]);
 
-  // Automatic expression rotation sequence when floating idle
-  useEffect(() => {
-    if (isOpen || isHovered) return;
-
-    const interval = setInterval(() => {
-      autoExpressionIndex.current =
-        (autoExpressionIndex.current + 1) % AUTOMATIC_EXPRESSIONS.length;
-      const nextAnimation = AUTOMATIC_EXPRESSIONS[autoExpressionIndex.current];
-      if (nextAnimation) {
-        setAnimation(nextAnimation);
-      }
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, [isOpen, isHovered]);
-
   const getDynamicTopic = (key: string): StructuredTopic => {
     if (key === "contact") {
       return {
@@ -260,9 +246,9 @@ export default function FloatingMascotInner() {
         badge: "Direct Contact",
         summary: "Reach our leadership and engineering team directly:",
         points: [
-          `Email: ${settings?.email || "qumitechnologies.web@gmail.com"}`,
-          `Phone: ${settings?.mobile_number || "+977 1-0000000"}`,
-          `Location: ${settings?.location || "Kathmandu, Nepal"}`,
+          `Email: ${settings?.email || company.email}`,
+          `Phone: ${settings?.mobile_number || company.phone}`,
+          `Location: ${settings?.location || company.address}`,
         ],
         actionLabel: "Send an Enquiry",
         actionLink: "/contact",
@@ -272,17 +258,31 @@ export default function FloatingMascotInner() {
     if (key === "careers") {
       return {
         title: "Open Opportunities",
-        badge: jobs.length > 0 ? `${jobs.length} Open ${jobs.length === 1 ? "Role" : "Roles"}` : "We're Hiring!",
-        summary: jobs.length > 0
-          ? `We currently have ${jobs.length} active position${jobs.length === 1 ? "" : "s"} listed on our careers portal:`
-          : "Passionate about hard engineering problems and distributed systems? Join our guild:",
-        points: jobs.length > 0
-          ? jobs.slice(0, 3).map((j: any) => `${j.title} (${j.department || "Engineering"} • ${j.employment_type || "Full-time"})`)
-          : [
-              "Autonomous, engineering-first culture with continuous growth.",
-              "Work with global clients on mission-critical architectures.",
-              "Flexible hybrid work environment in Kathmandu, Nepal.",
-            ],
+        badge:
+          jobs.length > 0
+            ? `${jobs.length} Open ${jobs.length === 1 ? "Role" : "Roles"}`
+            : "We're Hiring!",
+        summary:
+          jobs.length > 0
+            ? `We currently have ${jobs.length} active position${
+                jobs.length === 1 ? "" : "s"
+              } listed on our careers portal:`
+            : "Passionate about hard engineering problems and distributed systems? Join our guild:",
+        points:
+          jobs.length > 0
+            ? jobs
+                .slice(0, 3)
+                .map(
+                  (j: any) =>
+                    `${j.title} (${j.department || "Engineering"} • ${
+                      j.employment_type || "Full-time"
+                    })`
+                )
+            : [
+                "Autonomous, engineering-first culture with continuous growth.",
+                "Work with global clients on mission-critical architectures.",
+                "Flexible hybrid work environment in Kathmandu, Nepal.",
+              ],
         actionLabel: "View All Positions & Apply",
         actionLink: "/careers",
         animation: "playful",
@@ -292,7 +292,9 @@ export default function FloatingMascotInner() {
   };
 
   const resolveTopicFromQuery = (rawQuery: string): StructuredTopic => {
-    const query = rawQuery.toLowerCase();
+    const query = rawQuery.toLowerCase().trim();
+
+    // 1. Topic Keyword Matching
     if (
       query.includes("service") ||
       query.includes("offer") ||
@@ -318,17 +320,22 @@ export default function FloatingMascotInner() {
       query.includes("who") ||
       query.includes("qumi") ||
       query.includes("nepal") ||
-      query.includes("kathmandu")
+      query.includes("kathmandu") ||
+      query.includes("team")
     ) {
       return getDynamicTopic("about");
     }
     if (
       query.includes("tech") ||
       query.includes("stack") ||
+      query.includes("language") ||
+      query.includes("framework") ||
       query.includes("react") ||
-      query.includes("cloud") ||
+      query.includes("node") ||
+      query.includes("python") ||
       query.includes("aws") ||
-      query.includes("python")
+      query.includes("cloud") ||
+      query.includes("architecture")
     ) {
       return getDynamicTopic("tech");
     }
@@ -336,6 +343,7 @@ export default function FloatingMascotInner() {
       query.includes("industry") ||
       query.includes("fintech") ||
       query.includes("health") ||
+      query.includes("logistic") ||
       query.includes("domain")
     ) {
       return getDynamicTopic("industries");
@@ -371,7 +379,8 @@ export default function FloatingMascotInner() {
       return {
         title: "Project Case Studies",
         badge: "Proven Delivery",
-        summary: "Explore our real-world software, data, and cloud architecture deployments:",
+        summary:
+          "Explore our real-world software, data, and cloud architecture deployments:",
         points: [
           "FinTech: Digital lending & automated KYC underwriting engine.",
           "Logistics: Live GPS telemetry & automated fleet dispatch routing.",
@@ -382,6 +391,151 @@ export default function FloatingMascotInner() {
         animation: "celebrate",
       };
     }
+
+    // 2. Emotional & Conversational Sentiment Matching
+    if (
+      query.includes("hello") ||
+      query.includes("hi") ||
+      query.includes("hey") ||
+      query.includes("morning") ||
+      query.includes("yo")
+    ) {
+      return {
+        title: "Greetings! Welcome to QUMI",
+        badge: "AI Companion",
+        summary:
+          "Hello! I'm Strobi, QUMI's interactive companion. How can I assist you with your software and cloud initiatives today?",
+        points: [
+          "Ask me about our software engineering services.",
+          "Inquire about our team, technologies, or past projects.",
+          "Directly connected to QUMI's services & engineering portal.",
+        ],
+        actionLabel: "Explore Services",
+        actionLink: "/services",
+        animation: "happy",
+      };
+    }
+
+    if (
+      query.includes("thank") ||
+      query.includes("great") ||
+      query.includes("awesome") ||
+      query.includes("good") ||
+      query.includes("cool") ||
+      query.includes("nice") ||
+      query.includes("love")
+    ) {
+      return {
+        title: "Much Appreciated!",
+        badge: "Gratitude",
+        summary:
+          "Thank you! Our engineering guild takes immense pride in delivering resilient, production-grade systems and top-quality experiences.",
+        points: [
+          "Built with high reliability and zero fragile code.",
+          "Backed by senior guild delivery across global clients.",
+        ],
+        actionLabel: "Work With Us",
+        actionLink: "/contact",
+        animation: "laughing",
+      };
+    }
+
+    if (
+      query.includes("funny") ||
+      query.includes("joke") ||
+      query.includes("haha") ||
+      query.includes("lol") ||
+      query.includes("smile")
+    ) {
+      return {
+        title: "Keep Coding, Keep Smiling!",
+        badge: "Playful",
+        summary:
+          "Why do programmers prefer dark mode? Because light attracts bugs! 😄 Always happy to bring good energy to your development workflow.",
+        points: [
+          "Clean code, automated tests, zero late-night emergencies.",
+          "High performance with maximum engineering satisfaction.",
+        ],
+        actionLabel: "Explore Solutions",
+        actionLink: "/solutions",
+        animation: "laughing",
+      };
+    }
+
+    if (
+      query.includes("sad") ||
+      query.includes("bad") ||
+      query.includes("bug") ||
+      query.includes("error") ||
+      query.includes("problem") ||
+      query.includes("issue") ||
+      query.includes("broken") ||
+      query.includes("fail")
+    ) {
+      return {
+        title: "Let's Solve It Together",
+        badge: "Troubleshooting",
+        summary:
+          "Bugs happen, but resilient architecture eliminates fragile dependencies. Our engineers specialize in diagnosing performance bottlenecks.",
+        points: [
+          "Architecture audit and root-cause analysis.",
+          "Automated test suites & resilient retry logic.",
+          "Production observability with OpenTelemetry & Datadog.",
+        ],
+        actionLabel: "Request Architecture Audit",
+        actionLink: "/contact",
+        animation: "thinking",
+      };
+    }
+
+    if (
+      query.includes("smart") ||
+      query.includes("ai") ||
+      query.includes("intelligent") ||
+      query.includes("model") ||
+      query.includes("llm") ||
+      query.includes("agent")
+    ) {
+      return {
+        title: "Practical AI & Intelligence",
+        badge: "AI Engineering",
+        summary:
+          "We build production-grade agentic systems, RAG pipelines, and automated intelligence directly embedded into your operational workflows.",
+        points: [
+          "Enterprise RAG with strict tenant data isolation.",
+          "Vector embeddings & semantic search pipelines.",
+          "Domain-specialized agents with determinism & reliability.",
+        ],
+        actionLabel: "Explore AI Capabilities",
+        actionLink: "/services",
+        animation: "celebrate",
+      };
+    }
+
+    if (
+      query.includes("who are you") ||
+      query.includes("what are you") ||
+      query.includes("bot") ||
+      query.includes("mascot") ||
+      query.includes("strobi")
+    ) {
+      return {
+        title: "Meet Strobi · AI Companion",
+        badge: "Interactive Mascot",
+        summary:
+          "I'm Strobi, QUMI's interactive companion powered by procedural vector animations, here to guide you through our engineering offerings, case studies, and career opportunities!",
+        points: [
+          "Interactive vector animation with life-like expressions and natural blinks.",
+          "Ask about custom software, cloud architecture, data, and devops.",
+          "Check open opportunities or initiate an engagement anytime.",
+        ],
+        actionLabel: "Learn About QUMI",
+        actionLink: "/about",
+        animation: "happy",
+      };
+    }
+
+    // Default Fallback
     return {
       title: "QUMI Engineering Intelligence",
       badge: "Direct Assistance",
@@ -398,7 +552,10 @@ export default function FloatingMascotInner() {
   };
 
   const sendQuery = (text: string, matchedTopic?: StructuredTopic) => {
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const now = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     const userMsg: ChatMessage = {
       id: `u-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       sender: "user",
@@ -408,7 +565,7 @@ export default function FloatingMascotInner() {
 
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
-    setAnimation("thinking");
+    setBotAnimation("thinking");
 
     setTimeout(() => {
       const topic = matchedTopic || resolveTopicFromQuery(text);
@@ -416,12 +573,15 @@ export default function FloatingMascotInner() {
         id: `b-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         sender: "bot",
         topic,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
 
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
-      setAnimation(topic.animation);
+      triggerAnimation(topic.animation || "happy");
     }, 450);
   };
 
@@ -446,7 +606,7 @@ export default function FloatingMascotInner() {
     } catch {
       // ignore
     }
-    setAnimation("happy");
+    triggerAnimation("happy");
   };
 
   return (
@@ -456,7 +616,7 @@ export default function FloatingMascotInner() {
       initial={{ opacity: 0, scale: 0.85 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end select-none"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end select-none"
     >
       <AnimatePresence>
         {isOpen && (
@@ -471,9 +631,9 @@ export default function FloatingMascotInner() {
             <div className="flex items-center justify-between border-b border-border/70 px-3.5 py-2.5 sm:px-4.5 sm:py-3 bg-secondary/30 shrink-0">
               <div className="flex items-center gap-2.5">
                 {/* Live Strobi Avatar inside Header */}
-                <div className="relative h-8 w-8 sm:h-8.5 sm:w-8.5 flex items-center justify-center filter drop-shadow-xs">
+                <div className="relative h-10 w-10 sm:h-11 sm:w-11 flex items-center justify-center filter drop-shadow-xs shrink-0 transition-transform duration-200">
                   <StrobiAvatar
-                    animation={animation}
+                    animation={currentAnimation}
                     size="100%"
                     ariaLabel="Strobi"
                   />
@@ -488,8 +648,8 @@ export default function FloatingMascotInner() {
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
                   </div>
-                  <p className="text-[10px] sm:text-[11px] text-muted-foreground font-medium capitalize leading-none mt-0.5">
-                    QUMI AI · {animation}
+                  <p className="text-[10.5px] sm:text-[11px] text-muted-foreground font-medium leading-none mt-0.5">
+                    QUMI AI Companion
                   </p>
                 </div>
               </div>
@@ -501,7 +661,7 @@ export default function FloatingMascotInner() {
                   title="Clear conversation history"
                   className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <ArrowsCounterClockwise size={15} />
+                  <ArrowsCounterClockwise size={16} />
                 </button>
                 <button
                   type="button"
@@ -509,7 +669,7 @@ export default function FloatingMascotInner() {
                   title="Close assistant"
                   className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <X size={16} />
+                  <X size={17} />
                 </button>
               </div>
             </div>
@@ -573,7 +733,9 @@ export default function FloatingMascotInner() {
                           </div>
                         )}
                       </div>
-                      <span className="text-[9px] text-muted-foreground/70 px-1">{msg.timestamp}</span>
+                      <span className="text-[9px] text-muted-foreground/70 px-1">
+                        {msg.timestamp}
+                      </span>
                     </div>
                   ) : null}
                 </div>
@@ -618,7 +780,9 @@ export default function FloatingMascotInner() {
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                }}
                 placeholder="Ask Strobi anything about QUMI..."
                 className="flex-1 rounded-xl border border-border/80 bg-background/70 px-3 py-1.5 text-xs sm:text-[13px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus:ring-1 focus:ring-primary h-9 sm:h-9.5"
               />
@@ -635,7 +799,7 @@ export default function FloatingMascotInner() {
         )}
       </AnimatePresence>
 
-      {/* Sleek, Compact Bot Trigger Icon */}
+      {/* Sleek Bot Trigger Icon with Living Idle/Listening Animation */}
       <motion.button
         type="button"
         animate={{ y: [0, -4, 0] }}
@@ -644,34 +808,24 @@ export default function FloatingMascotInner() {
         whileTap={{ scale: 0.92 }}
         onClick={() => {
           setIsOpen((prev) => !prev);
-          if (!isOpen) {
-            setAnimation("happy");
-          }
         }}
         onMouseEnter={() => {
           setIsHovered(true);
-          if (!isOpen) {
-            setAnimation("curious");
-          }
         }}
         onMouseLeave={() => {
           setIsHovered(false);
-          if (!isOpen) {
-            setAnimation("idle");
-          }
         }}
         className={`group relative flex items-center justify-center bg-transparent border-0 p-0 outline-none focus:outline-none cursor-pointer filter drop-shadow-[0_6px_16px_rgba(0,0,0,0.2)] hover:drop-shadow-[0_8px_20px_rgba(91,127,229,0.35)] transition-all duration-200 ${
           isOpen
-            ? "h-11 w-11 sm:h-12 sm:w-12"
-            : "h-13 w-13 sm:h-14 sm:w-14"
+            ? "h-13 w-13 sm:h-15 sm:w-15 md:h-16 md:w-16"
+            : "h-16 w-16 sm:h-20 sm:w-20 md:h-[84px] md:w-[84px]"
         }`}
         aria-label="Chat with Strobi AI companion"
         aria-expanded={isOpen}
       >
-        {/* Compact Strobi Avatar */}
-        <div className="w-full h-full flex items-center justify-center pointer-events-none">
+        <div className="w-full h-full flex items-center justify-center pointer-events-none transition-transform duration-300">
           <StrobiAvatar
-            animation={isOpen ? "listening" : animation}
+            animation={currentAnimation}
             size="100%"
             ariaLabel="Strobi Avatar"
           />
@@ -682,7 +836,7 @@ export default function FloatingMascotInner() {
           <motion.div
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute right-full mr-2.5 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2.5 py-1 text-[11px] font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none flex items-center gap-1"
+            className="absolute right-full mr-3 whitespace-nowrap rounded-lg border border-border/80 bg-surface/95 px-2.5 py-1 text-[11px] font-semibold text-foreground shadow-md backdrop-blur-md pointer-events-none flex items-center gap-1.5"
           >
             <span>Ask Strobi</span>
             <Sparkle size={11} weight="fill" className="text-primary" />
