@@ -169,7 +169,7 @@ function RootComponent() {
   }, []);
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
       <QueryClientProvider client={queryClient}>
         <div className="relative">
           <Suspense fallback={null}>

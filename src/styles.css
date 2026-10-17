@@ -2,7 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -88,6 +88,37 @@
   --shadow-header: 0 1px 0 var(--border), 0 6px 20px -14px oklch(0.236 0.056 257 / 20%);
 }
 
+.dark {
+  --background: #090e17;
+  --surface: oklch(0.18 0.028 255 / 0.92);
+  --foreground: oklch(0.96 0.01 250);
+  --card: oklch(0.16 0.025 255 / 0.9);
+  --card-foreground: oklch(0.96 0.01 250);
+  --popover: oklch(0.16 0.025 255 / 0.95);
+  --popover-foreground: oklch(0.96 0.01 250);
+  --primary: oklch(0.62 0.20 255);
+  --primary-hover: oklch(0.68 0.19 255);
+  --primary-soft: oklch(0.24 0.05 255 / 0.6);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.21 0.025 255);
+  --secondary-foreground: oklch(0.94 0.01 250);
+  --muted: oklch(0.21 0.025 255);
+  --muted-foreground: oklch(0.68 0.02 255);
+  --accent: oklch(0.24 0.05 255 / 0.6);
+  --accent-foreground: oklch(0.94 0.02 255);
+  --highlight: oklch(0.76 0.18 58);
+  --ink: oklch(0.96 0.01 250);
+  --ink-foreground: oklch(0.12 0.025 255);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.30 0.03 255 / 0.7);
+  --border-strong: oklch(0.40 0.04 255);
+  --input: oklch(0.25 0.03 255);
+  --ring: oklch(0.62 0.20 255);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.45), 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+  --shadow-header: 0 1px 0 var(--border), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -112,6 +143,7 @@
     max-width: 100vw;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    transition: background-color 200ms ease, color 200ms ease;
   }
   body::-webkit-scrollbar {
     display: none;

@@ -4,6 +4,7 @@ import { List, X, ArrowRight, DownloadSimple } from "@phosphor-icons/react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const navItems = [
   { to: "/", label: "Home" },
@@ -58,13 +59,15 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle />
           <Link to="/contact" className={cn(buttonVariants({ size: "sm" }), "h-8.5 px-4 text-xs font-semibold shadow-xs")}>
             Start a Project <ArrowRight weight="bold" className="arrow-nudge ml-1.5" />
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
           <button
             type="button"
             className="inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-border/80 bg-surface/50 text-foreground transition-all duration-150 ease-out active:scale-75 shadow-xs"
@@ -92,7 +95,11 @@ export function Header() {
                 <ArrowRight className="opacity-50" />
               </Link>
             ))}
-            <div className="mt-8 flex flex-col gap-3">
+            <div className="mt-6 flex flex-col gap-3">
+              <div className="flex items-center justify-between py-2 border-b border-border/60">
+                <span className="text-sm font-medium text-muted-foreground">Theme</span>
+                <ThemeToggle variant="pill" />
+              </div>
               <Link to="/contact" onClick={() => setOpen(false)} className={buttonVariants({ size: "lg" })}>
                 Start a Project
               </Link>
