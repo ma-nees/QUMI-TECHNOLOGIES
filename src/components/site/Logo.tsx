@@ -12,10 +12,11 @@ export function Logo({
       <img
         src="/logo.png"
         alt="QUMI Technologies"
-        width={800}
-        height={268}
+        width={950}
+        height={694}
         className={cn(
           "w-auto max-h-full object-contain transition-all duration-200",
+          inverse ? "" : "invert dark:invert-0",
           className
         )}
         fetchPriority="high"
