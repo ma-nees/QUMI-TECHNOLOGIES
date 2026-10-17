@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
+import { InstallGuideModal } from "@/components/pwa/InstallGuideModal";
 
 export const navItems = [
   { to: "/", label: "Home" },
@@ -19,6 +20,7 @@ export const navItems = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -101,11 +103,25 @@ export function Header() {
               </Link>
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
+                  const promptEvent = (window as any).__qumi_deferred_prompt;
+                  if (promptEvent && typeof promptEvent.prompt === "function") {
+                    try {
+                      await promptEvent.prompt();
+                      const choice = await promptEvent.userChoice;
+                      (window as any).__qumi_deferred_prompt = null;
+                      if (choice?.outcome === "accepted") {
+                        setOpen(false);
+                        return;
+                      }
+                    } catch (err) {
+                      console.warn("Direct install prompt error:", err);
+                    }
+                  }
                   setOpen(false);
-                  window.dispatchEvent(new CustomEvent("qumi:open-install-prompt"));
+                  setShowInstallModal(true);
                 }}
-                className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 py-3 text-sm font-semibold text-primary hover:bg-primary/20 transition cursor-pointer"
+                className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 py-3 text-sm font-semibold text-primary hover:bg-primary/20 transition cursor-pointer active:scale-98"
               >
                 <DownloadSimple size={16} weight="bold" />
                 <span>Install QUMI Web App</span>
@@ -114,6 +130,12 @@ export function Header() {
           </nav>
         </div>
       )}
+
+      {/* Direct Install Guide Modal */}
+      <InstallGuideModal
+        open={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+      />
     </header>
   );
 }
