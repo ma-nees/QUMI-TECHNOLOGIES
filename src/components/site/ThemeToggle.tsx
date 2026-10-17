@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Sun, Moon } from "@phosphor-icons/react";
+import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ThemeToggleProps {
@@ -48,9 +48,9 @@ export function ThemeToggle({ className, variant = "button" }: ThemeToggleProps)
       >
         <span className="flex items-center gap-1.5">
           {isDark ? (
-            <Moon size={15} weight="fill" className="text-primary animate-in spin-in-180 duration-200" />
+            <Moon className="h-3.5 w-3.5 text-foreground transition-transform duration-200" strokeWidth={2} />
           ) : (
-            <Sun size={15} weight="fill" className="text-highlight animate-in spin-in-180 duration-200" />
+            <Sun className="h-3.5 w-3.5 text-foreground transition-transform duration-200" strokeWidth={2} />
           )}
           <span>{isDark ? "Dark mode" : "Light mode"}</span>
         </span>
@@ -72,15 +72,13 @@ export function ThemeToggle({ className, variant = "button" }: ThemeToggleProps)
     >
       {isDark ? (
         <Sun
-          size={18}
-          weight="fill"
-          className="text-highlight transition-transform duration-200 group-hover:rotate-45"
+          className="h-4.5 w-4.5 text-foreground transition-all duration-200 group-hover:rotate-45 group-hover:text-primary"
+          strokeWidth={2}
         />
       ) : (
         <Moon
-          size={18}
-          weight="duotone"
-          className="text-foreground transition-transform duration-200 group-hover:-rotate-12 group-hover:text-primary"
+          className="h-4.5 w-4.5 text-foreground transition-all duration-200 group-hover:-rotate-12 group-hover:text-primary"
+          strokeWidth={2}
         />
       )}
     </button>
