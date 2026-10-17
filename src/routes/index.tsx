@@ -78,12 +78,9 @@ function ValuePropositionSection() {
   );
 }
 
-import { EyePreloader } from "@/components/ui/eye-tracking";
-
 function Index() {
   return (
     <>
-      <EyePreloader duration={5000} />
       <div className="border-b border-border/80 bg-surface/85 backdrop-blur-md py-1.5 overflow-hidden shadow-xs">
         <ScrollBasedVelocity
           text="QUMI TECHNOLOGIES"

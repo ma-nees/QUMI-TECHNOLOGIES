@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "QUMI Technologies — Software, Cloud & Data Engineering from Nepal" },
       { name: "description", content: "QUMI Technologies is a Nepal-based technology partner building software, cloud, data and AI systems." },
       { name: "author", content: "QUMI Technologies" },
-      { name: "theme-color", content: "#0047AB" },
+      { name: "theme-color", content: "#0A192F" },
       { property: "og:site_name", content: "QUMI Technologies" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -101,8 +101,13 @@ function RootShell({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (window.location.pathname === '/' || window.location.pathname === '') {
+                var p = window.location.pathname;
+                if (p === '/' || p === '') {
                   document.documentElement.setAttribute('data-preloader-active', 'true');
+                  // Failsafe auto-clear
+                  setTimeout(function() {
+                    document.documentElement.removeAttribute('data-preloader-active');
+                  }, 5000);
                 }
               } catch (e) {}
             `,
@@ -111,6 +116,17 @@ function RootShell({ children }: { children: ReactNode }) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
+              /* Lock scroll and completely hide page layout while preloader is active to prevent any FOUC */
+              html[data-preloader-active="true"],
+              html[data-preloader-active="true"] body {
+                overflow: hidden !important;
+                height: 100vh !important;
+              }
+              html[data-preloader-active="true"] #site-main-layout {
+                opacity: 0 !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+              }
               html[data-preloader-active="true"] [data-mascot-container],
               html[data-preloader-active="true"] #floating-mascot-root {
                 display: none !important;
@@ -133,10 +149,12 @@ function RootShell({ children }: { children: ReactNode }) {
 import { ThemeProvider } from "next-themes";
 
 import { FloatingMascot } from "@/components/mascot/FloatingMascot";
+import { EyePreloader } from "@/components/ui/eye-tracking";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHomePage = pathname === "/" || pathname === "";
   const [shouldLoad3D, setShouldLoad3D] = React.useState(false);
 
   useEffect(() => {
@@ -171,7 +189,8 @@ function RootComponent() {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
-        <div className="relative">
+        {isHomePage && <EyePreloader duration={2400} />}
+        <div id="site-main-layout" className="relative transition-opacity duration-700 ease-out">
           <Suspense fallback={null}>
             <Global3DBackground />
           </Suspense>

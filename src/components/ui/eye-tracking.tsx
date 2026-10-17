@@ -588,23 +588,6 @@ export function EyeTracking({
     };
   }, [idleAnimation]);
 
-  if (!isMounted) {
-    return (
-      <div
-        className={cn("flex items-center justify-center", className)}
-        style={{ gap }}
-      >
-        {[...Array(eyeCount)].map((_, i) => (
-          <div
-            key={i}
-            className="rounded-full bg-neutral-200 dark:bg-neutral-800"
-            style={{ width: eyeSize, height: eyeSize * 0.85 }}
-          />
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn("flex items-center justify-center", className)}
@@ -636,25 +619,37 @@ export function EyeTracking({
   );
 }
 
+let hasCompletedSessionPreloader = false;
+
 interface EyePreloaderProps {
-  /** Minimum duration to show loader in milliseconds. Defaults to 5000 (5 seconds) */
+  /** Minimum duration to show loader in milliseconds. Defaults to 2400 (2.4 seconds) */
   duration?: number;
   onComplete?: () => void;
 }
 
-export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps) {
-  const [mounted, setMounted] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(true);
+export function EyePreloader({ duration = 2400, onComplete }: EyePreloaderProps) {
+  const [isVisible, setIsVisible] = React.useState(() => {
+    // If the preloader was already completed during client-side navigation, do not show again
+    if (hasCompletedSessionPreloader) return false;
+    return true;
+  });
   const [progress, setProgress] = React.useState(0);
+
+  const handleFinish = React.useCallback(() => {
+    hasCompletedSessionPreloader = true;
+    setIsVisible(false);
+    if (typeof document !== "undefined") {
+      document.documentElement.removeAttribute("data-preloader-active");
+      window.dispatchEvent(new CustomEvent("qumi:preloader-change", { detail: { active: false } }));
+    }
+    onComplete?.();
+  }, [onComplete]);
 
   // Lock body & html scroll completely while preloader is active
   React.useEffect(() => {
     if (!isVisible) return;
 
     const originalOverflow = document.body.style.overflow;
-    const originalPosition = document.body.style.position;
-    const originalTop = document.body.style.top;
-    const originalWidth = document.body.style.width;
     const originalTouchAction = document.body.style.touchAction;
 
     document.body.style.overflow = "hidden";
@@ -693,8 +688,25 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
     };
   }, [isVisible]);
 
+  // Keyboard shortcut (Escape, Space, Enter) to skip
   React.useEffect(() => {
-    setMounted(true);
+    if (!isVisible) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === " " || e.key === "Enter") {
+        setProgress(100);
+        setTimeout(handleFinish, 180);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isVisible, handleFinish]);
+
+  // Smooth progress timer
+  React.useEffect(() => {
+    if (!isVisible) return;
+
     const startTime = Date.now();
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -703,21 +715,18 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
 
       if (elapsed >= duration) {
         clearInterval(interval);
-        setTimeout(() => {
-          setIsVisible(false);
-          onComplete?.();
-        }, 300);
+        setTimeout(handleFinish, 200);
       }
-    }, 40);
+    }, 25);
 
     return () => clearInterval(interval);
-  }, [duration, onComplete]);
+  }, [duration, isVisible, handleFinish]);
 
-  if (!mounted || !isVisible) {
+  if (!isVisible) {
     return null;
   }
 
-  const preloaderMarkup = (
+  return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
@@ -725,9 +734,13 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
           data-preloader="active"
           key="eye-preloader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, filter: "blur(8px)" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-8 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden"
+          exit={{ opacity: 0, filter: "blur(10px)", transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
+          className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-8 bg-[#F0F4F8] text-[#0B1F3A] select-none overflow-hidden cursor-pointer"
+          onClick={() => {
+            setProgress(100);
+            setTimeout(handleFinish, 180);
+          }}
+          title="Click to skip"
         >
           {/* Subtle glacier atmospheric ambient glow & precision subpixel grid */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -737,10 +750,10 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
 
           {/* Centerpiece: Eye Card + Status and Progress directly underneath */}
           <motion.div
-            initial={{ scale: 0.92, opacity: 0 }}
+            initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex flex-col items-center gap-6"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 flex flex-col items-center gap-6 pointer-events-auto"
           >
             {/* Free-Floating Eyes */}
             <div className="relative">
@@ -773,25 +786,24 @@ export function EyePreloader({ duration = 5000, onComplete }: EyePreloaderProps)
               {/* Progress hairline & percentage indicator */}
               <div className="flex items-center gap-3 w-full">
                 <div className="relative flex-1 h-[2px] bg-[#D4E4F0] rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 rounded-full"
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 rounded-full transition-[width] duration-75 ease-linear"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                <span className="w-8 text-right tracking-widest text-[#0B1F3A] font-semibold">
+                <span className="w-8 text-right tracking-widest text-[#0B1F3A] font-semibold tabular-nums">
                   {String(progress).padStart(2, "0")}%
                 </span>
               </div>
+
+              {/* Subtle skip prompt */}
+              <span className="text-[10px] tracking-widest uppercase text-[#6B7280] hover:text-[#0B1F3A] transition-colors mt-2">
+                Click or press Esc to skip
+              </span>
             </div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
-
-  if (typeof document !== "undefined" && document.body) {
-    return createPortal(preloaderMarkup, document.body);
-  }
-
-  return preloaderMarkup;
 }
